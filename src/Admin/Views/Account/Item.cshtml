@@ -1,0 +1,28 @@
+﻿@using Resources
+@model Trezorix.Sparql.Api.Core.Accounts.Account
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Account";
+}
+<script>
+	app.config.apiRoot = '@Url.Content("~/Account")';
+	var accountId = '@Model.Id';
+</script>
+<script src="~/Static/js/Account.js"> </script>
+
+<div data-ng-app="AccountEditor">
+	<div data-ng-controller="AccountController">
+		<ng-form name="accountForm" >
+			<tabset>
+				<tab heading="Algemeen">
+					@{ Html.RenderPartial("General"); }
+				</tab>
+				<tab heading="Toegang">
+					@{ Html.RenderPartial("Access"); }
+				</tab>
+			</tabset>
+			@{ Html.RenderPartial("Control"); }  
+		</ng-form>
+	</div>
+</div>

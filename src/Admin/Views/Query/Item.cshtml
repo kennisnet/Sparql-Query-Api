@@ -1,0 +1,38 @@
+﻿@model Trezorix.Sparql.Api.Core.Queries.Query
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Query: " + Model.Id;
+}
+<script>
+	app.config.apiRoot = '@Url.Content("~/Query")';
+	var queryId = '@Model.Id';
+	var group = '@Model.Group';
+</script>
+<script src="~/Static/js/Query.js"> </script>
+
+
+<div data-ng-app="QueryEditor">
+	<div data-ng-controller="QueryController">
+		<ng-form name="queryForm">
+			<tabset>
+				<tab heading="Algemeen">
+					@{ Html.RenderPartial("General"); }
+				</tab>
+				<tab heading="SPARQL">
+					@{ Html.RenderPartial("Sparql"); }
+				</tab>
+				<tab heading="Parameters">
+					@{ Html.RenderPartial("Parameters"); }
+				</tab>
+				<tab heading="Toegang">
+					@{ Html.RenderPartial("Access"); }
+				</tab>
+				<tab heading="Test">
+					@{ Html.RenderPartial("Test"); }
+				</tab>
+			</tabset>
+			@{ Html.RenderPartial("Control"); }  
+		</ng-form>
+	</div>
+</div>

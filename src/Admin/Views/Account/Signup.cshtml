@@ -1,0 +1,36 @@
+﻿@using Proffile.Web.Models.Account
+@model Trezorix.Sparql.Api.Admin.Models.Accounts.SignupModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Signup";
+}
+
+<div class="container">
+    @using (Html.BeginForm("Signup", "Account", FormMethod.Post, new {
+        @class = "form-horizontal col-lg-6"
+    })) {
+        var inputAttributes = new {
+            @class = "form-control"
+        };
+        var labelAttributes = new {
+            @class = "control-label"
+        };
+        <div class="control-group">
+            @Html.LabelFor(m => m.Voornaam, labelAttributes) @Html.TextBoxFor(m => m.Voornaam, inputAttributes)
+            @Html.LabelFor(m => m.Tussenvoegsel, labelAttributes) @Html.TextBoxFor(m => m.Tussenvoegsel, inputAttributes)
+            @Html.LabelFor(m => m.Achternaam, labelAttributes) @Html.TextBoxFor(m => m.Achternaam, inputAttributes)
+            @Html.LabelFor(m => m.Email, labelAttributes) @Html.TextBoxFor(m => m.Email, inputAttributes)
+        </div>
+        <p>&#160;</p>
+        if (!string.IsNullOrEmpty(ViewBag.ErrorMessage)) {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" class="btn btn-primary" value="Signup"/>
+            </div>
+        </div>
+    }
+              
+</div>

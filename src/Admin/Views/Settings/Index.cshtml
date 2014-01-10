@@ -1,0 +1,30 @@
+﻿@model Trezorix.Sparql.Api.Core.Configuration.ApiConfiguration
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Settings";
+}
+<script>
+	app.config.apiRoot = '@Url.Content("~/Settings")';
+</script>
+<script src="~/Static/js/Settings.js"> </script>
+
+
+<div data-ng-app="SettingsEditor">
+	<div data-ng-controller="SettingsController">
+		<ng-form name="settingsForm" >
+			<tabset>
+				<tab heading="Algemeen">
+					@{ Html.RenderPartial("General"); }
+				</tab>
+				<tab heading="SPARQL Endpoints">
+					@{ Html.RenderPartial("Endpoints"); }
+				</tab>
+				<tab heading="Toegang">
+					@{ Html.RenderPartial("Access"); }
+				</tab>
+			</tabset>
+			@{ Html.RenderPartial("Control"); }
+		</ng-form>
+	</div>
+</div>

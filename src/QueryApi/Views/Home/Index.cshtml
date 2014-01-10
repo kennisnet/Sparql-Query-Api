@@ -1,0 +1,121 @@
+﻿@using System.Text
+@using Trezorix.Sparql.Api.Core.Configuration
+@using Trezorix.Sparql.Api.Core.Queries
+@model IEnumerable<Trezorix.Sparql.Api.Core.Queries.Query>
+@{
+	ViewBag.Title = ApiConfiguration.Current.ApplicationTitle;
+}
+@section header{
+	<div class="header">
+		<div class="container">
+			@Html.Raw(ApiConfiguration.Current.Description)
+		
+			@if (!Model.Any())
+			{
+				<p>Voor de toegang tot de API heeft u een API key nodig.</p>
+			}
+		</div>
+	</div>
+}
+	<script type="text/javascript" src="~/Static/js/QueryIndex.js"> </script>
+<div id="body">
+	@{
+		var groupedQueries = Model.GroupBy(q => q.Group).OrderBy(g => g.Key);
+	}
+	<p>&#160;</p>
+	<div class="container" data-ng-app="QueryIndex">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="sidebar hidden-print" role="complementary" style="background-color: #f6f6f6">
+					<ul class="nav">
+						<li>
+							@foreach (var group in groupedQueries)
+							{
+								<h4>@group.Key</h4>
+								<ul class="list-unstyled">
+									@foreach (var query in group)
+									{
+										<li><a title="@query.Label" href="#@query.Id">@query.Label</a></li>
+									}
+								</ul>
+							}
+						</li>	
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-9" role="main">
+							@foreach (var group in groupedQueries)
+							{
+								<h3>@group.Key</h3>
+								foreach (var query in group)
+								{
+									<div class="well">
+										<h4 id="@query.Id">@query.Label</h4>
+										@if (query.Parameters.Any())
+										{
+											<table class="table-striped table-bordered" style="width: 80%"> 
+												<thead>
+													<tr>
+														<th style="width: 30%">parameter</th>
+														<th style="width: 70%">beschrijving</th>
+													</tr>
+												</thead>
+												@foreach (var param in query.Parameters)
+												{
+													<tr>
+														<td class="top">@param.Name</td>
+														<td>@param.Description&#160;</td>
+													</tr>
+												}
+											</table>
+										}
+										<div class="space-above space-below">
+											@Html.Raw(query.Description)
+										</div>
+										@{
+											var sb = new StringBuilder();
+											string key = (!string.IsNullOrEmpty(ViewBag.ApiKey)) ? "api_key=" + ViewBag.ApiKey : "";
+											sb.Append(query.Parameters.Aggregate(key, (current, parameter) => current + (((current != "") ? "&" : "") + parameter.Name + "=" + (parameter.SampleValue ?? ""))));
+
+											string url = @Url.Content(ApiConfiguration.Current.QueryApiUrl + "/" + query.Id + "?" + string.Join("&", sb));
+											string formatConcatenator = (url.EndsWith("?")) ? "format" : "&format"; 
+										} 
+										<a href="@url">@url</a><br/>
+										<a class="badge" href="@url@formatConcatenator=csv">CSV</a>&#160;
+										<a class="badge" href="@url@formatConcatenator=json">JSON</a>&#160;
+										
+										@*
+										@foreach (var parameter in query.Parameters.Where(p => p.ValuesQuery != ""))
+										{
+											<div data-ng-controller="QueryParameterController">
+												<button data-ng-click="fetchParameterValues()" class="btn">Fetch</button>
+												<select class="form-control" data-ng-model="parameterValue" data-ng-options="item.Value as item.Label for item in parameters">
+												</select>
+												<button class="btn" data-ng-click="goForLink('@url')">Test</button>&#160;
+											</div>											
+										}
+										*@
+														
+														@*						
+										<!-- Split button -->
+						<div class="input-group">	
+							<input type="text" class="form-control">
+      				<div class="input-group-btn btn-group">
+								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+									<span class="sr-only">Format</span>
+									<span class="caret"></span>
+								</button>
+					      <ul class="dropdown-menu" role="menu">
+						      <li><a href="@url">HTML</a></li>
+						      <li><a href="@urlCsv">CSV</a></li>
+					      </ul>
+							</div>
+						</div>*@
+									</div>
+								}
+							}
+			</div>
+		</div>
+	</div>
+
+</div>

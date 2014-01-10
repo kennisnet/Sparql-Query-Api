@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title</title>
+        <script> document.write('<base href="' + document.location + '" />'); </script>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/Static/css/content.css">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"> </script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"> </script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"> </script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js"> </script>
+        <script type="text/javascript" src="~/Static/js/Shortcut.js"> </script>
+        <script>
+            var app = {
+                config: {
+                    siteRoot: '@Url.Content("~")',
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <header>
+        </header>
+        <div class="container">
+	        @if (ViewBag.Account != null)
+	        {
+		        string controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+		        <div class="navbar navbar-inverse">
+			        <ul class="nav navbar-nav">
+				        <li class="@((controllerName == "Home") ? "active" : "")"><a href="~/Home">Home</a></li>
+				        <li class="@((controllerName == "Query") ? "active" : "")"><a href="~/Query">Queries</a></li>
+				        <li class="@((controllerName == "Account") ? "active" : "")"><a href="~/Account">Accounts</a></li>
+				        <li class="@((controllerName == "Settings") ? "active" : "")"><a href="~/Settings">Settings</a></li>
+				        <li class="@((controllerName == "Log") ? "active" : "")"><a href="~/Log">Logs</a></li>
+			        </ul>
+			        @if (ViewBag.Account != null)
+			        {
+				        using (Html.BeginForm("Logout", "Home", FormMethod.Get, new
+					        {
+						        @class = "navbar-form pull-right"
+					        }))
+				        {
+					        <a href="@Url.Action("Index", "Account")" class="btn">@ViewBag.Account.FullName</a>
+					        <button type="submit" class="btn btn-sm btn-info">Log uit</button>
+				        }
+			        }
+			        else
+			        {
+				        using (Html.BeginForm("Login", "Home", FormMethod.Post, new
+					        {
+						        @class = "navbar-form pull-right"
+					        }))
+				        {
+					        <input type="text" name="userName" id="userName" class="form-control input-small" style="width: 200px;" />
+					        <button type="submit" class="btn btn-sm btn-info">Log in</button>
+				        }
+			        }
+
+		        </div>
+	        }
+          @RenderBody()
+        </div>
+	    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="~/Static/js/Loading.js"> </script>
+    </body>
+</html>

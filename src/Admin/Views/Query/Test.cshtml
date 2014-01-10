@@ -1,0 +1,14 @@
+﻿@using Resources
+
+<div id="edit_query_sparql" class="well space-above">
+	<div class="form-group row">
+		<div class="col-lg-12">
+			<div class="alert alert-link" data-ng-show="!queryForm.$pristine">
+				De query is nog niet opgeslagen, mogelijk zijn de resultaten anders dan verwacht.
+			</div>
+			<div class="panel">
+				<a href="{{query.Link}}" target="_blank">{{query.Link}}</a>
+			</div>
+		</div>
+	</div>
+</div>

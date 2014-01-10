@@ -1,0 +1,35 @@
+﻿@using Resources
+<div id="view_log_downloads" class="well space-above form-inline">
+	
+	<div class="form-group row">
+		<div class="col-lg-3">
+			&#160;<label class="label">Periode</label>
+			<select class="form-control" data-ng-model="downloadsTimespan" data-ng-change="onDownloadsTimespanChanged()">
+				<option value="week">week</option>
+				<option value="month">maand</option>
+			</select>
+		</div>
+		<div class="col-lg-12 space-above">
+			<table class="table table-striped" style="width:100%">
+				<thead>
+					<tr>
+						<th>Logs</th>
+						<th class="numValue">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="logItem in downloads.Items">
+						<td><a href="~/Log/Download/?start={{logItem.Start}}&end={{logItem.End}}">{{logItem.Label}}</a></td>
+						<td>{{logItem.Status}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-lg-12">
+			<ul class="pager" data-ng-show="downloads != null && downloads.TotalCount > 10">
+				<li class="previous" data-ng-class="{disabled:downloads.Start == 0}"><a href="#" data-ng-click="previous()">&larr; Vorige</a></li>
+				<li class="next" data-ng-class="{disabled:downloads.End >= downloads.TotalCount}"><a href="#" data-ng-click="next()">Volgende &rarr;</a></li>
+			</ul>
+		</div>
+	</div>
+</div>

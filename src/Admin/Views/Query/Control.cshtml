@@ -1,0 +1,13 @@
+﻿@using Resources
+<div class="form-group row">
+	<div class="col-lg-12">
+		<div class="alert alert-success" data-ng-show="false">
+			Query is opgeslagen...
+		</div>
+		@*<button data-ng-click="delete()" class="btn btn-sm btn-danger">@EditorStrings.Delete</button>*@
+		<div class="control-group pull-right">
+			<button data-ng-click="cancel()" class="btn btn-danger">@EditorStrings.Cancel</button>
+			<button data-ng-click="save()" data-ng-disabled="queryForm.$pristine || (queryForm.$dirty && queryForm.$invalid)" class="btn btn-primary">@EditorStrings.Save</button>
+		</div>
+	</div>
+</div>

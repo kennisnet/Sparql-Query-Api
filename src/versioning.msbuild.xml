@@ -1,0 +1,15 @@
+<Project DefaultTargets="Version" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+	<Target Name="Version"> 
+		<AssemblyInfo CodeLanguage="CS" 
+									OutputFile="SparqlQueryApiAssemblyInfo.cs" 
+									AssemblyCompany="Trezorix B.V." 
+									AssemblyCopyright="Copyright ©  2012-2014 Trezorix B.V." 
+									AssemblyProduct="Trezorix SparqlQueryApi" 
+									AssemblyVersion="$(version)" 
+									AssemblyInformationalVersion="0.8" />
+		<!-- AssemblyVersion: major.minor.build.vcsrevision -->
+		<!-- AssemblyInformationalVersion: marketing/sales version (may include alpha/beta postfixes)-->
+		<!--<SvnCommit Message="build: versioning $(version)." Username="buildix" Password="svnww" Targets="RnaAssemblyInfo.cs;" />-->
+	</Target>
+</Project>

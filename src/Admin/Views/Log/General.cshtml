@@ -1,0 +1,39 @@
+﻿@using Resources
+<div id="view_log_general" class="well space-above form-inline">
+	
+	<div class="form-group row">
+		<div class="col-lg-3">
+			&#160;<label class="label">Periode</label>
+			<select class="form-control" data-ng-model="timespan" data-ng-change="onTimespanChanged()">
+				<option value="last-hour">afgelopen uur</option>
+				<option value="last-24">afgelopen 24 uur</option>
+				<option value="last-week">afgelopen 7 dagen</option>
+				<option value="last-month">afgelopen maand</option>
+			</select>
+		</div>
+		<div class="col-lg-12 space-above">
+			<table class="table table-striped" style="width:100%">
+				<thead>
+					<tr>
+						<th>Query</th>
+						<th class="numValue">Gemiddelde tijd (ms)</th>
+						<th class="numValue">Uitvoeringstijd (ms)</th>
+						<th class="numValue">Cache tijd (ms)</th>
+						<th class="numValue">Hits</th>
+						<th class="numValue">Cache hits</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="log in queryStatistics">
+						<td>{{log.Name}}</td>
+						<td class="numValue">{{log.AverageTime}}</td>
+						<td class="numValue">{{log.AverageExecutionTime}}</td>
+						<td class="numValue">{{log.AverageCachedTime}}</td>
+						<td class="numValue">{{log.Hits}}</td>
+						<td class="numValue">{{log.CacheHits}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

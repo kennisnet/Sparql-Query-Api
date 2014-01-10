@@ -1,0 +1,14 @@
+﻿@using Resources
+<div id="edit_query_access" class="well space-above">
+	<div class="form-group row">
+		<div class="col-lg-12">
+			<label>Selecteer de query's waar gebruiker '{{account.FullName}}' toegang toe heeft.</label>
+			<ul class="list-unstyled" style="margin-top: 8px;">
+				<li data-ng-repeat="queryAccess in account.QueryAccess">
+					<input type="checkbox" value="{{queryAccess.Name}}" data-ng-model="queryAccess.Selected"  />
+					<span class="space-before">{{queryAccess.Name}}</span>
+				</li>
+			</ul>   
+		</div>
+	</div>
+</div>

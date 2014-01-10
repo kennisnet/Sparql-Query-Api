@@ -1,0 +1,16 @@
+*.Cache
+*.db
+*.suo
+*.tmp
+*.user
+bin
+build
+com
+config
+deploy
+dist
+obj
+/release
+Data
+packages
+!packages/Microsoft.Bcl.Build*/tools/Microsoft.Bcl.Build.targets

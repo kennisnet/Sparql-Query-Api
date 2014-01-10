@@ -1,0 +1,52 @@
+﻿.space-above {
+	margin-top: 20px;
+}
+
+.space-below {
+	margin-bottom: 20px;
+}
+
+.space-before {
+	margin-left: 6px;
+}
+
+th {
+	padding: 4px;
+}
+
+td {
+	padding: 4px;
+	vertical-align: top;
+}
+
+.header {
+	background-color: #203040;
+	color: #fff;
+}
+
+.header p {
+	color: #ccddee;
+	font-size: 16px;
+}
+
+.sidebar {
+	background-color: #F5F5F5;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	min-height: 20px;
+	padding: 8px;
+}
+
+
+.sidebar > .nav > li a {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 1px 8px;
+	position: relative;
+}
+
+.sidebar > .nav h4 {
+	margin-bottom: 2px;
+}

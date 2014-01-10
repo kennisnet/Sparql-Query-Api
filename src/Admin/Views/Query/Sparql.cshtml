@@ -1,0 +1,27 @@
+﻿@using Resources
+
+<div id="edit_query_sparql" class="well space-above">
+	<div class="form-group row">
+		<div class="col-lg-12">
+			<label>Endpoint</label>
+		</div>	
+		<div class="col-lg-12">
+			<select class="form-control" data-ng-model="query.Endpoint" data-ng-options="item as item for item in query.Endpoints">
+			</select>
+		</div>
+		<div class="col-lg-12 space-above">
+			<textarea rows="20" class="form-control sparql-editor" data-ng-model="query.SparqlQuery" wrap="off" spellcheck='false' ></textarea>
+		</div>   
+		<div class="col-lg-12 space-above">
+			<label>Test</label>
+		</div>	
+		<div class="col-lg-12">
+			<div class="alert alert-link" data-ng-show="!queryForm.$pristine">
+				De query is nog niet opgeslagen, mogelijk zijn de resultaten anders dan verwacht.
+			</div>
+			<div class="panel">
+				<a href="{{query.Link}}" target="_blank">{{query.Link}}</a>
+			</div>
+		</div>
+	</div>
+</div>

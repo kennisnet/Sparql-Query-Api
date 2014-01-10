@@ -1,0 +1,29 @@
+<Project DefaultTargets="PackageRelease" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  <PropertyGroup>
+    <OutputPath>$(teamcity_build_workingDir)\trunk\_pickup</OutputPath>
+    <PickupPath>$(OutputPath)\_PublishedWebsites\WebApi</PickupPath>
+  </PropertyGroup>
+  <Target Name="PackageRelease">
+    <MSBuild Projects=".\QueryApi\QueryApi.csproj;.\Admin\Admin.csproj;" 
+             ContinueOnError="false" 
+             Targets="_WPPCopyWebApplication" 
+             Properties="Configuration=$(Configuration);OutputPath=$(OutputPath)" 
+            />
+    <CallTarget Targets="ZipPackage"  />
+  </Target>
+
+  
+  <Target Name="ZipPackage">
+    <ItemGroup>
+      <PackageFiles Include="$(PickupPath)\**\*.*" />
+    </ItemGroup>
+
+    <Zip Files="@(PackageFiles)" 
+          WorkingDirectory="$(PickupPath)" 
+          ZipFileName="$(teamcity_build_workingDir)\QueryApi_$(version).zip" />
+    <Copy SourceFiles="$(teamcity_build_workingDir)\QueryApi_$(version).zip"
+            DestinationFolder="$(packageRepositoryPath)\QueryApi"
+    />
+  </Target>
+</Project>

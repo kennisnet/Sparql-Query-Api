@@ -1,0 +1,17 @@
+﻿@using Resources
+<div class="form-group row">
+	<div class="col-lg-12">
+		@*<button data-ng-click="delete()" class="btn btn-sm btn-danger">@EditorStrings.Delete</button>*@
+		<div id="saveSucces" class="alert alert-success" data-ng-show="saveSuccess" data-alert="alert">
+			Settings opgeslagen.
+		</div>
+		<div id="saveError" class="alert alert-danger" data-ng-show="saveError" data-alert="alert">
+			Settings niet opgeslagen, controlleer de gegevens.
+		</div>
+		
+		<div class="control-group pull-right">
+			<button data-ng-click="cancel()" class="btn btn-danger">@EditorStrings.Cancel</button>
+			<button data-ng-click="save()" data-ng-disabled="settingsForm.$pristine || (settingsForm.$dirty && settingsForm.$invalid)" class="btn btn-primary">@EditorStrings.Save</button>
+		</div>
+	</div>
+</div>

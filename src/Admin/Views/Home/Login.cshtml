@@ -1,0 +1,43 @@
+﻿@using Trezorix.Sparql.Api.Core.Configuration
+@model Trezorix.Sparql.Api.Admin.Models.Accounts.LoginModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Login";
+}
+<div class="container">
+	<div>&#160;</div>
+	<div class="row" >
+		<div class="col-lg-4 col-offset-3 well" >
+			@*            
+            <div class="alert alert-danger">
+                <a class="close" data-dismiss="alert" href="#">×</a>Incorrect naam of wachtwoord!
+            </div>
+            *@
+			@using (Html.BeginForm(ViewContext.RouteData.GetRequiredString("Action"), ViewContext.RouteData.GetRequiredString("Controller"), FormMethod.Post)) {
+				<legend>Log in op @ApiConfiguration.Current.ApplicationTitle Beheer</legend>
+				<div>
+					<label class="control-label">Naam</label>
+					@Html.TextBoxFor(m => m.Username, new {
+						@class = "form-control"
+					})
+				</div>
+				<div class="space-above">
+					<label class="control-label">Wachtwoord</label>
+					@Html.PasswordFor(m => m.Password, new {
+						@class = "form-control"
+					})
+				</div>
+				<div class="space-above space-below">
+				<label>
+					@Html.CheckBoxFor(m => m.RememberMe, new
+						{
+							@text = "Onthoud mij",
+							@class = "in"
+						}) <span class="space-before">Onthoud mij</span></label>
+        </div>		 
+				<button type="submit" name="submit" class="btn btn-info btn-block">Log in</button>
+			}
+		</div>
+	</div>
+</div>

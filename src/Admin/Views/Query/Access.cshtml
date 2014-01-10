@@ -1,0 +1,18 @@
+﻿@using Resources
+<div id="edit_query_access" class="well space-above">
+	<div class="form-group row">
+		<div class="col-lg-12">
+			<label>Selecter gebruikers die toegang hebben tot de query '{{query.Id}}'.</label>
+			<ul class="list-unstyled"  style="margin-top: 8px;">
+				<li data-ng-repeat="access in query.Access">
+					<input type="checkbox" value="{{access.Id}}" data-ng-model="access.Selected" data-ng-disabled="query.AllowAnonymous" />
+					<span class="space-before">{{access.Name}}</span>
+				</li>
+				<li data-ng-show="query.EnableAllowAnonymous">
+					<input type="checkbox" value="anonymous" data-ng-model="query.AllowAnonymous"  />
+					<span class="space-before">Anonieme toegang</span>
+				</li>
+			</ul>   
+		</div>
+	</div>
+</div>
