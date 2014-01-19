@@ -12,5 +12,7 @@ dist
 obj
 /release
 Data
+Logs
+Publish
 packages
 !packages/Microsoft.Bcl.Build*/tools/Microsoft.Bcl.Build.targets
