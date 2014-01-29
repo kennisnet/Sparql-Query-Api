@@ -1,0 +1,9 @@
+{
+  "Database": "Project.QueryApi",
+  "ApplicationTitle": "[Project] Query API",
+  "Description": "<h1>[Project] Query API</h1>\n<p>Project description</p>",
+  "SparqlEndpoints": [],
+  "QueryApiUrl": "http://localhost:49975",
+  "AdminApiUrl": "http://localhost:53783",
+  "AllowAnonymous": false
+}
