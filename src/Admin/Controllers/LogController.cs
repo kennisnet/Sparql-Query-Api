@@ -147,6 +147,9 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		{
 			// get the min dates per query
 			var queryStatistics = _session.Query<Indexes.QueryStatistics.Result, Indexes.QueryStatistics>().ToList();
+
+			if (queryStatistics.Count == 0) return null;
+
 			// get the min date from all queries
 			var minTimestamp = queryStatistics.Where(q => q.First > DateTime.MinValue).Min(q => q.First).Date;
 

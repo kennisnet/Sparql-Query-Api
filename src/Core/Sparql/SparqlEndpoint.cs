@@ -46,7 +46,8 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			var client = new WebClientWithTimeout(Math.Max(Timeout, 90*1000));
 			if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
 			{
-				client.Credentials = new NetworkCredential(Username, Password, new Uri(Url).Host);
+				var uri = new Uri(Url);
+				client.Credentials = new NetworkCredential(Username, Password, "");
 			}
 			switch (output)
 			{

@@ -27,11 +27,11 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 
 		[HttpGet]
 		public ActionResult Index() {
-			try
+			try 
 			{
 				ViewBag.Account = OperatingAccount.Current();
 			}
-			catch (ApplicationException e)
+			catch (ApplicationException e) 
 			{
 				return RedirectToAction("Login", "Home");
 			}
@@ -45,7 +45,12 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 			{
 				string safeId = ((!string.IsNullOrEmpty(group)) ? group.Replace("'", "_") : "");
 				string thisGroup = group;
-				model.Groups.Add(new QueryGroup { Id = safeId, Label = ((!string.IsNullOrEmpty(group)) ? group : "algemeen"), Items = list.Where(q => q.Group == thisGroup)});
+				model.Groups.Add(new QueryGroup { Id = safeId, Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"), Items = list.Where(q => q.Group == thisGroup)});
+			}
+
+			if (model.Groups.Count == 0)
+			{
+				model.Groups.Add(new QueryGroup { Label = "Algemeen", Items = new List<Query>()});
 			}
 			return View(model);
 		}

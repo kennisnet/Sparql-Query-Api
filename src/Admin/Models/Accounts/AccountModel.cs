@@ -28,20 +28,23 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		{
 			account.FullName = FullName;
 			account.ApiKey = Guid.Parse(ApiKey);
-			foreach (var queryAccessModel in QueryAccess)
+			if (QueryAccess != null)
 			{
-				var query = queryRepository.Get(queryAccessModel.Name);
-				if (queryAccessModel.Selected && query.ApiKeys.All(a => a != account.ApiKey))
+				foreach (var queryAccessModel in QueryAccess)
 				{
-					query.ApiKeys.Add(account.ApiKey);
-					queryRepository.Save(query.Id, query);
-				}
-				else if (!queryAccessModel.Selected && query.ApiKeys.Any(a => a == account.ApiKey))
-				{
-					query.ApiKeys.Remove(account.ApiKey);
-					queryRepository.Save(query.Id, query);
-				}
+					var query = queryRepository.Get(queryAccessModel.Name);
+					if (queryAccessModel.Selected && query.ApiKeys.All(a => a != account.ApiKey))
+					{
+						query.ApiKeys.Add(account.ApiKey);
+						queryRepository.Save(query.Id, query);
+					}
+					else if (!queryAccessModel.Selected && query.ApiKeys.Any(a => a == account.ApiKey))
+					{
+						query.ApiKeys.Remove(account.ApiKey);
+						queryRepository.Save(query.Id, query);
+					}
 
+				}				
 			}
 		}
 
