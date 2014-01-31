@@ -21,30 +21,10 @@ namespace Trezorix.Sparql.Api.Core.Configuration
 
 		public static ApiConfiguration Current { get; set; }
 
-		public ApiConfiguration()
-		{
-			//switch (hostName.ToLower())
-			//{
-			//	case "obk.edustandaard":
-			//		_sparqlEndpointUrl = "http://obk.edustandaard.nl/sparql";
-			//		break;
-			//	case "staging-obk.edustandaard":
-			//		_sparqlEndpointUrl = "http://staging-obk.edustandaard.nl/sparql";
-			//		break;
-			//	case "pld-obk.edustandaard":
-			//		_sparqlEndpointUrl = "http://pld3.rnatoolset.net/sparql";
-			//		break;
-			//	default:
-			//		_sparqlEndpointUrl = "http://pld3.rnatoolset.net/sparql";
-			//		break;
-			//}
-
-		}
-
 		public static ApiConfiguration Init(string hostName)
 		{
-			string root = HttpContext.Current.Server.MapPath("~");
-			if (root.EndsWith("Query") || root.EndsWith("Admin") || root.EndsWith("Api"))
+			string root = HttpContext.Current.Server.MapPath("~").ToLowerInvariant();
+			if (root.EndsWith("query") || root.EndsWith("admin") || root.EndsWith("api"))
 			{
 				root += "..\\";
 			}
