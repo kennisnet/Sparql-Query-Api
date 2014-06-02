@@ -21,14 +21,14 @@ namespace Trezorix.Sparql.Api.Core.Configuration
 
 		public static ApiConfiguration Current { get; set; }
 
-		public static ApiConfiguration Init(string hostName)
+		public static ApiConfiguration Init(string instanceName)
 		{
 			string root = HttpContext.Current.Server.MapPath("~").ToLowerInvariant();
 			if (root.EndsWith("query") || root.EndsWith("admin") || root.EndsWith("api"))
 			{
 				root += "..\\";
 			}
-			string repositoryRoot = root + "..\\Data\\";
+			string repositoryRoot = string.Format("{0}..\\Data\\{1}\\", root, instanceName);
 
 			string json = File.ReadAllText(repositoryRoot + "settings.json");
 			var configuration = JsonConvert.DeserializeObject<ApiConfiguration>(json);

@@ -7,7 +7,11 @@
 <script>
 	app.config.apiRoot = '@Url.Content("~/Settings")';
 </script>
-<script src="~/Static/js/Settings.js"> </script>
+
+@section Scripts
+{
+	<script src="~/Static/js/Settings.js"> </script>
+}
 
 
 <div data-ng-app="SettingsEditor">

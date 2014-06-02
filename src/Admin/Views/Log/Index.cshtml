@@ -9,7 +9,10 @@
 	app.config.apiRoot = '@Url.Content("~/Log")';
 	queryApiUrl = '@ApiConfiguration.Current.QueryApiUrl';
 </script>
-<script src="~/Static/js/Log.js"> </script>
+@section Scripts
+{
+	<script src="~/Static/js/Log.js"> </script>
+}
 
 
 <div data-ng-app="LogViewer">

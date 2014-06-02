@@ -1,6 +1,6 @@
-﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'loadingScreen']);
+﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'loadingScreen', 'ui.codemirror']);
 
-function QueryController($scope, $location, $http) {
+function QueryController($scope, $location, $http, $timeout) {
     var original = null;
     var query = null;
 
@@ -73,6 +73,19 @@ function QueryController($scope, $location, $http) {
 		$scope.newGroup = '';
 	};
 
+	$scope.getEditor = function() {
+		console.log($('#sparql-editor'), angular.element('#sparql-editor'), angular.element('#edit_query_sparql'));
+		$scope.setSparqlEditorParent();
+	};
+
+	$scope.setSparqlEditorParent = function() {
+		var element = $('#sparql-editor').detach();
+		$('#sparql-editor-parent').append(element);
+		$scope.codeMirrorRefresh++;
+		$timeout(function () { $scope.codeMirrorRefresh++; }, 100);
+	};
+
+	//$timeout($scope.setSparqlEditorParent, 100);
 }
 
 function IndexController($scope, $location, $http) {

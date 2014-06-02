@@ -9,8 +9,10 @@
 			<select class="form-control" data-ng-model="query.Endpoint" data-ng-options="item as item for item in query.Endpoints">
 			</select>
 		</div>
-		<div class="col-lg-12 space-above">
-			<textarea rows="20" class="form-control sparql-editor" data-ng-model="query.SparqlQuery" wrap="off" spellcheck='false' ></textarea>
+		@*<div class="col-lg-12 space-above">
+			<textarea rows="20" class="form-control sparql-editor" data-ng-model="xquery.SparqlQuery" wrap="off" spellcheck='false' ></textarea>
+		</div>*@   
+		<div class="col-lg-12 space-above" id="sparql-editor-parent">
 		</div>   
 		<div class="col-lg-12 space-above">
 			<label>Test</label>

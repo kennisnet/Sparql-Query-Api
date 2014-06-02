@@ -4,22 +4,26 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 	ViewBag.Title = "Query: " + Model.Id;
 }
+@section Scripts
+{
+<script src="~/Static/js/Query.js"> </script>
+	
+}
 <script>
 	app.config.apiRoot = '@Url.Content("~/Query")';
 	var queryId = '@Model.Id';
 	var group = '@Model.Group';
 </script>
-<script src="~/Static/js/Query.js"> </script>
 
 
 <div data-ng-app="QueryEditor">
 	<div data-ng-controller="QueryController">
-		<ng-form name="queryForm">
+		<ng-form name="queryForm" ng-init="codeMirrorRefresh = 0">
 			<tabset>
 				<tab heading="Algemeen">
 					@{ Html.RenderPartial("General"); }
 				</tab>
-				<tab heading="SPARQL">
+				<tab heading="SPARQL" select="setSparqlEditorParent()">
 					@{ Html.RenderPartial("Sparql"); }
 				</tab>
 				<tab heading="Parameters">
@@ -33,6 +37,9 @@
 				</tab>
 			</tabset>
 			@{ Html.RenderPartial("Control"); }  
+			<div style="display: none;">
+				<div id="sparql-editor" ui-codemirror="{ lineNumbers: true, lineWrapping : true, mode: 'sparql' }" ui-refresh="codeMirrorRefresh" data-ng-model="query.SparqlQuery"></div>
+			</div>
 		</ng-form>
 	</div>
 </div>

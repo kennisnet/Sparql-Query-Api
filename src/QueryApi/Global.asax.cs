@@ -19,7 +19,7 @@ namespace Trezorix.Sparql.Api.QueryApi
 		{
 			AreaRegistration.RegisterAllAreas();
 
-			var cfg = ApiConfiguration.Init(HostingEnvironment.SiteName);
+			var cfg = ApiConfiguration.Init("OBK");
 			ApiConfiguration.Current = cfg;
 
 		  WebApiConfig.Register(GlobalConfiguration.Configuration);

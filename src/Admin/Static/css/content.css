@@ -182,3 +182,11 @@ fieldset[disabled] .btn-danger.active {
   color: #ffffff;
 }
 
+.CodeMirror-wrap {
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+}
+
+.CodeMirror-lines {
+	line-height: 1.5em;
+}

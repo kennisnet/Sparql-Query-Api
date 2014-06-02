@@ -23,7 +23,7 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			get
 			{
 				var text = _query;
-				foreach (var param in Params)
+				foreach (var param in Params.OrderByDescending(p => p.Key.Length))
 				{
 					text = text.Replace("$$" + param.Key, param.Value);
 				}
