@@ -3,9 +3,11 @@ document.onkeyup = function(e) {
 	if (e.keyCode == 17) {
 		isCtrl = false;
 	}
+  return true;
 };
 
-document.onkeydown = function(e) {
+document.onkeydown = function (e) {
+  //return true;
 	if (e.keyCode == 17) {
 		isCtrl = true;
 	}
@@ -14,8 +16,8 @@ document.onkeydown = function(e) {
 		if (shortcuts.Ctrl[key]) {
 			console.log('Ctrl+' + key, shortcuts.Ctrl[key]);
 			shortcuts.Ctrl[key].action();
-		}
-		return false;
+			return false;
+    }
 	}
 	return true;
 };

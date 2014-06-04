@@ -258,6 +258,7 @@
     <Content Include="Views\Log\General.cshtml" />
     <Content Include="Views\Settings\Access.cshtml" />
     <Content Include="Views\Log\Downloads.cshtml" />
+    <Content Include="Views\Query\Preview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

@@ -46,7 +46,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 		public dynamic Get(string name, bool debug = false, bool showQuery = false)
 		{
 			var type = GetOutputType();
-			if (type.Name == "XmlDocument")
+			if (type.Name == "XmlDocument" && !showQuery)
 			{
 				return Execute<XmlDocument>(name, HttpContext.Current.Request.Params, debug, showQuery);
 			}
@@ -225,7 +225,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 		{
 			dynamic xmlOut;
 
-			string cacheKey = typeof(T).Name + "|" + name + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
+			string cacheKey = name + "|" + typeof(T).Name + "|" + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
 
 			if (Cache[cacheKey] != null && !debug)
 			{

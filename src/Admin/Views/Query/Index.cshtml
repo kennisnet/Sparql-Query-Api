@@ -8,9 +8,13 @@
     ViewBag.Title = "Query overzicht";
 }
 <script>
-	app.config.apiRoot = '@Url.Content("~/Query")';
+  app.config.apiRoot = '@Url.Content("~/Query")';
 </script>
-<script src="~/Static/js/Query.js?dsad"> </script>
+
+@section Scripts
+{
+	<script src="~/Static/js/Query.js"> </script>
+}
 
 <p>&#160;</p>
 

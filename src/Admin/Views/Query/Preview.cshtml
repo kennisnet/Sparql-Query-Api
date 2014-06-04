@@ -1,0 +1,16 @@
+﻿@using Resources
+<div class="well space-above" data-ng-show="previewResults.head">
+  <table class="table">
+    <thead>
+      <tr>
+        <th data-ng-repeat="var in previewResults.head.vars">{{var}}</th>
+      </tr>
+    </thead>
+    <tr data-ng-repeat="binding in previewResults.results.bindings">
+      <td data-ng-repeat="var in previewResults.head.vars">
+        {{formatSparqlBinding(binding[var])}}
+      </td>
+    </tr>
+  </table>
+  
+</div>

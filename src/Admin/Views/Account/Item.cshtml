@@ -9,7 +9,10 @@
 	app.config.apiRoot = '@Url.Content("~/Account")';
 	var accountId = '@Model.Id';
 </script>
-<script src="~/Static/js/Account.js"> </script>
+@section Scripts
+{
+	<script src="~/Static/js/Account.js"> </script>
+}
 
 <div data-ng-app="AccountEditor">
 	<div data-ng-controller="AccountController">

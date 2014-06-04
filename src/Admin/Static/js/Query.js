@@ -47,11 +47,44 @@ function QueryController($scope, $location, $http, $timeout) {
 
     };
 
-	RegisterShortcut({ funxion: 'Ctrl', key: 'S' }, $scope.save);
+		RegisterShortcut({ funxion: 'Ctrl', key: 'S' }, $scope.save);
 
     $scope.cancel = function () {
         $scope.returnUrl = app.config.siteRoot + 'Query';
         document.location.href = $scope.returnUrl;
+    };
+
+    $scope.duplicate = function () {
+      queryId = '';
+      $scope.query.Id = 'copy of ' + $scope.query.Id;
+      $scope.query.Label = 'copy of ' + $scope.query.Label;
+      $scope.save();
+    };
+
+    $scope.preview = function () {
+      $http.get(app.config.apiRoot + '/Preview/' + $scope.query.Id)
+        .success(function (response) {
+          console.log(response);
+          $scope.previewResults = angular.copy(response);
+          console.log($scope.previewResults);
+        })
+        .error(function () {
+          alert('Preview mislukt. Probeer het nog eens...');
+        });
+    };
+
+    $scope.formatSparqlBinding = function (binding) {
+      if (!binding) {
+        return '';
+      }
+      switch (binding.type) {
+        case "uri":
+          return binding.value.replace('http://purl.edustandaard.nl/begrippenkader/', 'bk:');
+        case "literal":
+          return binding.value;// + '@' + binding['xml:lang'];
+        default:
+          return binding.value;
+      }
     };
 
     $scope.delete = function () {
