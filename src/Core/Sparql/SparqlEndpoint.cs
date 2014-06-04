@@ -36,6 +36,13 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 				result.Load(stream);
 				return result as T;
 			}
+			if (typeof(T) == typeof(object)) {
+				var stream = (MemoryStream)ExecuteSparqlQuery(query, "json");
+
+				var data = Encoding.UTF8.GetString(stream.ToArray());
+				var result = JsonConvert.DeserializeObject<dynamic>(data);
+				return result as T;
+			}
 			return null;
 		}
 

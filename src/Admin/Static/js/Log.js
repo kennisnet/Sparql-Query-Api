@@ -11,6 +11,7 @@ function LogController($scope, $location, $http) {
 			if (!angular.isDefined($scope.downloads)) {
 				$scope.updateDownloads(0);
 			}
+			break;
 		default:
 		}
 	};

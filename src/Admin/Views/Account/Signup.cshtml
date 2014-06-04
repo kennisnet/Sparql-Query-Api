@@ -1,5 +1,4 @@
-﻿@using Proffile.Web.Models.Account
-@model Trezorix.Sparql.Api.Admin.Models.Accounts.SignupModel
+﻿@model Trezorix.Sparql.Api.Admin.Models.Accounts.SignupModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,9 +16,8 @@
             @class = "control-label"
         };
         <div class="control-group">
-            @Html.LabelFor(m => m.Voornaam, labelAttributes) @Html.TextBoxFor(m => m.Voornaam, inputAttributes)
-            @Html.LabelFor(m => m.Tussenvoegsel, labelAttributes) @Html.TextBoxFor(m => m.Tussenvoegsel, inputAttributes)
-            @Html.LabelFor(m => m.Achternaam, labelAttributes) @Html.TextBoxFor(m => m.Achternaam, inputAttributes)
+            @Html.LabelFor(m => m.FullName, labelAttributes) @Html.TextBoxFor(m => m.FullName, inputAttributes)
+            @Html.LabelFor(m => m.Username, labelAttributes) @Html.TextBoxFor(m => m.Username, inputAttributes)
             @Html.LabelFor(m => m.Email, labelAttributes) @Html.TextBoxFor(m => m.Email, inputAttributes)
         </div>
         <p>&#160;</p>

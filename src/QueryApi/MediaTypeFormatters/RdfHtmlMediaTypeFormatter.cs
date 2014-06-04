@@ -25,7 +25,7 @@ namespace Trezorix.Sparql.Api.QueryApi.MediaTypeFormatters
 
 		public override bool CanWriteType(Type type)
 		{
-
+			return true;
 			return typeof(XmlNode).IsAssignableFrom(type);
 		}
 		

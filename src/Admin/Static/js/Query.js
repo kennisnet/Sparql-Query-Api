@@ -8,7 +8,7 @@ function QueryController($scope, $location, $http, $timeout) {
 
 
 	  $scope.isNewquery = function (value) {
-	  	return (value == '' || value.indexOf('000000') > -1);
+	  	return (value === '' || value.indexOf('000000') > -1);
 	  };
 
 	  $http.get(app.config.apiRoot + '/Details/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
@@ -57,7 +57,7 @@ function QueryController($scope, $location, $http, $timeout) {
     $scope.delete = function () {
         $scope.returnUrl = app.config.siteRoot + 'Query';
 
-        if (queryId == '') {
+        if (queryId === '') {
             document.location.href = $scope.returnUrl;
         } else
         {
@@ -95,7 +95,7 @@ function IndexController($scope, $location, $http) {
 	};
 	
 	$scope.ensureGroup = function (value) {
-		if ($scope.data.groups[value] == null) {
+		if ($scope.data.groups[value] === null) {
 			$scope.data.groups[value] = { visible: true, edit: false };
 		}
 		return $scope.data.groups[value];
@@ -124,15 +124,13 @@ function IndexController($scope, $location, $http) {
 		$scope.returnUrl = app.config.siteRoot + 'Query';
 
 		if (window.confirm("Weet u zeker dat u query '" + value + "' wilt verwijderen?")) {
-			if (value == '') {
+			if (value === '') {
 				document.location.href = $scope.returnUrl;
 			} else {
 				$http.post(app.config.apiRoot + '/Delete/' + value).then(function (response) {
 					document.location.href = $scope.returnUrl;
 				});
 			}
-
 		}
-
 	};
 }

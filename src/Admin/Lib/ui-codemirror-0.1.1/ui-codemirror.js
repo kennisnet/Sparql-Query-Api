@@ -20,7 +20,7 @@ angular.module('ui.codemirror', []).constant('uiCodemirrorConfig', {}).directive
         //   see http://codemirror.net/doc/manual.html#api_constructor
         var value = tElement.text();
         
-        return  function postLink(scope, iElement, iAttrs, ngModel) {
+        return function postLink(scope, iElement, iAttrs, ngModel) {
         var codeMirror = new window.CodeMirror(function (cm_el) {
         	/*
 					angular.forEach(tElement.prop('attributes'), function (a) {

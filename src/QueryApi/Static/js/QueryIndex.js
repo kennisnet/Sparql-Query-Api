@@ -15,8 +15,6 @@ function QueryParameterController($scope, $location, $http) {
 	$scope.goForLink = function(link) {
 		console.log(link);
 		document.location.href = link + "&leverancier=" + $scope.parameterValue;
-
-
 	};
 
 }

@@ -43,15 +43,26 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 		}
 
 		[ApiKeyAuth("api_key", typeof(ApiKeyAuthorizer))]
-		public XmlDocument Get(string name, bool debug = false)
+		public dynamic Get(string name, bool debug = false, bool showQuery = false)
 		{
-			return Execute(name, HttpContext.Current.Request.Params, debug);
+			var type = GetOutputType();
+			if (type.Name == "XmlDocument")
+			{
+				return Execute<XmlDocument>(name, HttpContext.Current.Request.Params, debug, showQuery);
+			}
+
+			return Execute<object>(name, HttpContext.Current.Request.Params, debug, showQuery);
 		}
 
 		[ApiKeyAuth("api_key", typeof(ApiKeyAuthorizer))]
-		public XmlDocument Post(string name, [FromBody]dynamic model, bool debug = false)
+		public dynamic Post(string name, [FromBody]dynamic model, bool debug = false, bool showQuery = false)
 		{
-			return Execute(name, model, debug);
+			var type = GetOutputType();
+			if (type.Name == "XmlDocument" && !showQuery) {
+				return Execute<XmlDocument>(name, model, debug, showQuery);
+			}
+
+			return Execute<object>(name, model, debug, showQuery);
 		}
 
 		[HttpGet]
@@ -100,7 +111,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			return labelUriList;
 		}
 
-		private XmlDocument Execute(string name, dynamic model, bool debug)
+		private dynamic Execute<T>(string name, dynamic model, bool debug, bool showQuery) where T : class
 		{
 			Logger.Info("url: " + HttpContext.Current.Request.Url);
 
@@ -128,7 +139,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			var sq = new Parameterized‎SparqlQuery(endpoint.Namespaces, query.SparqlQuery);
 			sq.InjectParameterValues(model);
 
-			var xmlOut = ExecuteCachedQuery(name, debug, sq, endpoint, timeTracker, queryLogItem);
+			var xmlOut = (T)ExecuteCachedQuery<T>(name, debug, sq, endpoint, timeTracker, queryLogItem);
 
 			timeTracker.End("Query");
 			timeTracker.WriteLog(Logger);
@@ -139,8 +150,27 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			_session.SaveChanges();
 
 			Logger.Info("querylog: " + JsonConvert.SerializeObject(queryLogItem));
+			if (showQuery)
+			{
+				return sq;
+			}
 
 			return xmlOut;
+		}
+
+		private static Type GetOutputType() {
+			string accept = HttpContext.Current.Request.Headers["Accept"];
+			string format = HttpContext.Current.Request.Params["format"];
+
+			if (format != null && ("json").Contains(format)) {
+				return typeof(object);
+			}
+
+			if ((accept != null && accept.Contains("application/xml")) || (format != null && ("csv|xml").Contains(format))) {
+				return typeof(XmlDocument);
+			}
+
+			return typeof(object);
 		}
 
 		private static bool IsAuthorized(Query query)
@@ -190,22 +220,23 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			return response;
 		}
 
-		private XmlDocument ExecuteCachedQuery(string name, bool debug, Parameterized‎SparqlQuery sq, SparqlEndpoint endpoint,
-		                                       TimeTracker timeTracker, QueryLogItem queryLogItem)
+		private dynamic ExecuteCachedQuery<T>(string name, bool debug, Parameterized‎SparqlQuery sq, SparqlEndpoint endpoint,
+																					 TimeTracker timeTracker, QueryLogItem queryLogItem) where T : class
 		{
-			XmlDocument xmlOut;
+			dynamic xmlOut;
 
-			string cacheKey = name + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
+			string cacheKey = typeof(T).Name + "|" + name + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
 
 			if (Cache[cacheKey] != null && !debug)
 			{
-				xmlOut = (XmlDocument) Cache[cacheKey];
+				xmlOut = (dynamic) Cache[cacheKey];
 				Logger.Info("Cache hit on: " + cacheKey);
 				if (queryLogItem != null) queryLogItem.CacheHit = true;
 			}
 			else
 			{
-				xmlOut = endpoint.Query<XmlDocument>(sq.Query);
+				xmlOut = endpoint.Query<T>(sq.Query);
+				Logger.Info("SPARQL: " + sq.Query);
 
 				if (!debug)
 				{

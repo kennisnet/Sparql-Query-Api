@@ -5,7 +5,7 @@ function AccountController($scope, $location, $http) {
     var account = null;
 
     $scope.isNewAccount = function (value) {
-    	return (value == '' || value.indexOf('000000') > -1);
+    	return (value === '' || value.indexOf('000000') > -1);
     };
 
     $http.get(app.config.apiRoot + '/Details/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function (response) {
@@ -41,7 +41,7 @@ function AccountController($scope, $location, $http) {
     $scope.delete = function () {
         $scope.returnUrl = app.config.siteRoot + "Account";
 
-        if (accountId == '') {
+        if (accountId === '') {
             document.location.href = $scope.returnUrl;
         } else
         {
@@ -60,7 +60,7 @@ function IndexController($scope, $location, $http) {
 	};
 
 	$scope.ensureGroup = function (value) {
-		if ($scope.data.groups[value] == null) {
+		if ($scope.data.groups[value] === null) {
 			$scope.data.groups[value] = { visible: true, edit: false };
 		}
 		return $scope.data.groups[value];
@@ -89,7 +89,7 @@ function IndexController($scope, $location, $http) {
 		$scope.returnUrl = app.config.siteRoot + 'Account';
 
 		if (window.confirm("Weet u zeker dat u account '" + value + "' wilt verwijderen?")) {
-			if (value == '') {
+			if (value === '') {
 				document.location.href = $scope.returnUrl;
 			} else {
 				$http.post(app.config.apiRoot + '/Delete/' + value).then(function (response) {
@@ -101,4 +101,3 @@ function IndexController($scope, $location, $http) {
 
 	};
 }
-

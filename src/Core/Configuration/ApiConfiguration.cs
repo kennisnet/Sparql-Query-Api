@@ -28,7 +28,9 @@ namespace Trezorix.Sparql.Api.Core.Configuration
 			{
 				root += "..\\";
 			}
-			string repositoryRoot = string.Format("{0}..\\Data\\{1}\\", root, instanceName);
+			string repositoryRoot = string.Format("{0}..\\Data\\", root);
+			
+			repositoryRoot += ((!string.IsNullOrEmpty(instanceName)) ? instanceName + "\\" : "");
 
 			string json = File.ReadAllText(repositoryRoot + "settings.json");
 			var configuration = JsonConvert.DeserializeObject<ApiConfiguration>(json);

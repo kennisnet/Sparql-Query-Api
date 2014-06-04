@@ -1,18 +1,23 @@
 ﻿var isCtrl = false;
 document.onkeyup = function(e) {
-	if (e.keyCode == 17) isCtrl = false;
+	if (e.keyCode == 17) {
+		isCtrl = false;
+	}
 };
 
 document.onkeydown = function(e) {
-	if (e.keyCode == 17) isCtrl = true;
-	if (e.keyCode == 83 && isCtrl == true) {
-		//run code for CTRL+S -- ie, save!
-		console.log(shortcuts.Ctrl['S']);
-		if (shortcuts.Ctrl['S']) {
-			shortcuts.Ctrl['S'].action();
+	if (e.keyCode == 17) {
+		isCtrl = true;
+	}
+	var key = String.fromCharCode(e.keyCode);
+	if (isCtrl === true) {
+		if (shortcuts.Ctrl[key]) {
+			console.log('Ctrl+' + key, shortcuts.Ctrl[key]);
+			shortcuts.Ctrl[key].action();
 		}
 		return false;
 	}
+	return true;
 };
 
 var shortcuts = {

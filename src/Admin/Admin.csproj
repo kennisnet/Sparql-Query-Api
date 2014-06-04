@@ -238,9 +238,6 @@
     <Content Include="Views\Query\Parameters.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\Copy of Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Account\Item.cshtml" />
   </ItemGroup>
   <ItemGroup>

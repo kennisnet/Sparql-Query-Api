@@ -22,7 +22,9 @@
     			numLoadings++;
     			loadingScreen.show();
     			var hide = function(r) {
-    				if (!(--numLoadings)) loadingScreen.hide();
+    				if (!(--numLoadings)) {
+					    loadingScreen.hide();
+				    }
     				return r;
     			};
     			return promise.then(hide, hide);

@@ -41,7 +41,9 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			while (match.Success)
 			{
 				var param = match.Value;
-				paramList.Add(param.Substring(2), null);
+				if (!paramList.ContainsKey(param.Substring(2))) {
+					paramList.Add(param.Substring(2), null);
+				}
 				//text = text.Replace(param, model[param.Substring(2)].Value);
 				match = match.NextMatch();
 			}
