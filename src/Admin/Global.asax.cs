@@ -20,7 +20,7 @@ namespace Trezorix.Sparql.Api.Admin
 	{
 		protected void Application_Start()
 		{
-			var cfg = ApiConfiguration.Init((HostingEnvironment.SiteName == "Admin") ? "OBK" : null);
+			var cfg = ApiConfiguration.Init((HostingEnvironment.SiteName == "Admin") ? "API" : null);
 			ApiConfiguration.Current = cfg;
 
 			AreaRegistration.RegisterAllAreas();

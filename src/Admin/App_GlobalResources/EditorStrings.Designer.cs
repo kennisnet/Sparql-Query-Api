@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cache wissen.
+        /// </summary>
+        internal static string ClearCache {
+            get {
+                return ResourceManager.GetString("ClearCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verder gaan.
         /// </summary>
         internal static string Continue {
@@ -156,6 +165,15 @@ namespace Resources {
         internal static string Preview {
             get {
                 return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query bekijken.
+        /// </summary>
+        internal static string PreviewQuery {
+            get {
+                return ResourceManager.GetString("PreviewQuery", resourceCulture);
             }
         }
         

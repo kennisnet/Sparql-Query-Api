@@ -15,7 +15,9 @@ namespace Trezorix.Sparql.Api.QueryApi.MediaTypeFormatters
 		{
 			// ToDo: Support N3 and Turtle?
 			SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-		}
+			SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
+			SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xhtml+xml"));
+    }
 
 		public override bool CanReadType(Type type)
 		{
@@ -36,11 +38,16 @@ namespace Trezorix.Sparql.Api.QueryApi.MediaTypeFormatters
 			{
 				var xml = (XmlNode) value;
 
-				var parameters = new XsltArgumentList();
-				var transform = XsltRepository.Get("RdfToHtml.xslt");
-				transform.Transform(xml, parameters, writeStream);
-
-				//((XmlDocument)xml).Save(writeStream);
+			  var documentElement = ((XmlDocument)value).DocumentElement;
+			  if (documentElement != null && documentElement.LocalName == "RDF") {
+          ((XmlDocument)xml).Save(writeStream);
+        }
+        else {
+          var parameters = new XsltArgumentList();
+          var transform = XsltRepository.Get("RdfToHtml.xslt");
+          transform.Transform(xml, parameters, writeStream);
+        }
+				
 				
 				taskSource.SetResult(null);
 			}

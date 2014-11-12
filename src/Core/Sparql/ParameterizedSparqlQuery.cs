@@ -51,8 +51,10 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			return paramList;
 		}
 
-		public void InjectParameterValues(dynamic data)
+		public void InjectParameterValues(dynamic data) 
 		{
+			if (data == null) return;
+
 			var paramList = Params.ToList();
 
 			foreach (var param in paramList)

@@ -13,7 +13,9 @@ using Trezorix.Sparql.Api.Core.Queries;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers
 {
-	public class LogController : BaseController
+  using Raven.Client.Document;
+
+  public class LogController : BaseController
 	{
 		private readonly IDocumentSession _session;
 
@@ -60,6 +62,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 
 			}
 
+		  _session.Advanced.MaxNumberOfRequestsPerSession = 100;
 			var logItems = _session.Query<QueryLogItem>().Where(q => q.DateTime > startTime);
 			var queryNames = logItems.Select(q => q.Name).Distinct().ToList();
 
@@ -67,7 +70,8 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 
 			foreach (string queryName in queryNames)
 			{
-				var set = logItems.Where(q => q.Name == queryName).ToList();
+			  string name = queryName;
+			  var set = GetAll(logItems.Where(q => q.Name == name));
 				queryStatistics.Add(new QueryStatisticsModel
 					{
 						//var sum = list.Aggregate((acc, cur) => acc + cur);
@@ -190,24 +194,47 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 			csv.Configuration.Delimiter = ";";
 			csv.WriteHeader<QueryLogItem>();
 
-			var query = _session.Query<QueryLogItem>().Where(q => q.DateTime >= start && q.DateTime <= end.AddHours(24));
+		  var documentStore = _session.Advanced.DocumentStore;
 
+		  var query = documentStore.OpenSession().Query<QueryLogItem>().Where(q => q.DateTime >= start && q.DateTime <= end.AddHours(24));
+
+		  const int BatchSize = 1024;
 			int pos = 0;
-			var items = query.Skip(pos).Take(100);
-			while (items.Any())
+      var items = query.Skip(pos).Take(BatchSize);
+      int requestCounter = 1;
+      while (items.Any())
 			{
 				foreach (QueryLogItem queryLogItem in items)
 				{
 					csv.WriteRecord(queryLogItem);
 				}
-				pos += 100;
-				items = query.Skip(pos).Take(100);
+        pos += BatchSize;
+			  requestCounter++;
+        // since RavenDB limits the number of query's per session, we create a new one each 10? query's
+        if (requestCounter > 10) {
+          query = documentStore.OpenSession().Query<QueryLogItem>().Where(q => q.DateTime >= start && q.DateTime <= end.AddHours(24));
+          requestCounter = 1;
+        }
+        items = query.Skip(pos).Take(BatchSize);
+
 			}
 			textWriter.Close();
 
 			return File(new System.Text.UTF8Encoding().GetBytes(textWriter.ToString()), "text/csv", string.Format("log {0:yyyy-MM-dd} -- {1:yyyy-MM-dd}.csv", start, end));
 		}
 
-	}
+
+    private IList<T> GetAll<T>(IQueryable<T> queryable) {
+      int start = 0;
+      var result = new List<T>();
+      while (true) {
+        var current = queryable.Take(1024).Skip(start).ToList();
+        if (current.Count == 0) break;
+        start += current.Count;
+        result.AddRange(current);
+      }
+      return result;
+    }
+  }
 
 }

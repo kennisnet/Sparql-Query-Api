@@ -33,7 +33,7 @@
 				<a href="@Url.Content("Query/new?group=" + group.Id)" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateQuery</a>
 			</div>
 		
-			<table class="table" data-ng-show="isGroupVisible('@group.Id')">
+			<table class="table table-striped" data-ng-show="isGroupVisible('@group.Id')">
 				<tbody>
 					@foreach (var query in group.Items.OrderBy(q => q.Id))
 					{
@@ -41,17 +41,17 @@
 							"?api_key=" + OperatingAccount.Current().ApiKey.ToString() + 
 							query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
 						<tr>
-							<td><a href="@queryUrl" target="_blank">@query.Id</a></td>
-							<td style="width: 10%">
-								<button type="button" data-ng-click="deleteQuery('@query.Id')" class="btn btn-sm">@EditorStrings.Delete</button>
-
-								@*								@using (Html.BeginForm("Delete", "Query", new {id = query.Id}, FormMethod.Post, new {@class = "form-inline pull-right"}))
-								{
-									<input type="submit" class="btn btn-sm @(ViewBag.Account == null ? "disabled" : "")" value="@EditorStrings.Delete" />
-								}*@
+						  <td>
+                <a href="@Url.Content("Query/" + query.Id)">@query.Id</a>
+						  </td>
+							<td style="width: 5%">
+                <a href="@queryUrl" target="_blank" class="btn pull-right glyphicon glyphicon-eye-open icon" title="@query.Id"> </a>
 							</td>
-							<td style="width: 10%">
-								<a href="@Url.Content("Query/" + query.Id)" class="btn btn-sm btn-default pull-right">@EditorStrings.Edit</a>
+							<td style="width: 5%">
+							  <button type="button" data-ng-click="deleteQuery('@query.Id')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
+							</td>
+							<td style="width: 5%">
+								<a href="@Url.Content("Query/" + query.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
 							</td>
 						</tr>
 					}

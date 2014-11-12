@@ -6,7 +6,6 @@ function QueryController($scope, $location, $http, $timeout) {
 
 	  $scope.newGroup = '';
 
-
 	  $scope.isNewquery = function (value) {
 	  	return (value === '' || value.indexOf('000000') > -1);
 	  };
@@ -61,7 +60,7 @@ function QueryController($scope, $location, $http, $timeout) {
       $scope.save();
     };
 
-    $scope.preview = function () {
+    $scope.showPreview = function () {
       $http.get(app.config.apiRoot + '/Preview/' + $scope.query.Id)
         .success(function (response) {
           console.log(response);
@@ -87,6 +86,18 @@ function QueryController($scope, $location, $http, $timeout) {
       }
     };
 
+    $scope.showQueryPreview = function () {
+      $http.get(app.config.apiRoot + '/PreviewQuery/' + $scope.query.Id)
+        .success(function (response) {
+          console.log(response);
+          $scope.previewQuery = angular.copy(response);
+          console.log($scope.previewQuery);
+        })
+        .error(function () {
+          alert('Preview query mislukt. Probeer het nog eens...');
+        });
+    };
+
     $scope.delete = function () {
         $scope.returnUrl = app.config.siteRoot + 'Query';
 
@@ -100,9 +111,10 @@ function QueryController($scope, $location, $http, $timeout) {
         }
     };
 
-	$scope.addGroup = function() {
-		$scope.query.Groups.push($scope.newGroup);
-		$scope.query.Group = $scope.newGroup;
+	$scope.addGroup = function(value) {
+	  $scope.query.Groups = $scope.query.Groups || [];
+	  $scope.query.Groups.push(value);
+		$scope.query.Group = value;
 		$scope.newGroup = '';
 	};
 

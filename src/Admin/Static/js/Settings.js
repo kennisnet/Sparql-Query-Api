@@ -24,6 +24,21 @@ function SettingsController($scope, $location, $http) {
     	$scope.settingsForm.$setDirty();
     };
 
+    $scope.clearCache = function () {
+      $http.post(app.config.apiRoot + '/ClearCache')
+            .success(function (data, status) {
+              if (status == 200) {
+                alert('Cache legen is gelukt!');
+              } else {
+                alert('Fout: Cache legen is mislukt...');
+              }
+            })
+            .error(function () {
+              alert('Fout: Cache legen is mislukt...');
+            });
+
+    };
+
     $scope.save = function () {
     	$http.post(app.config.apiRoot + '/Details/Global', { model: $scope.settings })
             .success(function (response) {

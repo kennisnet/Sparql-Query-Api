@@ -23,23 +23,23 @@
 			<a href="@Url.Content("Account/new")" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateAccount</a>
 		</div>
 
-		<table class="table" data-ng-show="isGroupVisible('')">
+		<table class="table table-striped" data-ng-show="isGroupVisible('')">
 			<tbody>
 				@foreach (var account in Model.OrderBy(a => a.FullName))
 				{
 					<tr>
 						<td>@account.FullName</td>
 						<td>@account.Id</td>
-						<td style="width: 10%">
-							<button type="button" data-ng-click="deleteAccount('@account.Id')" class="btn btn-sm">@EditorStrings.Delete</button>
+						<td style="width: 5%">
+              <button type="button" data-ng-click="deleteAccount('@account.Id')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
 
 							@*								@using (Html.BeginForm("Delete", "Query", new {id = query.Id}, FormMethod.Post, new {@class = "form-inline pull-right"}))
 								{
 									<input type="submit" class="btn btn-sm @(ViewBag.Account == null ? "disabled" : "")" value="@EditorStrings.Delete" />
 								}*@
 						</td>
-						<td style="width: 10%">
-							<a href="@Url.Content("Account/" + account.Id)" class="btn btn-sm btn-default pull-right">@EditorStrings.Edit</a>
+						<td style="width: 5%">
+              <a href="@Url.Content("Account/" + account.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
 						</td>
 					</tr>
 				}

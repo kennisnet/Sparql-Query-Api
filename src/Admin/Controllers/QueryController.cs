@@ -152,7 +152,27 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 			return new FileStreamResult(response, "application/json");
 		}
 
-		private void ClearCacheInQueryApi(Query query)
+    [HttpGet]
+    public ActionResult PreviewQuery(string id) {
+      var query = _queryRepository.Get(id);
+
+      if (query == null) {
+        return new HttpNotFoundResult();
+      }
+
+      var model = new QueryModel();
+      model.MapFrom(query, _accountRepository.All(), _queryRepository.All().Select(q => q.Group).Distinct());
+
+      model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
+
+      var webclient = new WebClient();
+      var response = webclient.OpenRead(model.Link + "&debug=true&showQuery=true&format=json");
+
+
+      return new FileStreamResult(response, "application/json");
+    }
+    
+    private void ClearCacheInQueryApi(Query query)
 		{
 			var webclient = new WebClient();
 			webclient.OpenRead(ApiConfiguration.Current.QueryApiUrl + "/Home/ClearCache?queryName=" + query.Id);

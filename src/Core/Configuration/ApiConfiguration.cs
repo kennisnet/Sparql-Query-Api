@@ -18,6 +18,7 @@ namespace Trezorix.Sparql.Api.Core.Configuration
 		public string QueryApiUrl { get; set; }
 		public string AdminApiUrl { get; set; }
 		public bool AllowAnonymous { get; set; }
+		public int CacheTime { get; set; }
 
 		public static ApiConfiguration Current { get; set; }
 

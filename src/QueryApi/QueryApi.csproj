@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="MediaTypeFormatters\RdfCsvMediaTypeFormatter.cs" />
     <Compile Include="MediaTypeFormatters\RdfHtmlMediaTypeFormatter.cs" />
+    <Compile Include="MediaTypeFormatters\RdfXmlMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

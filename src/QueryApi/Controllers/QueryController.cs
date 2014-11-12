@@ -128,7 +128,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 				throw new HttpResponseException(notFoundMessage);
 			}
 
-			var endpoint = FindEndpointForQuery(query);
+      var endpoint = (model != null && model["endpoint"] != null) ? FindEndpointByName(model["endpoint"]) : FindEndpointForQuery(query);
 
 			if (!IsAuthorized(query))
 			{
@@ -139,7 +139,11 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			var sq = new Parameterized‎SparqlQuery(endpoint.Namespaces, query.SparqlQuery);
 			sq.InjectParameterValues(model);
 
-			var xmlOut = (T)ExecuteCachedQuery<T>(name, debug, sq, endpoint, timeTracker, queryLogItem);
+      if (showQuery) {
+        return sq;
+      }
+      
+      var xmlOut = (T)ExecuteCachedQuery<T>(name, debug, sq, endpoint, timeTracker, queryLogItem);
 
 			timeTracker.End("Query");
 			timeTracker.WriteLog(Logger);
@@ -148,12 +152,6 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
 			_session.Store(queryLogItem);
 			_session.SaveChanges();
-
-			Logger.Info("querylog: " + JsonConvert.SerializeObject(queryLogItem));
-			if (showQuery)
-			{
-				return sq;
-			}
 
 			return xmlOut;
 		}
@@ -166,7 +164,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 				return typeof(object);
 			}
 
-			if ((accept != null && accept.Contains("application/xml")) || (format != null && ("csv|xml").Contains(format))) {
+      if ((accept != null && (accept.Contains("text/html") || accept.Contains("application/xml") || accept.Contains("application/xhtml+xml"))) || (format != null && ("csv|xml").Contains(format))) {
 				return typeof(XmlDocument);
 			}
 
@@ -194,12 +192,16 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			return endpoint;
 		}
 
-		private SparqlResponse ExecuteCachedJsonQuery(string name, bool debug, Parameterized‎SparqlQuery sq, SparqlEndpoint endpoint,
+    private static SparqlEndpoint FindEndpointByName(string name) {
+      return ApiConfiguration.Current.SparqlEndpoints.First(s => s.Name == name);
+    }
+    
+    private SparqlResponse ExecuteCachedJsonQuery(string name, bool debug, Parameterized‎SparqlQuery sq, SparqlEndpoint endpoint,
 																					 TimeTracker timeTracker, QueryLogItem queryLogItem)
 		{
 			SparqlResponse response;
 
-			string cacheKey = name + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
+      string cacheKey = endpoint.Name + "|" + name + "|" + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
 
 			if (Cache[cacheKey] != null && !debug)
 			{
@@ -211,10 +213,11 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			{
 				response = endpoint.Query<SparqlResponse>(sq.Query);
 
-				if (!debug)
+				if (!debug && ApiConfiguration.Current.CacheTime > 0)
 				{
-					Cache[cacheKey] = response;
-					Logger.Info("Added to cache: " + cacheKey);
+					Cache.Add(cacheKey, response, DateTime.Now.AddMinutes(ApiConfiguration.Current.CacheTime));
+					//Cache[cacheKey] = response;
+          Logger.Debug("Added to cache: " + cacheKey);
 				}
 			}
 			return response;
@@ -225,7 +228,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 		{
 			dynamic xmlOut;
 
-			string cacheKey = name + "|" + typeof(T).Name + "|" + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
+      string cacheKey = endpoint.Name + "|" + name + "|" + typeof(T).Name + "|" + string.Join("|", sq.Params.Select((key, value) => key + ":" + value));
 
 			if (Cache[cacheKey] != null && !debug)
 			{
@@ -236,12 +239,13 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			else
 			{
 				xmlOut = endpoint.Query<T>(sq.Query);
-				Logger.Info("SPARQL: " + sq.Query);
+				Logger.Debug("SPARQL: " + sq.Query);
 
-				if (!debug)
+				if (!debug && ApiConfiguration.Current.CacheTime > 0)
 				{
-					Cache[cacheKey] = xmlOut;
-					Logger.Info("Added to cache: " + cacheKey);
+					Cache.Add(cacheKey, xmlOut, DateTime.Now.AddMinutes(ApiConfiguration.Current.CacheTime));
+					//Cache[cacheKey] = xmlOut;
+					Logger.Debug("Added to cache: " + cacheKey);
 				}
 			}
 			return xmlOut;

@@ -4,10 +4,7 @@
 	<div class="form-group row">
 		<div class="col-lg-3">
 			&#160;<label class="label">Periode</label>
-			<select class="form-control" data-ng-model="downloadsTimespan" data-ng-change="onDownloadsTimespanChanged()">
-				<option value="week">week</option>
-				<option value="month">maand</option>
-			</select>
+		  <select class="form-control" data-ng-model="downloadsTimespan" data-ng-options="item.label for item in timespans" data-ng-change="onDownloadsTimespanChanged(downloadsTimespan)"></select>
 		</div>
 		<div class="col-lg-12 space-above">
 			<table class="table table-striped" style="width:100%">

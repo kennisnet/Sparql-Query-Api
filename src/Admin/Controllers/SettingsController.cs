@@ -30,6 +30,13 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 			webclient.OpenRead(ApiConfiguration.Current.QueryApiUrl + "/Home/Reload");
 			return new HttpStatusCodeResult(HttpStatusCode.OK);
 		}
-			
+
+		[HttpPost]
+		public ActionResult ClearCache() {
+			var webclient = new WebClient();
+			webclient.OpenRead(ApiConfiguration.Current.QueryApiUrl + "/Home/ClearCache");
+			return new HttpStatusCodeResult(HttpStatusCode.OK);
+		}
+
 	}
 }

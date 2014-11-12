@@ -1,0 +1,12 @@
+﻿@using Resources
+<div id="edit_settings_access" class="well space-above">
+  <div class="form-group row">
+    <div class="col-lg-12">
+      <label class="small-space-above">Cache tijd in minuten</label>
+      <input type="number" class="form-control" data-ng-model="settings.CacheTime" />
+				<div class="space-above">
+					<button data-ng-click="clearCache()" class="btn btn-sm btn-danger">@EditorStrings.ClearCache</button>
+				</div>
+    </div>
+  </div>
+</div>

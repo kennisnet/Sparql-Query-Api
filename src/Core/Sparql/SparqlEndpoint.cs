@@ -59,7 +59,7 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			switch (output)
 			{
 				case "json":
-					client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+json, application/sparql-results+json");
+          client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+json, 'application/ld+json', application/sparql-results+json");
 					break;
 				case "xml":
 					client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+xml, application/sparql-results+xml");
