@@ -14,7 +14,9 @@ using Trezorix.Sparql.Api.Core.Configuration;
 
 namespace Trezorix.Sparql.Api.Admin
 {
-	// Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+  using Trezorix.Sparql.Api.Admin.Models;
+
+  // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
 	// visit http://go.microsoft.com/?LinkId=9394801
 	public class MvcApplication : System.Web.HttpApplication
 	{
@@ -23,7 +25,9 @@ namespace Trezorix.Sparql.Api.Admin
 			var cfg = ApiConfiguration.Init((HostingEnvironment.SiteName == "Admin") ? "API" : null);
 			ApiConfiguration.Current = cfg;
 
-			AreaRegistration.RegisterAllAreas();
+      ModelMapper.ConfigureMapper();
+      
+      AreaRegistration.RegisterAllAreas();
 
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

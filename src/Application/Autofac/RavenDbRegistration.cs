@@ -43,8 +43,7 @@ namespace Trezorix.Sparql.Api.Application.Autofac {
 
       builder.Register(x => x.Resolve<IDocumentStore>().OpenSession())
              .As<IDocumentSession>()
-             .InstancePerHttpRequest()
-             .InstancePerApiRequest()
+             .InstancePerRequest()
              .OnRelease(x => x.Dispose());
     }
 

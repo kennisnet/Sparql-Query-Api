@@ -16,12 +16,12 @@ namespace Trezorix.Sparql.Api.Admin.App_Start {
 
 			builder.Register(x => new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account"))
 							.As<IAccountRepository>()
-							.InstancePerHttpRequest();
+							.InstancePerRequest();
 							//.OnRelease(x => x.Dispose()); 
 
 			builder.Register(x => new FileQueryRepository(ApiConfiguration.Current.RepositoryRoot + "Query"))
 							.As<IQueryRepository>()
-							.InstancePerHttpRequest();
+							.InstancePerRequest();
 
 			builder.RegisterType<FormsAuthenticationService>().As<IFormsAuthenticationService>();
 			RavenDbRegistration.Register(builder);

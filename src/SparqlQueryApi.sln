@@ -1,10 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6019C3EA-4DE3-46C1-997D-9DF1D2806C3D}"
 	ProjectSection(SolutionItems) = preProject
-		SparqlQueryApiAssemblyInfo.cs = SparqlQueryApiAssemblyInfo.cs
 		packagerelease.msbuild.xml = packagerelease.msbuild.xml
+		SparqlQueryApiAssemblyInfo.cs = SparqlQueryApiAssemblyInfo.cs
 		versioning.msbuild.xml = versioning.msbuild.xml
 	EndProjectSection
 EndProject
@@ -15,6 +17,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Admin\Admin.csproj", "{B9F753A8-A793-4211-8AB4-F567AE1A0536}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{FA286E61-3A13-48BD-9238-B6CD82559535}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CBF314A9-87B3-427D-9204-96E9131824BC}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

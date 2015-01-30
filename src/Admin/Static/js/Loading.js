@@ -8,7 +8,6 @@
     	$httpProvider.interceptors.push(function () {
     		return {
     			request: function(config) {
-    				console.log('showing loader screen');
     				//numLoadings++;
     				loadingScreen.show();
     				return config;
@@ -18,7 +17,6 @@
 	    
     	$httpProvider.responseInterceptors.push(function () {
     		return function (promise) {
-    			console.log('showing loader screen');
     			numLoadings++;
     			loadingScreen.show();
     			var hide = function(r) {

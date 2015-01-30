@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using AutoMapper;
 using Trezorix.Sparql.Api.Admin.Controllers.Core;
 using Trezorix.Sparql.Api.Admin.Models.Accounts;
 using Trezorix.Sparql.Api.Admin.Services;

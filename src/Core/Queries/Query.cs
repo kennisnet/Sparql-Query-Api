@@ -17,6 +17,7 @@ namespace Trezorix.Sparql.Api.Core.Queries
 		public string Description { get; set; }
 		public string Group { get; set; }
 		public string Endpoint { get; set; }
+		public IEnumerable<Note> Notes { get; set; }
 		public bool AllowAnonymous { get; set; }
 		public IList<Guid> ApiKeys { get; set; }
 		public IEnumerable<QueryParameter> Parameters { get; set; }

@@ -1,0 +1,23 @@
+﻿@using Resources
+<div id="edit_query_notes">
+	<div data-ng-show="query.Notes == null || query.Notes.length == 0" class="well space-above">
+		<div class="form-group row">
+			<div class="col-lg-12">
+				<div class="space-above">
+					<span>Geen notities gespecificeerd.</span><button data-ng-click="addNote($index)" class="btn btn-sm btn-default pull-right">@EditorStrings.Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div data-ng-repeat="note in query.Notes track by $index" class="well space-above">
+		<div class="form-group row">
+			<div class="col-lg-12">
+				<textarea rows="20" class="form-control" data-ng-model="note.Content" wrap="off" spellcheck='false'></textarea>
+				<div class="space-above">
+					<button data-ng-click="deleteNote($index)" class="btn btn-sm btn-danger">@EditorStrings.Delete</button>
+					<button data-ng-click="addNote($index)" class="btn btn-sm btn-default pull-right">@EditorStrings.Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

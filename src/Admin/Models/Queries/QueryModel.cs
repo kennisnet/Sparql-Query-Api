@@ -6,7 +6,9 @@ using Trezorix.Sparql.Api.Core.Queries;
 
 namespace Trezorix.Sparql.Api.Admin.Models.Queries
 {
-	public class QueryModel
+  using AutoMapper;
+
+  public class QueryModel
 	{
 		public readonly bool EnableAllowAnonymous = ApiConfiguration.Current.AllowAnonymous;
 
@@ -17,6 +19,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 		public string Group { get; set; }
 		public string Endpoint { get; set; }
 		public string Link { get; set; }
+		public IEnumerable<NoteModel> Notes { get; set; }
 		public bool AllowAnonymous { get; set; }
 		public IEnumerable<string> Groups { get; set; }
 		public IEnumerable<AccessModel> Access { get; set; }
@@ -33,6 +36,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 			Id = query.Id;
 			Label = (string.IsNullOrEmpty(query.Label)) ? query.Id : query.Label;
 			Description = query.Description;
+      Notes = Mapper.Map<IEnumerable<NoteModel>>(query.Notes);
 			Group = query.Group;
 			Groups = groups;
 			SparqlQuery = query.SparqlQuery;
@@ -65,7 +69,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 			query.Id = Id;
 			query.Label = Label;
 			query.Description = Description;
-			query.Group = Group;
+      query.Notes = Mapper.Map<IEnumerable<Note>>(Notes);
+      query.Group = Group;
 			query.SparqlQuery = SparqlQuery;
 			query.Parameters = (Parameters != null)
 					                  ? Parameters.Select(p => new QueryParameter()
