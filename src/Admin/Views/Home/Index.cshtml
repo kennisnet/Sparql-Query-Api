@@ -6,12 +6,5 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = ApiConfiguration.Current.ApplicationTitle + " - Admin";
 }
-
-<h2>Welkom bij @ApiConfiguration.Current.ApplicationTitle Beheer applicatie.</h2>
-<ul class="list-unstyled">
-	<li><a href="~/Query">Beheer de SPARQL query's</a></li>
-	<li><a href="~/Account">Beheer accounts en API keys.</a></li>
-	<li><a href="@ApiConfiguration.Current.QueryApiUrl/Home/Index/?api_key=@ViewBag.Account.Id">Ga naar de Query API homepage.</a></li>
-</ul>
-
+<div ng-view></div>
 

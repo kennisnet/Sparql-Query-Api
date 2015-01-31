@@ -1,26 +1,12 @@
 ﻿@using Resources
 @model IEnumerable<Trezorix.Sparql.Api.Core.Accounts.Account>
 
-@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "Account overzicht";
-}
-<script>
-	app.config.apiRoot = '@Url.Content("~/Account")';
-</script>
-@section Scripts
-{
-	<script src="~/Static/js/Account.js"> </script>
-}
-
-<p>&#160;</p>
-
-<div data-ng-app="AccountEditor" data-ng-controller="IndexController" data-ng-model="data">
+<div data-ng-model="data">
 	
 	<div class="panel panel-default" >
 		<div id="account_" class="panel-heading form-inline" data-ng-click="toggleGroup($event, '')">
 			<strong style="font-size: 1.5em">Algemeen</strong>
-			<a href="@Url.Content("Account/new")" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateAccount</a>
+			<a href="#/account/new" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateAccount</a>
 		</div>
 
 		<table class="table table-striped" data-ng-show="isGroupVisible('')">
@@ -39,7 +25,7 @@
 								}*@
 						</td>
 						<td style="width: 5%">
-              <a href="@Url.Content("Account/" + account.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
+              <a href="#/account/@(account.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
 						</td>
 					</tr>
 				}

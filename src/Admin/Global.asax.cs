@@ -14,6 +14,8 @@ using Trezorix.Sparql.Api.Core.Configuration;
 
 namespace Trezorix.Sparql.Api.Admin
 {
+  using System.Web.Optimization;
+
   using Trezorix.Sparql.Api.Admin.Models;
 
   // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -32,6 +34,7 @@ namespace Trezorix.Sparql.Api.Admin
       GlobalConfiguration.Configure(WebApiConfig.Register);
       FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
+      BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 			AutofacConfig.SetAsDependencyResolver();
 

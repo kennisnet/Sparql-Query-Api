@@ -1,21 +1,8 @@
 ﻿@using Resources
 @model Trezorix.Sparql.Api.Core.Accounts.Account
 
-@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "Account";
-}
-<script>
-	app.config.apiRoot = '@Url.Content("~/Api/Account")';
-	var accountId = '@Model.Id';
-</script>
-@section Scripts
-{
-	<script src="~/Static/js/Account.js"> </script>
-}
-
-<div data-ng-app="AccountEditor">
-	<div data-ng-controller="AccountController">
+<div>
+	<div>
 		<ng-form name="accountForm" >
 			<tabset>
 				<tab heading="Algemeen">

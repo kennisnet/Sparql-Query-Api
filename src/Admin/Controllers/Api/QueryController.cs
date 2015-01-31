@@ -2,6 +2,7 @@
 {
   using System;
   using System.Collections.Generic;
+  using System.IO;
   using System.Linq;
   using System.Net;
   using System.Web.Http;
@@ -136,14 +137,9 @@
 			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
 
 			var webclient = new WebClient();
-			var response = webclient.OpenRead(model.Link + "&debug=true");
+			var response = webclient.DownloadString(model.Link + "&debug=true");
 
-		  if (response == null) 
-      {
-		    return this.NotFound();
-		  }
-
-      var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response.ToString());
+      var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
       return data;
     }
 
@@ -163,14 +159,9 @@
       model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
 
       var webclient = new WebClient();
-      var response = webclient.OpenRead(model.Link + "&debug=true&showQuery=true&format=json");
+      var response = webclient.DownloadString(model.Link + "&debug=true&showQuery=true&format=json");
 
-      if (response == null) 
-      {
-        return this.NotFound();
-      }
-
-      var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response.ToString());
+      var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
       return data;
     }
     

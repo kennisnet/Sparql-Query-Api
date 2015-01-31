@@ -25,6 +25,12 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
       return View();
     }
 
+		[HttpGet]
+    public ActionResult Overview() {
+      ViewBag.Account = OperatingAccount.Current();
+      return View();
+    }
+
 		[AllowAnonymous]
 		[HttpGet]
 		public ActionResult Login(string returnUrl)

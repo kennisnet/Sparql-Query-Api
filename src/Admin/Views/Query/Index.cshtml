@@ -3,22 +3,9 @@
 @using Trezorix.Sparql.Api.Core.Configuration
 @model Trezorix.Sparql.Api.Admin.Models.Queries.GroupedQueryModel
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Query overzicht";
-}
-<script>
-  app.config.apiRoot = '@Url.Content("~/Query")';
-</script>
-
-@section Scripts
-{
-	<script src="~/Static/js/Query.js"> </script>
-}
-
 <p>&#160;</p>
 
-<div data-ng-app="QueryEditor" data-ng-controller="IndexController" data-ng-model="data">
+<div data-ng-model="data">
 	
 	@foreach (var group in Model.Groups.OrderBy(g => g.Label))
 	{
@@ -28,7 +15,7 @@
 				<strong style="font-size: 1.5em">@group.Label</strong>
 				@*<button data-ng-click="toggleEdit('@group.Id');" class="btn btn-sm btn-default">bewerken</button>
 				<input data-ng-show="isGroupEdit('@group.Id')" type="text" value="@group.Label" class="form-control input-small"/>*@	
-				<a href="@Url.Content("Query/new?group=" + group.Id)" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateQuery</a>
+        <a href="#/query/new?group=@(group.Id)" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateQuery</a>
 			</div>
 		
 			<table class="table table-striped" data-ng-show="isGroupVisible('@group.Id')">
@@ -40,7 +27,7 @@
 							query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
 						<tr>
 						  <td>
-                <a href="@Url.Content("Query/" + query.Id)">@query.Id</a>
+                <a href="#/query/@(query.Id)">@query.Id</a>
 						  </td>
 							<td style="width: 5%">
                 <a href="@queryUrl" target="_blank" class="btn pull-right glyphicon glyphicon-eye-open icon" title="@query.Id"> </a>
@@ -49,7 +36,7 @@
 							  <button type="button" data-ng-click="deleteQuery('@query.Id')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
 							</td>
 							<td style="width: 5%">
-								<a href="@Url.Content("Query/" + query.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
+								<a href="#/query/@(query.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
 							</td>
 						</tr>
 					}

@@ -1,22 +1,7 @@
 ﻿@using Trezorix.Sparql.Api.Core.Configuration
 @model ApiConfiguration
-
-@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "Logs";
-}
-<script>
-	app.config.apiRoot = '@Url.Content("~/Api/Log")';
-	queryApiUrl = '@ApiConfiguration.Current.QueryApiUrl';
-</script>
-@section Scripts
-{
-	<script src="~/Static/js/Log.js"> </script>
-}
-
-
-<div data-ng-app="LogViewer">
-	<div data-ng-controller="LogController">
+<div>
+	<div>
 @*		<ng-form name="logForm" data-ng-model="queryStatistics">*@
 			<tabset>
 				<tab heading="Statistieken">

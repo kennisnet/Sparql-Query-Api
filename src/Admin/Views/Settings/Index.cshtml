@@ -1,21 +1,6 @@
 ﻿@model Trezorix.Sparql.Api.Core.Configuration.ApiConfiguration
-
-@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "Settings";
-}
-<script>
-	app.config.apiRoot = '@Url.Content("~/Api/Settings")';
-</script>
-
-@section Scripts
-{
-	<script src="~/Static/js/Settings.js"> </script>
-}
-
-
-<div data-ng-app="SettingsEditor">
-	<div data-ng-controller="SettingsController">
+<div>
+	<div>
 		<ng-form name="settingsForm" >
 			<tabset>
 				<tab heading="Algemeen">

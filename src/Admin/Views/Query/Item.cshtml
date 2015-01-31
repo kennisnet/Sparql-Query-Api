@@ -1,23 +1,14 @@
 ﻿@model Trezorix.Sparql.Api.Core.Queries.Query
 
-@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "Query: " + Model.Id;
-}
-@section Scripts
-{
-<script src="~/Static/js/Query.js"> </script>
-	
-}
-<script>
+@*<script>
 	app.config.apiRoot = '@Url.Content("~/Api/Query")';
 	var queryId = '@Model.Id';
 	var group = '@Model.Group';
-</script>
+</script>*@
 
 
-<div data-ng-app="QueryEditor">
-	<div data-ng-controller="QueryController">
+<div>
+	<div>
 		<ng-form name="queryForm" ng-init="codeMirrorRefresh = 0">
 			<tabset>
 				<tab heading="Algemeen">
