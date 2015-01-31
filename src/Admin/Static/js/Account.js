@@ -8,7 +8,7 @@ function AccountController($scope, $location, $http) {
     	return (value === '' || value.indexOf('000000') > -1);
     };
 
-    $http.get(app.config.apiRoot + '/Details/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function (response) {
+    $http.get(app.config.apiRoot + '/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function (response) {
     		account = response.data;
     		original = account;
     		$scope.account = angular.copy(account);
@@ -21,7 +21,7 @@ function AccountController($scope, $location, $http) {
     $scope.save = function () {
 	    var saveMethod = ($scope.isNewAccount(accountId)) ? $http.post : $http.put;
 
-    	saveMethod(app.config.apiRoot + "/Details/" + accountId, { model: $scope.account })
+    	saveMethod(app.config.apiRoot + "/" + accountId, $scope.account)
             .success(function (response) {
             	if ($scope.isNewAccount(accountId)) {
             		document.location.href = app.config.siteRoot + "Account";
@@ -45,7 +45,7 @@ function AccountController($scope, $location, $http) {
             document.location.href = $scope.returnUrl;
         } else
         {
-        	$http.delete(app.config.apiRoot + "/Delete/" + accountId).then(function (response) {
+        	$http.delete(app.config.apiRoot + "/" + accountId).then(function (response) {
               document.location.href = $scope.returnUrl;
           });
         }

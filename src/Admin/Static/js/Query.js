@@ -10,7 +10,7 @@ function QueryController($scope, $location, $http, $timeout) {
     return (value === '' || value.indexOf('000000') > -1);
   };
 
-  $http.get(app.config.apiRoot + '/Details/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
+  $http.get(app.config.apiRoot + '/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
     query = response.data;
     original = query;
     $scope.query = angular.copy(query);
@@ -48,7 +48,7 @@ function QueryController($scope, $location, $http, $timeout) {
   $scope.save = function () {
     var saveMethod = ($scope.isNewquery(queryId)) ? $http.post : $http.put;
 
-    saveMethod(app.config.apiRoot + '/Details/' + (($scope.isNewquery(queryId)) ? 'new' : queryId), { model: $scope.query })
+    saveMethod(app.config.apiRoot + '/' + (($scope.isNewquery(queryId)) ? 'new' : queryId), $scope.query)
           .success(function (response) {
             $scope.queryForm.$setPristine();
             if ($scope.isNewquery(queryId)) {
@@ -76,7 +76,7 @@ function QueryController($scope, $location, $http, $timeout) {
   };
 
   $scope.showPreview = function () {
-    $http.get(app.config.apiRoot + '/Preview/' + $scope.query.Id)
+    $http.get(app.config.apiRoot + '/' + $scope.query.Id + '/Preview')
       .success(function (response) {
         console.log(response);
         $scope.previewResults = angular.copy(response);
@@ -102,7 +102,7 @@ function QueryController($scope, $location, $http, $timeout) {
   };
 
   $scope.showQueryPreview = function () {
-    $http.get(app.config.apiRoot + '/PreviewQuery/' + $scope.query.Id)
+    $http.get(app.config.apiRoot + '/' + $scope.query.Id + '/PreviewQuery/')
       .success(function (response) {
         console.log(response);
         $scope.previewQuery = angular.copy(response);
@@ -120,7 +120,7 @@ function QueryController($scope, $location, $http, $timeout) {
       document.location.href = $scope.returnUrl;
     } else
     {
-      $http.delete(app.config.apiRoot + '/Delete/' + queryId).then(function(response) {
+      $http.delete(app.config.apiRoot + '/' + queryId).then(function(response) {
         document.location.href = $scope.returnUrl;
       });
     }
@@ -187,7 +187,7 @@ function IndexController($scope, $location, $http) {
       if (value === '') {
         document.location.href = $scope.returnUrl;
       } else {
-        $http.post(app.config.apiRoot + '/Delete/' + value).then(function (response) {
+        $http.post(app.config.apiRoot + '/' + value).then(function (response) {
           document.location.href = $scope.returnUrl;
         });
       }

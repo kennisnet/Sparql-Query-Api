@@ -7,12 +7,15 @@ using Trezorix.Sparql.Api.Core.Configuration;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.App_Start {
+  using System.Web.Http;
+
+  using Autofac.Integration.WebApi;
 
   public class AutofacConfig {
     public static void SetAsDependencyResolver() {
       var builder = new ContainerBuilder();
       builder.RegisterControllers(typeof (AutofacConfig).Assembly);
-      //builder.RegisterApiControllers(typeof (AutofacConfig).Assembly);
+      builder.RegisterApiControllers(typeof (AutofacConfig).Assembly);
 
 			builder.Register(x => new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account"))
 							.As<IAccountRepository>()
@@ -31,7 +34,7 @@ namespace Trezorix.Sparql.Api.Admin.App_Start {
 
       IContainer container = builder.Build();
       DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-      //GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+      GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
     }
   }
 

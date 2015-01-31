@@ -4,7 +4,7 @@ function SettingsController($scope, $location, $http) {
     var original = null;
     var settings = null;
 
-    $http.get(app.config.apiRoot + '/Details/Global').then(function(response) {
+    $http.get(app.config.apiRoot + '/Global').then(function(response) {
         settings = response.data;
         original = settings;
         $scope.settings = angular.copy(settings);
@@ -40,7 +40,7 @@ function SettingsController($scope, $location, $http) {
     };
 
     $scope.save = function () {
-    	$http.post(app.config.apiRoot + '/Details/Global', { model: $scope.settings })
+    	$http.post(app.config.apiRoot + '/Global', $scope.settings)
             .success(function (response) {
 	            $scope.settingsForm.$setPristine();
             })

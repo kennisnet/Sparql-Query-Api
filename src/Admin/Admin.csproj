@@ -148,6 +148,10 @@
     </Compile>
     <Compile Include="App_Start\AutoFacConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\AccountController.cs" />
+    <Compile Include="Controllers\Api\LogController.cs" />
+    <Compile Include="Controllers\Api\QueryController.cs" />
+    <Compile Include="Controllers\Api\SettingsController.cs" />
     <Compile Include="Controllers\Attributes\AuthenticateUser.cs" />
     <Compile Include="Controllers\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Models\ModelMapper.cs" />

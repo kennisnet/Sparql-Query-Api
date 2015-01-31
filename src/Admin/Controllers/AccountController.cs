@@ -41,50 +41,6 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 			return View(model);
 		}
 
-		[HttpGet]
-		public ActionResult Details(string id)
-		{
-			var account = (id == "new") ? new Account() : _accountRepository.Get(id);
-
-			var model = new AccountModel();
-			model.MapFrom(account, _queryRepository.All());
-
-			return Json(model, JsonRequestBehavior.AllowGet);
-		}
-
-		[HttpPost]
-		public ActionResult Details(AccountModel model)
-		{
-			if (string.IsNullOrEmpty(model.Id) || model.Id == Guid.Empty.ToString())
-			{
-				model.ApiKey = Guid.NewGuid().ToString();
-				model.Id = model.ApiKey;
-			}
-
-			var account = new Account();
-			model.MapTo(account, _queryRepository);
-			_accountRepository.Save(account.Id, account);
-
-			return new HttpStatusCodeResult(HttpStatusCode.OK);
-		}
-
-		[HttpPut]
-		public ActionResult Details(string id, AccountModel model)
-		{
-			var account = _accountRepository.Get(id);
-
-			if (account == null)
-			{
-				return new HttpNotFoundResult();
-			}
-
-			model.MapTo(account, _queryRepository);
-
-			_accountRepository.Save(account.Id, account);
-
-			return new HttpStatusCodeResult(HttpStatusCode.OK);
-		}
-
 		[AllowAnonymous]
     [HttpGet]
     public ActionResult Signup(string errorString) {
@@ -92,7 +48,6 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
       ViewBag.ErrorMessage = errorString;
       return View(model);
     }
-
     
     [AllowAnonymous]
     [HttpPost]
