@@ -8,7 +8,7 @@ QueryEditor.controller('QueryController', [
     $scope.newGroup = '';
 
     $scope.isNewquery = function(value) {
-      return (value === '' || value.indexOf('000000') > -1);
+      return (value === 'new' || value === '' || value.indexOf('000000') > -1);
     };
 
     var queryId = $routeParams.id;
@@ -47,14 +47,16 @@ QueryEditor.controller('QueryController', [
       $scope.queryForm.$setDirty();
     };
 
-    $scope.save = function() {
-      var saveMethod = ($scope.isNewquery(queryId)) ? $http.post : $http.put;
+    $scope.save = function () {
+      var isNewquery = $scope.isNewquery(queryId);
 
-      saveMethod(app.config.apiRoot + '/' + (($scope.isNewquery(queryId)) ? 'new' : queryId), $scope.query)
+      var saveMethod = (isNewquery) ? $http.post : $http.put;
+
+      saveMethod(config.adminApiUrl + 'Query/' + ((isNewquery) ? 'new' : queryId), $scope.query)
         .success(function(response) {
           $scope.queryForm.$setPristine();
-          if ($scope.isNewquery(queryId)) {
-            document.location.href = app.config.siteRoot + "Query";
+          if (isNewquery) {
+            document.location.href = config.viewsUrl + '#/query';
           }
         })
         .error(function() {
@@ -66,7 +68,7 @@ QueryEditor.controller('QueryController', [
     RegisterShortcut({ funxion: 'Ctrl', key: 'S' }, $scope.save);
 
     $scope.cancel = function() {
-      $scope.returnUrl = app.config.siteRoot + 'Query';
+      $scope.returnUrl = config.viewsUrl + '#/query';
       document.location.href = $scope.returnUrl;
     };
 
@@ -78,7 +80,7 @@ QueryEditor.controller('QueryController', [
     };
 
     $scope.showPreview = function() {
-      $http.get(app.config.apiRoot + '/' + $scope.query.Id + '/Preview')
+      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Id + '/Preview')
         .success(function(response) {
           console.log(response);
           $scope.previewResults = angular.copy(response);
@@ -104,7 +106,7 @@ QueryEditor.controller('QueryController', [
     };
 
     $scope.showQueryPreview = function() {
-      $http.get(app.config.apiRoot + '/' + $scope.query.Id + '/PreviewQuery/')
+      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Id + '/PreviewQuery/')
         .success(function(response) {
           console.log(response);
           $scope.previewQuery = angular.copy(response);
@@ -116,7 +118,7 @@ QueryEditor.controller('QueryController', [
     };
 
     $scope.delete = function() {
-      $scope.returnUrl = app.config.siteRoot + 'Query';
+      $scope.returnUrl = config.viewsUrl + '#/query';
 
       if (queryId === '') {
         document.location.href = $scope.returnUrl;
