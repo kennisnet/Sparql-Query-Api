@@ -164,7 +164,9 @@ QueryEditor.controller('QueryIndexController', [
     };
 
     $scope.toggleGroup = function(event, value) {
-      if (event.target.id.startsWith('group')) {
+      var panelId = "" + event.target.id;
+      console.log(panelId);
+      if (panelId.indexOf('group') == 0) {
         userService.queryGroup(value).visible = !userService.queryGroup(value).visible;
       }
       //$scope.panels[value] = !$scope.panels[value];
