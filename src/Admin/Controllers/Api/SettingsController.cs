@@ -17,14 +17,12 @@
     }
 
     [HttpGet]
-    [Route("{id}")]
     public dynamic Get(string id)
     {
       return ApiConfiguration.Current;
     }
 
     [HttpPost]
-    [Route("{id}")]
     public dynamic Post(string id, ApiConfiguration model)
     {
 			ApiConfiguration.Save(model);
@@ -35,8 +33,8 @@
 		}
 
 		[HttpPost]
-    [Route("{id}/ClearCache")]
-		public dynamic ClearCache(string id) 
+    [Route("ClearCache")]
+		public dynamic ClearCache() 
     {
 			var webclient = new WebClient();
 			webclient.OpenRead(ApiConfiguration.Current.QueryApiUrl + "/Home/ClearCache");

@@ -22,10 +22,12 @@
 		    new Bundle("~/bundles/project").Include(
           "~/Lib/Shortcut.js",
           "~/Lib/ui-codemirror-0.1.1/ui-codemirror.js",
+          "~/Lib/ui-bootstrap/ui-bootstrap-tpls-0.11.0.js",
           "~/NgApp/App.js",
           "~/NgApp/Loading.js",
           "~/NgApp/RouteConfig.js",
           "~/NgApp/Config.js",
+          "~/NgApp/Modules/NoCache.js",
           "~/NgApp/Modules/Query.js",
           "~/NgApp/Modules/Settings.js",
           "~/NgApp/Modules/User.js",

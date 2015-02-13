@@ -204,11 +204,14 @@
     <Content Include="Lib\angular\angular-route.min.js" />
     <Content Include="Lib\angular\angular.js" />
     <Content Include="Lib\angular\angular.min.js" />
+    <Content Include="Lib\ui-bootstrap\ui-bootstrap-tpls-0.11.0.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.min.js" />
     <Content Include="NgApp\App.js" />
     <Content Include="NgApp\Config.js" />
     <Content Include="NgApp\Controllers\NavController.js" />
+    <Content Include="NgApp\Modules\Alerts.js" />
+    <Content Include="NgApp\Modules\NoCache.js" />
     <Content Include="NgApp\RouteConfig.js" />
     <Content Include="NgApp\Modules\Account.js" />
     <Content Include="NgApp\Loading.js" />
@@ -218,7 +221,9 @@
     <Content Include="NgApp\Modules\Settings.js" />
     <Content Include="NgApp\Modules\Query.js" />
     <Content Include="Static\css\content.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

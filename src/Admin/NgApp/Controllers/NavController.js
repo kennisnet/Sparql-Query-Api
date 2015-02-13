@@ -3,7 +3,9 @@
 
     $scope.isRoute = function(value) {
       if (angular.isDefined($route.current)) {
-        return $route.current.originalPath.indexOf(value) == 0;
+        if (angular.isDefined($route.current.originalPath)) {
+          return $route.current.originalPath.indexOf(value) == 0;
+        }
       }
       return false;
     }

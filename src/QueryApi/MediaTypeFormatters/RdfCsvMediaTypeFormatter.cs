@@ -72,8 +72,9 @@ namespace Trezorix.Sparql.Api.QueryApi.MediaTypeFormatters
 					sb.AppendLine();
 				}
 
-				var streamWriter = new StreamWriter(writeStream);
-        streamWriter.Write(sb.ToString());
+			  using (var streamWriter = new StreamWriter(writeStream)) {
+          streamWriter.Write(sb.ToString());
+			  };
 		
 				taskSource.SetResult(null);
 			}
