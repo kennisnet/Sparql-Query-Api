@@ -1,7 +1,7 @@
 ﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule']);
 
 QueryEditor.controller('QueryController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', function ($scope, $routeParams, $location, $http, $timeout, config) {
+  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', 'userService', function ($scope, $routeParams, $location, $http, $timeout, config, userService) {
     var original = null;
     var query = null;
 
@@ -136,7 +136,21 @@ QueryEditor.controller('QueryController', [
       $scope.newGroup = '';
     };
 
-    $scope.getEditor = function() {
+
+    $scope.activeTab = [];
+
+    $scope.setTab = function (tab) {
+      $scope.activeTab = [];
+      $scope.activeTab[tab] = true;
+      // activate the sparql code mirror editor 
+      if (tab == 'sparql') {
+        $scope.setSparqlEditorParent();
+      }
+      // store current tab in user's profile
+      userService.activeQueryTab(tab);
+    };
+
+    $scope.getEditor = function () {
       console.log($('#sparql-editor'), angular.element('#sparql-editor'), angular.element('#edit_query_sparql'));
       $scope.setSparqlEditorParent();
     };
@@ -148,7 +162,13 @@ QueryEditor.controller('QueryController', [
       $timeout(function() { $scope.codeMirrorRefresh++; }, 100);
     };
 
-    //$timeout($scope.setSparqlEditorParent, 100);
+    $scope.$on("$destroy", function () {
+      // clear the setTab function, otherwise it's called multiple times while destroying the tabcontrol
+      $scope.setTab = function () { };
+    });
+
+    $scope.setTab(userService.activeQueryTab());
+
   }
 ]);
 
@@ -163,14 +183,14 @@ QueryEditor.controller('QueryIndexController', [
       return userService.queryGroup(value).visible;
     };
 
-    $scope.toggleGroup = function(event, value) {
-      if (event.target.id.startsWith('group')) {
+    $scope.toggleGroup = function (event, value) {
+      var panelId = "" + event.target.id;
+      if (panelId.indexOf('group') == 0) {
         userService.queryGroup(value).visible = !userService.queryGroup(value).visible;
       }
-      //$scope.panels[value] = !$scope.panels[value];
     };
 
-    $scope.toggleEdit = function(value) {
+    $scope.toggleEdit = function (value) {
       userService.queryGroup(value).edit = !userService.queryGroup(value).edit;
     };
 

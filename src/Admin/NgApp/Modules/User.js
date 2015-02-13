@@ -2,13 +2,14 @@
 
 .factory('userService', ['$q', function ($q) {
 
-  var queryGroups = [];
+  var _queryGroups = [];
+  var _activeQueryTab = "sparql";
 
   var ensureQueryGroup = function (value) {
-    if (angular.isUndefined(queryGroups[value]) || queryGroups[value] === null) {
-      queryGroups[value] = { visible: true, edit: false };
+    if (angular.isUndefined(_queryGroups[value]) || _queryGroups[value] === null) {
+      _queryGroups[value] = { visible: true, edit: false };
     }
-    return queryGroups[value];
+    return _queryGroups[value];
   };
 
   var accountGroups = [];
@@ -21,7 +22,14 @@
   };
 
   var user = {
-    queryGroup: function(name) {
+    activeQueryTab: function(value) {
+      if (angular.isDefined(value)) {
+        _activeQueryTab = value;
+      }
+      return _activeQueryTab;
+    },
+
+    queryGroup: function (name) {
       return ensureQueryGroup(name);
     },
 
