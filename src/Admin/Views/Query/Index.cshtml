@@ -23,8 +23,8 @@
 				<tbody>
 					@foreach (var query in group.Items.OrderBy(q => q.Id))
 					{
-						string queryUrl = ApiConfiguration.Current.QueryApiUrl + "/" + query.Id + 
-							"?api_key=" + OperatingAccount.Current().ApiKey.ToString() + 
+						string queryUrl = ApiConfiguration.Current.QueryApiUrl + "/" + query.Id +
+              "?api_key=" + ViewBag.Account.ApiKey.ToString() + 
 							query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
 						<tr>
 						  <td>
