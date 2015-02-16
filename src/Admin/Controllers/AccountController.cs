@@ -10,6 +10,7 @@ using Trezorix.Sparql.Api.Core.Accounts;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers {
+  using Trezorix.Sparql.Api.Application.Accounts;
   using Trezorix.Sparql.Api.Core;
 
   public class AccountController : BaseController
@@ -27,7 +28,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 
 		public ActionResult Index()
 		{
-			ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
 			var model = _accountRepository.All().ToList();
 			return View(model);
 		}
@@ -35,7 +36,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 		[HttpGet]
 		public ActionResult Item(string id)
 		{
-			ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
 			
 			return View();
 		}
@@ -74,7 +75,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
       Account account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
 			if (account != null) {
-        if (OperatingAccount.Current().Id == account.Id) {
+        if (OperatingAccount.Current(_accountRepository).Id == account.Id) {
           _formsService.SignOut();
           OperatingAccount.SetAnonymous();
         }

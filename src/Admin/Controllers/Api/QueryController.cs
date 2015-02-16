@@ -9,6 +9,7 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Queries;
+  using Trezorix.Sparql.Api.Application.Accounts;
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Configuration;
   using Trezorix.Sparql.Api.Core.Queries;
@@ -55,13 +56,13 @@
 		public dynamic Get(string id)
 		{
       var query = (id == "new") ? new Query {
-        ApiKeys = new List<Guid> { OperatingAccount.Current().ApiKey }
+        ApiKeys = new List<Guid> { OperatingAccount.Current(_accountRepository).ApiKey }
       } : this._queryRepository.Get(id);
 
 			var model = new QueryModel();
 			model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
-			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
+      model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
 			
 			return model;
 		}
@@ -76,7 +77,7 @@
 			}
 			var query = new Query();
 			model.MapTo(query);
-			this._queryRepository.Save(query.Id, query);
+			this._queryRepository.Add(query);
 
 			this.ClearCacheInQueryApi(query);
 
@@ -102,7 +103,7 @@
 
 			model.MapTo(query);
 
-			this._queryRepository.Save(model.Id, query);
+			this._queryRepository.Update(query);
 
 			this.ClearCacheInQueryApi(query);
 		
@@ -134,7 +135,7 @@
 			var model = new QueryModel();
 			model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
-			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
+      model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
 
 			var webclient = new WebClient();
 			var response = webclient.DownloadString(model.Link + "&debug=true");
@@ -156,7 +157,7 @@
       var model = new QueryModel();
       model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
-      model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current().ApiKey.ToString());
+      model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
 
       var webclient = new WebClient();
       var response = webclient.DownloadString(model.Link + "&debug=true&showQuery=true&format=json");

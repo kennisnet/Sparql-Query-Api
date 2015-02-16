@@ -76,14 +76,43 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			return query;
 		}
 
-		private Query LoadFromFile(string filename)
+    public Query GetById(string id) {
+      return All().SingleOrDefault(a => a.Id == id);
+    }
+    
+    private Query LoadFromFile(string filename)
 		{
 			string json = File.ReadAllText(filename);
 			var query = JsonConvert.DeserializeObject<Query>(json);
 			return query;
 		}
 
-		public void Save(string name, Query query)
+    public Query Add(Query query) {
+      return this.Update(query);
+    }
+
+    public Query Update(Query query) {
+      //query.Id = query.ApiKey.AsObjectId().ToString();
+      dynamic item =
+        new {
+          query.Id,
+          query.AllowAnonymous,
+          query.ApiKeys,
+          query.Description,
+          query.Endpoint,
+          query.Group,
+          query.Label,
+          query.Notes,
+          query.Parameters,
+          query.SparqlQuery,
+        };
+
+      string json = JsonConvert.SerializeObject(item, Formatting.Indented);
+      File.WriteAllText(FilenameFromQueryName(query.Id), json);
+      return query;
+    }
+    
+    public void Save(string name, Query query)
 		{
 			string json = JsonConvert.SerializeObject(query, Formatting.Indented);
 			File.WriteAllText(FilenameFromQueryName(name), json);

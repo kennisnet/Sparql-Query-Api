@@ -7,9 +7,10 @@ using Trezorix.Sparql.Api.Core.Accounts;
 
 namespace Trezorix.Sparql.Api.Core.Repositories
 {
-	public class FileAccountRepository: IAccountRepository
-	{
-		private string _repositoryPath;
+	public class FileAccountRepository: IAccountRepository 
+  {
+	  private bool _loaded;
+    private string _repositoryPath;
 		private IList<Account> _accounts; 
 
 		public FileAccountRepository(string repositoryPath)
@@ -23,9 +24,10 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		}
 
-		private void LoadAllFromPath()
-		{
-			var files = Directory.EnumerateFiles(_repositoryPath);
+		private void LoadAllFromPath() 
+    {
+		  if (_loaded) return;
+      var files = Directory.EnumerateFiles(_repositoryPath);
 			foreach (var file in files)
 			{
 				if (file.ToLower().EndsWith(".json"))
@@ -33,6 +35,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 					_accounts.Add(LoadFromFile(file));
 				}
 			}
+		  _loaded = true;
 		}
 
 		public void Delete(Account account)

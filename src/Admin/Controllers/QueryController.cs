@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading;
 using System.Web.Mvc;
 
 using Trezorix.Sparql.Api.Admin.Controllers.Core;
 using Trezorix.Sparql.Api.Admin.Models.Queries;
-using Trezorix.Sparql.Api.Core.Accounts;
-using Trezorix.Sparql.Api.Core.Configuration;
 using Trezorix.Sparql.Api.Core.Queries;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers
 {
-	public class QueryController : BaseController
+  using Trezorix.Sparql.Api.Application.Accounts;
+
+  public class QueryController : BaseController
 	{
 		private readonly IQueryRepository _queryRepository;
 		private readonly IAccountRepository _accountRepository;
@@ -29,7 +27,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		public ActionResult Index() {
 			try 
 			{
-				ViewBag.Account = OperatingAccount.Current();
+        ViewBag.Account = OperatingAccount.Current(_accountRepository);
 			}
 			catch (ApplicationException e) 
 			{
@@ -58,7 +56,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		[HttpGet]
 		public ActionResult Item(string id, string group)
 		{
-			ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
 
 			var query = (id == "new") ? new Query() { Group = group } : _queryRepository.Get(id);
 

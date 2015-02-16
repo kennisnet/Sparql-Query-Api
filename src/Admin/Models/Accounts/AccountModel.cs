@@ -36,12 +36,12 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 					if (queryAccessModel.Selected && query.ApiKeys.All(a => a != account.ApiKey))
 					{
 						query.ApiKeys.Add(account.ApiKey);
-						queryRepository.Save(query.Id, query);
+						queryRepository.Update(query);
 					}
 					else if (!queryAccessModel.Selected && query.ApiKeys.Any(a => a == account.ApiKey))
 					{
 						query.ApiKeys.Remove(account.ApiKey);
-						queryRepository.Save(query.Id, query);
+						queryRepository.Update(query);
 					}
 
 				}				

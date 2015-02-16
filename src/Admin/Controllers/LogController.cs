@@ -15,6 +15,8 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 {
   using Raven.Client.Document;
 
+  using Trezorix.Sparql.Api.Application.Accounts;
+
   public class LogController : BaseController
 	{
 		private readonly IDocumentSession _session;
@@ -26,7 +28,6 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 
 		[HttpGet]
 		public ActionResult Index() {
-			ViewBag.Account = OperatingAccount.Current();
 			return View(ApiConfiguration.Current);
 		}
 

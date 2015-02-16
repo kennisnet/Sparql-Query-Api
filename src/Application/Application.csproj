@@ -117,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accounts\OperatingAccount.cs" />
     <Compile Include="Autofac\RavenDbRegistration.cs" />
     <Compile Include="Filters\ApiKeyAuthAttribute.cs" />
     <Compile Include="Filters\IApiKeyAuthorizer.cs" />

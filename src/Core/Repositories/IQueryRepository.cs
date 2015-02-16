@@ -6,7 +6,9 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 	public interface IQueryRepository
 	{
 		Query Get(string name);
-		void Save(string name, Query query);
+    Query GetById(string id);
+    Query Add(Query query);
+    Query Update(Query query);
 		IEnumerable<Query> All();
 		void Delete(Query query);
 	}
