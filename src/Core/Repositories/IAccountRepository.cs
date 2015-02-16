@@ -7,8 +7,10 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 	public interface IAccountRepository
 	{
 		Account Get(string id);
+		Account GetById(string id);
 		Account GetByUserName(string userName);
-		void Save(string name, Account account);
+		Account Add(Account account);
+		Account Update(Account account);
 		void Delete(Account account);
 		IEnumerable<Account> All();
 	}

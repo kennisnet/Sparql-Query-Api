@@ -136,18 +136,19 @@ QueryEditor.controller('QueryController', [
       $scope.newGroup = '';
     };
 
-
     $scope.activeTab = [];
 
     $scope.setTab = function (tab) {
       $scope.activeTab = [];
       $scope.activeTab[tab] = true;
-      // activate the sparql code mirror editor 
-      if (tab == 'sparql') {
-        $scope.setSparqlEditorParent();
-      }
+
       // store current tab in user's profile
       userService.activeQueryTab(tab);
+
+      // activate the sparql code mirror editor 
+      if (tab == 'sparql') {
+        $timeout(function () { $scope.setSparqlEditorParent(); }, 100);
+      }
     };
 
     $scope.getEditor = function () {

@@ -9,7 +9,7 @@
     var accountId = $routeParams.id;
 
     $scope.isNewAccount = function(value) {
-      return (value === '' || value.indexOf('000000') > -1);
+      return (value === null || value === '' || value === 'new' || value.indexOf('000000') > -1);
     };
 
     $http.get(config.adminApiUrl + 'Account/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function(response) {
@@ -28,7 +28,7 @@
       saveMethod(config.adminApiUrl + 'Account/' + accountId, $scope.account)
         .success(function(response) {
           if ($scope.isNewAccount(accountId)) {
-            document.location.href = app.config.siteRoot + "Account";
+            document.location.href = config.viewsUrl + '#/Account';
           }
         })
         .error(function() {
@@ -45,7 +45,7 @@
       if (accountId === '') {
         document.location.href = returnUrl;
       } else {
-        $http.delete(app.config.apiRoot + "/" + accountId).then(function(response) {
+        $http.delete(config.adminApiUrl + 'Account/' + accountId).then(function (response) {
           document.location.href = returnUrl;
         });
       }

@@ -16,21 +16,26 @@
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
-  public class GroupRepository : MongoRepository<Account>, IAccountRepository {
+  public class MongoAccountRepository : MongoRepository<Account>, IAccountRepository {
     public Account Get(string id) {
-      throw new NotImplementedException();
+      return this.AsEnumerable().SingleOrDefault(a => a.ApiKey == Guid.Parse(id));
     }
 
     public Account GetByUserName(string userName) {
-      throw new NotImplementedException();
+      return this.AsQueryable().SingleOrDefault(a => a.UserName == userName);
     }
 
     public void Save(string name, Account account) {
-      throw new NotImplementedException();
+      if (account.Id == null) {
+        this.Add(account);
+      }
+      else {
+        this.Update(account);
+      }
     }
 
     public IEnumerable<Account> All() {
-      throw new NotImplementedException();
+      return this.AsEnumerable();
     }
   }
 }

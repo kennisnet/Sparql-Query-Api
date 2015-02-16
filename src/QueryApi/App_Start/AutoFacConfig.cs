@@ -18,8 +18,11 @@ namespace Trezorix.Sparql.Api.QueryApi.App_Start {
 			builder.Register(x => new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account"))
 							.As<IAccountRepository>()
 							.InstancePerRequest();
-							//.OnRelease(x => x.Dispose()); 
-
+      //builder.Register(x => new MongoAccountRepository())
+      //        .As<IAccountRepository>()
+      //        .InstancePerRequest();
+      ////.OnRelease(x => x.Dispose()); 
+      
 			builder.Register(x => new FileQueryRepository(ApiConfiguration.Current.RepositoryRoot + "Query"))
 							.As<IQueryRepository>()
 							.InstancePerRequest();

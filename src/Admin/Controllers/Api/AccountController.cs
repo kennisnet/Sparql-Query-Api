@@ -5,6 +5,7 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Accounts;
+  using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Configuration;
   using Trezorix.Sparql.Api.Core.Repositories;
@@ -33,7 +34,7 @@
     [Route("{id}")]
     public dynamic Get(string id)
     {
-      var account = (id == "new") ? new Account() : _accountRepository.Get(id);
+      var account = (id == "new") ? new Account() : (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
       var model = new AccountModel();
       model.MapFrom(account, _queryRepository.All());
@@ -52,7 +53,7 @@
 
       var account = new Account();
       model.MapTo(account, _queryRepository);
-      _accountRepository.Save(account.Id, account);
+      _accountRepository.Add(account);
 
       return Ok();
     }
@@ -62,7 +63,7 @@
     [Route("{id}")]
     public dynamic Put(string id, AccountModel model)
     {
-      var account = _accountRepository.Get(id);
+      var account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
       if (account == null) {
         return NotFound();
@@ -70,7 +71,7 @@
 
       model.MapTo(account, _queryRepository);
 
-      _accountRepository.Save(account.Id, account);
+      _accountRepository.Update(account);
 
       return Ok();
     }
@@ -79,7 +80,7 @@
     [Route("{id}")]
     public dynamic Delete(string id)
     {
-      var account = _accountRepository.Get(id);
+      var account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
       if (account == null) {
         return NotFound();

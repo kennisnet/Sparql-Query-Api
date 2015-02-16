@@ -8,7 +8,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts
 {
   using MongoRepository;
 
-  public class Account
+  public class Account : Entity
 	{
 		public string FullName { get; set; }
 		public string UserName { get; set; }
@@ -16,11 +16,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts
 		public string Password { get; set; }
 		public Guid ApiKey { get; set; }
 
-    public string Id {
-      get { return ApiKey.ToString(); }
-    }
-
-		public virtual string ComputeSaltedHash(string password)
+    public virtual string ComputeSaltedHash(string password)
 		{
 			return SHA512(password, ReverseString(UserName.ToLower()));
 		}

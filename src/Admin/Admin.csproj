@@ -301,7 +301,6 @@
     <Content Include="Lib\angular\angular-file-upload.min.map" />
     <Content Include="Lib\angular\angular-resource.min.js.map" />
     <Content Include="Lib\angular\angular.min.js.map" />
-    <Content Include="MongoRepository.chm" />
     <None Include="Properties\PublishProfiles\Deploy to File.pubxml" />
     <Content Include="Views\Account\Access.cshtml" />
     <Content Include="Views\Query\Test.cshtml" />
