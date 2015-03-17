@@ -53,8 +53,8 @@ namespace Migrator {
 			var mongoQueryRepository = new MongoQueryRepository();
 			mongoQueryRepository.DeleteAll();
 
-			foreach (var query in fileQueryRepository.All())
-			{
+			foreach (var query in fileQueryRepository.All()) {
+				query.Alias = query.Id;
 				query.Id = null;
 				mongoQueryRepository.Add(query);
 			}
