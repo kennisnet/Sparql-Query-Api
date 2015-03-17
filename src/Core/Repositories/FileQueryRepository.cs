@@ -83,7 +83,24 @@ namespace Trezorix.Sparql.Api.Core.Repositories
     private Query LoadFromFile(string filename)
 		{
 			string json = File.ReadAllText(filename);
-			var query = JsonConvert.DeserializeObject<Query>(json);
+
+			var item = JsonConvert.DeserializeObject<dynamic>(json);
+			var query =
+				new Query()
+				{
+					Id = item.Id,
+					AllowAnonymous = item.AllowAnonymous,
+					Description = item.Description,
+					Endpoint = item.Endpoint,
+					Group = item.Group,
+					Label = item.Label,
+					SparqlQuery = item.SparqlQuery,
+				};
+
+			query.ApiKeys = (item.ApiKeys != null) ? item.ApiKeys.ToObject<List<Guid>>() : new List<Guid>();
+			query.Notes = (item.Notes != null) ? item.Notes.ToObject<List<Note>>() : new List<Note>();
+			query.Parameters = (item.Parameters != null) ? item.Parameters.ToObject<List<QueryParameter>>() : new List<QueryParameter>(); ;
+
 			return query;
 		}
 

@@ -3,12 +3,6 @@
   using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
   using System.Linq;
-  using System.Linq.Expressions;
-  using System.Text.RegularExpressions;
-
-  using MongoDB.Bson;
-  using MongoDB.Driver;
-  using MongoDB.Driver.Builders;
 
   using MongoRepository;
 

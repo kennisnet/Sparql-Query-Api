@@ -16,3 +16,4 @@ Logs
 Publish
 packages
 !packages/Microsoft.Bcl.Build*/tools/Microsoft.Bcl.Build.targets
+src/.nuget/

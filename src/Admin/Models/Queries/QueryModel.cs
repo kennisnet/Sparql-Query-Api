@@ -69,7 +69,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 			query.Id = Id;
 			query.Label = Label;
 			query.Description = Description;
-      query.Notes = Mapper.Map<IEnumerable<Note>>(Notes);
+      query.Notes = Mapper.Map<IList<Note>>(Notes);
       query.Group = Group;
 			query.SparqlQuery = SparqlQuery;
 			query.Parameters = (Parameters != null)
@@ -79,7 +79,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 							                  Description = p.Description,
 							                  SampleValue = p.SampleValue,
 																ValuesQuery = p.ValuesQuery
-						                  })
+						                  }).ToList()
 					                  : new List<QueryParameter>();
 			query.ApiKeys = Access.Where(a => a.Selected).Select(a => Guid.Parse(a.Key)).ToList();
 			query.Endpoint = Endpoint;
