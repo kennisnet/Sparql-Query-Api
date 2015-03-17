@@ -24,7 +24,8 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult Index() {
+		public ActionResult Index() 
+    {
 			try 
 			{
         ViewBag.Account = OperatingAccount.Current(_accountRepository);

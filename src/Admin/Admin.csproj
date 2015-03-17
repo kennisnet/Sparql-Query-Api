@@ -176,6 +176,7 @@
     <Compile Include="Controllers\Api\SettingsController.cs" />
     <Compile Include="Controllers\Attributes\AuthenticateUser.cs" />
     <Compile Include="Controllers\Attributes\NoCacheAttribute.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Models\ModelMapper.cs" />
     <Compile Include="Models\Queries\NoteModel.cs" />
     <Compile Include="Models\Statistics\QueryStatisticsModel.cs" />
@@ -224,6 +225,7 @@
     <Content Include="NgApp\Controllers\NavController.js" />
     <Content Include="NgApp\Modules\Alerts.js" />
     <Content Include="NgApp\Modules\NoCache.js" />
+    <Content Include="NgApp\Modules\Test.js" />
     <Content Include="NgApp\RouteConfig.js" />
     <Content Include="NgApp\Modules\Account.js" />
     <Content Include="NgApp\Loading.js" />
@@ -317,6 +319,7 @@
     <Content Include="Views\Settings\Caching.cshtml" />
     <Content Include="Views\Query\Notes.cshtml" />
     <Content Include="Views\Home\Overview.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

@@ -1,0 +1,50 @@
+﻿@using Resources
+@using Trezorix.Sparql.Api.Application.Accounts
+@using Trezorix.Sparql.Api.Core.Accounts
+@using Trezorix.Sparql.Api.Core.Configuration
+@model Trezorix.Sparql.Api.Admin.Models.Queries.GroupedQueryModel
+
+<p>&#160;</p>
+
+<div data-ng-model="data">
+	<div class="row">
+		<div class="col-md-6"><input type="text" class="form-control" value="OBK" ng-model="endpoint.source" /></div>
+		<div class="col-md-6"><input type="text" class="form-control" value="OBK-Virtuoso" ng-model="endpoint.compare" /></div>
+	</div>
+	<div class="row space-above space-below">
+		<div class="col-md-12">
+			<button class="btn btn-default pull-right" ng-click="testAll()"><i class="glyphicon glyphicon-forward icon"></i>Test alles</button>
+		</div>
+	</div>
+	<div class="panel panel-default" ng-repeat="group in groupedQueries.Groups">
+		<!-- Default panel contents -->
+		<div id="group_{{Id}}" class="panel-heading form-inline" data-ng-click="toggleGroup($event, group.Id)">
+			<strong style="font-size: 1.5em">{{group.Label}}</strong>
+		</div>
+		<table class="table table-striped" data-ng-show="isGroupVisible(group.Id)">
+			<tbody>
+				<tr ng-repeat="query in group.Items | orderBy: group.Id">
+					<td>
+						<a href="#/query/{{query.Id}}">{{query.Id}}</a>
+						<div class="alert alert-warning small-space-above" ng-show="query.test[0].error">
+							{{query.test[0].error}}
+						</div>
+						<div class="alert alert-warning" ng-show="query.test[1].error">
+							{{query.test[1].error}}
+						</div>
+					</td>
+					<td style="width: 5%">
+						<span ng-show="query.test">
+							<span ng-hide="query.test[1]">bezig...</span>
+							<span ng-show="query.test[1] && query.test[0] == query.test[1]" class="btn pull-right glyphicon glyphicon-ok icon" style="color: #0c0"></span>
+							<span ng-show="query.test[1] && query.test[0] != query.test[1]" class="btn pull-right glyphicon glyphicon-remove icon" style="color: red" title="{{query.test[1].error}}"></span>
+						</span>
+					</td>
+					<td style="width: 5%">
+						<a href ng-click="test(query)" class="btn pull-right glyphicon glyphicon-play icon" title="{{query.Id}}"> </a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

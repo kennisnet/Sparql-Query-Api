@@ -33,6 +33,7 @@
           "~/NgApp/Modules/User.js",
           "~/NgApp/Modules/Account.js",
           "~/NgApp/Modules/Log.js",
+          "~/NgApp/Modules/Test.js",
           "~/NgApp/Controllers/NavController.js"
           )
       );

@@ -210,7 +210,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MongoRepository.chm" />
     <None Include="Properties\PublishProfiles\Deploy to File.pubxml" />
   </ItemGroup>
   <ItemGroup>

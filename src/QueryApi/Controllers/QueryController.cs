@@ -211,7 +211,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			}
 			else
 			{
-				response = endpoint.Query<SparqlResponse>(sq.Query);
+				response = endpoint.Query<SparqlResponse>(sq.Query, debug);
 
 				if (!debug && ApiConfiguration.Current.CacheTime > 0)
 				{
@@ -238,7 +238,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			}
 			else
 			{
-				xmlOut = endpoint.Query<T>(sq.Query);
+				xmlOut = endpoint.Query<T>(sq.Query, debug);
 				Logger.Debug("SPARQL: " + sq.Query);
 
 				if (!debug && ApiConfiguration.Current.CacheTime > 0)

@@ -9,6 +9,7 @@ using Trezorix.Sparql.Api.Core.Helpers;
 
 namespace Trezorix.Sparql.Api.Core.Sparql
 {
+	using System.Diagnostics;
 
 	public class SparqlEndpoint
 	{
@@ -19,11 +20,11 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 		public int Timeout { get; set; }
 		public string Namespaces { get; set; }
 
-		public T Query<T>(string query) where T : class
+		public T Query<T>(string query, bool debug = false) where T : class
 		{
 			if (typeof (T) == typeof (SparqlResponse))
 			{
-				var stream = (MemoryStream)ExecuteSparqlQuery(query, "json");
+				var stream = (MemoryStream)ExecuteSparqlQuery(query, "json", debug);
 
 				var data = Encoding.UTF8.GetString(stream.ToArray());
 				var result = JsonConvert.DeserializeObject<SparqlResponse>(data);
@@ -31,13 +32,13 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			}
 			if (typeof(T) == typeof(XmlDocument))
 			{
-				var stream = (MemoryStream)ExecuteSparqlQuery(query, "xml");
+				var stream = (MemoryStream)ExecuteSparqlQuery(query, "xml", debug);
 				var result = new XmlDocument();
 				result.Load(stream);
 				return result as T;
 			}
 			if (typeof(T) == typeof(object)) {
-				var stream = (MemoryStream)ExecuteSparqlQuery(query, "json");
+				var stream = (MemoryStream)ExecuteSparqlQuery(query, "json", debug);
 
 				var data = Encoding.UTF8.GetString(stream.ToArray());
 				var result = JsonConvert.DeserializeObject<dynamic>(data);
@@ -46,7 +47,7 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			return null;
 		}
 
-		private Stream ExecuteSparqlQuery(string query, string output)
+		private Stream ExecuteSparqlQuery(string query, string output, bool debug)
 		{
 			MemoryStream stream = null;
 
@@ -59,18 +60,20 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			switch (output)
 			{
 				case "json":
-          client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+json, 'application/ld+json', application/sparql-results+json");
+					client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+json");
+					//// client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+json, application/rdf+json, application/ld+json");
 					break;
 				case "xml":
-					client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+xml, application/sparql-results+xml");
+					client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+xml");
+					//// client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+xml, application/sparql-results+xml");
 					break;
 			}
 			client.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
 			client.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-16");
 
 			string sparqlQuery = query;
-
-			byte[] result = client.UploadValues(Url, new NameValueCollection
+			string url = Url + (debug ? (Url.Contains("?") ? "&" : "?") +  "debug=true" : "");
+			byte[] result = client.UploadValues(url, new NameValueCollection
 				{
 					{
 						"query", sparqlQuery
