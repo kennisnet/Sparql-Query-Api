@@ -7,8 +7,6 @@ using System.Web;
 using System.Web.Http;
 using System.Xml;
 
-using Newtonsoft.Json;
-using Raven.Client;
 using Trezorix.Sparql.Api.Application.Filters;
 using Trezorix.Sparql.Api.Application.TimeTracking;
 using Trezorix.Sparql.Api.Core.Configuration;
@@ -21,16 +19,16 @@ using Trezorix.Sparql.Api.QueryApi.Controllers.Core;
 namespace Trezorix.Sparql.Api.QueryApi.Controllers
 {
 	public class QueryController : QueryApiController
-	{
-		private readonly IDocumentSession _session;
+	{		
 		private readonly IQueryRepository _queryRepository;
+		private readonly IQueryLogRepository _queryLogRepository;
 		private readonly IAccountRepository _accountRepository;
 
-		public QueryController(IDocumentSession session, IQueryRepository queryRepository, IAccountRepository accountRepository)
+		public QueryController(IQueryRepository queryRepository, IQueryLogRepository queryLogRepository, IAccountRepository accountRepository)
 		{
 			_queryRepository = queryRepository;
+			_queryLogRepository = queryLogRepository;
 			_accountRepository = accountRepository;
-			_session = session;
 		}
 
 		public HttpResponseMessage Get()
@@ -150,8 +148,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
 			queryLogItem.ExecutionTime = timeTracker.TotalTime;
 
-			_session.Store(queryLogItem);
-			_session.SaveChanges();
+			_queryLogRepository.Add(queryLogItem);
 
 			return xmlOut;
 		}

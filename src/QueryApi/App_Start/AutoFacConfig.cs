@@ -4,7 +4,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Trezorix.Sparql.Api.Application.Autofac;
-using Trezorix.Sparql.Api.Core.Configuration;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.QueryApi.App_Start {
@@ -28,6 +27,10 @@ namespace Trezorix.Sparql.Api.QueryApi.App_Start {
 			//				.InstancePerRequest();
 			builder.Register(x => new MongoQueryRepository())
 							.As<IQueryRepository>()
+							.InstancePerRequest();
+
+			builder.Register(x => new MongoQueryLogRepository())
+							.As<IQueryLogRepository>()
 							.InstancePerRequest();
 
 			RavenDbRegistration.Register(builder);
