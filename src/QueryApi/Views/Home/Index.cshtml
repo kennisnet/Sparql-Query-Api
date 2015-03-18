@@ -35,7 +35,7 @@
 								<ul class="list-unstyled">
 									@foreach (var query in group)
 									{
-										<li><a title="@query.Label" href="#@query.Id">@query.Label</a></li>
+										<li><a title="@query.Label" href="#@query.Alias">@query.Label</a></li>
 									}
 								</ul>
 							}
@@ -50,7 +50,7 @@
 								foreach (var query in group)
 								{
 									<div class="well">
-										<h4 id="@query.Id">@query.Label</h4>
+										<h4 id="@query.Alias">@query.Label</h4>
 										@if (query.Parameters.Any())
 										{
 											<table class="table-striped table-bordered" style="width: 80%"> 
@@ -77,7 +77,7 @@
 											string key = (!string.IsNullOrEmpty(ViewBag.ApiKey)) ? "api_key=" + ViewBag.ApiKey : "";
 											sb.Append(query.Parameters.Aggregate(key, (current, parameter) => current + (((current != "") ? "&" : "") + parameter.Name + "=" + (parameter.SampleValue ?? ""))));
 
-											string url = @Url.Content(ApiConfiguration.Current.QueryApiUrl + "/" + query.Id + "?" + string.Join("&", sb));
+											string url = @Url.Content(ApiConfiguration.Current.QueryApiUrl + "/" + query.Alias + "?" + string.Join("&", sb));
 											string formatConcatenator = (url.EndsWith("?")) ? "format" : "&format"; 
 										} 
 										<a href="@url">@url</a><br/>

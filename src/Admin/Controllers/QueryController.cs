@@ -55,11 +55,11 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult Item(string id, string group)
+		public ActionResult Item(string alias, string group)
 		{
       ViewBag.Account = OperatingAccount.Current(_accountRepository);
 
-			var query = (id == "new") ? new Query() { Group = group } : _queryRepository.Get(id);
+			var query = (alias == "new") ? new Query() { Group = group } : _queryRepository.GetByAlias(alias);
 
 			return View(query);
 		}

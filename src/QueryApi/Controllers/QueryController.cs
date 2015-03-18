@@ -69,7 +69,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 		[ApiKeyAuth("api_key", typeof(ApiKeyAuthorizer))]
 		public IEnumerable<dynamic> ParameterValues(string name, string parameter, bool debug = false)
 		{
-			var query = _queryRepository.Get(name);
+			var query = _queryRepository.GetByAlias(name);
 
 			if (query == null)
 			{
@@ -120,7 +120,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			var timeTracker = new TimeTracker();
 			timeTracker.Start("Query");
 
-			var query = _queryRepository.Get(name);
+			var query = _queryRepository.GetByAlias(name);
 
 			if (query == null)
 			{

@@ -14,9 +14,8 @@
 			return this.AsEnumerable().SingleOrDefault(q => q.Label == name);
 		}
 
-		public Query GetByAlias(string name) {
-			throw new NotImplementedException();
-			//return this.AsEnumerable().SingleOrDefault(q => q.Alias == name);
+		public Query GetByAlias(string alias) {
+			return this.AsEnumerable().SingleOrDefault(q => q.Alias == alias);
 		}
 
 		public IEnumerable<Query> All() {

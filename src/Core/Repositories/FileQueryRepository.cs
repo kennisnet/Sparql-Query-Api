@@ -56,13 +56,17 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			File.Delete(filename);
 		}
 
-		public Query Get(string name)
+		public Query Get(string name) {
+			return this.GetByAlias(name);
+		}
+
+		public Query GetByAlias(string alias)
 		{
-			var query = _queries.FirstOrDefault(q => q.Id == name);
+			var query = _queries.FirstOrDefault(q => q.Id == alias);
 
 			//if (query == null)
 			{
-				string filename = FilenameFromQueryName(name);
+				string filename = FilenameFromQueryName(alias);
 
 				if (!File.Exists(filename))
 				{
@@ -71,7 +75,6 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 				query = LoadFromFile(filename);
 			}
-
 
 			return query;
 		}
@@ -89,6 +92,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 				new Query()
 				{
 					Id = item.Id,
+					Alias = item.Id,
 					AllowAnonymous = item.AllowAnonymous,
 					Description = item.Description,
 					Endpoint = item.Endpoint,

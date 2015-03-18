@@ -51,17 +51,5 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 			}
 			return View(model);
 		}
-
-		[HttpGet]
-		public ActionResult Item(string id, string group) {
-			ViewBag.Account = OperatingAccount.Current(_accountRepository);
-
-			var query = (id == "new") ? new Query() {
-				Group = group
-			} : _queryRepository.Get(id);
-
-			return View(query);
-		}
-
 	}
 }

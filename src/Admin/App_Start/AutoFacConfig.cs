@@ -17,15 +17,18 @@ namespace Trezorix.Sparql.Api.Admin.App_Start {
       builder.RegisterControllers(typeof (AutofacConfig).Assembly);
       builder.RegisterApiControllers(typeof (AutofacConfig).Assembly);
 
-      builder.Register(x => new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account"))
-              .As<IAccountRepository>()
-              .InstancePerRequest();
-      //builder.Register(x => new MongoAccountRepository())
-      //        .As<IAccountRepository>()
-      //        .InstancePerRequest();
-      ////.OnRelease(x => x.Dispose()); 
+			//builder.Register(x => new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account"))
+			//				.As<IAccountRepository>()
+			//				.InstancePerRequest();
+			builder.Register(x => new MongoAccountRepository())
+							.As<IAccountRepository>()
+							.InstancePerRequest();
+			//.OnRelease(x => x.Dispose()); 
 
-			builder.Register(x => new FileQueryRepository(ApiConfiguration.Current.RepositoryRoot + "Query"))
+			//builder.Register(x => new FileQueryRepository(ApiConfiguration.Current.RepositoryRoot + "Query"))
+			//				.As<IQueryRepository>()
+			//				.InstancePerRequest();
+			builder.Register(x => new MongoQueryRepository())
 							.As<IQueryRepository>()
 							.InstancePerRequest();
 

@@ -13,6 +13,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 		public readonly bool EnableAllowAnonymous = ApiConfiguration.Current.AllowAnonymous;
 
 		public string Id { get; set; }
+		public string Alias { get; set; }
 		public string Label { get; set; }
 		public string SparqlQuery { get; set; }
 		public string Description { get; set; }
@@ -34,13 +35,14 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 			}
 
 			Id = query.Id;
-			Label = (string.IsNullOrEmpty(query.Label)) ? query.Id : query.Label;
+			Alias = query.Alias;
+			Label = (string.IsNullOrEmpty(query.Label)) ? query.Alias : query.Label;
 			Description = query.Description;
       Notes = Mapper.Map<IEnumerable<NoteModel>>(query.Notes);
 			Group = query.Group;
 			Groups = groups;
 			SparqlQuery = query.SparqlQuery;
-			Link = "/" + query.Id + "?api_key=$$apikey" + query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
+			Link = "/" + query.Alias + "?api_key=$$apikey" + query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
 			Parameters =
 				query.Parameters.Select(
 					p => new QueryParameterModel()
@@ -67,6 +69,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 		public void MapTo(Query query)
 		{
 			query.Id = Id;
+			query.Alias = Alias;
 			query.Label = Label;
 			query.Description = Description;
       query.Notes = Mapper.Map<IList<Note>>(Notes);

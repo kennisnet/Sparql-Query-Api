@@ -5,10 +5,10 @@ namespace Migrator {
 
 	internal class Options {
 
-		[Option("AccountPath", HelpText = @"D:\Projecten\kennisnet-sparql-query-api\src\Data\API\Account")]
+		[Option('a', "AccountPath", Required = true, HelpText = @"Path to file account folder, D:\Projecten\kennisnet-sparql-query-api\src\Data\API\Account")]
 		public string AccountPath { get; set; }
 
-		[Option("QueryPath", HelpText = @"D:\Projecten\kennisnet-sparql-query-api\src\Data\API\Query")]
+		[Option('q', "QueryPath", Required = true, HelpText = @"Path to file query folder, D:\Projecten\kennisnet-sparql-query-api\src\Data\API\Query")]
 		public string QueryPath { get; set; }
 
 

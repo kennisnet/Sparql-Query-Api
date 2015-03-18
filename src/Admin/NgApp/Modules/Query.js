@@ -74,13 +74,14 @@ QueryEditor.controller('QueryController', [
 
     $scope.duplicate = function() {
       queryId = '';
-      $scope.query.Id = 'copy of ' + $scope.query.Id;
+      $scope.query.Alias = 'copy of ' + $scope.query.Alias;
       $scope.query.Label = 'copy of ' + $scope.query.Label;
       $scope.save();
     };
 
-    $scope.showPreview = function() {
-      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Id + '/Preview')
+    $scope.showPreview = function () {
+	    console.log($scope.query.Alias);
+      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Alias + '/Preview')
         .success(function(response) {
           console.log(response);
           $scope.previewResults = angular.copy(response);
@@ -106,7 +107,7 @@ QueryEditor.controller('QueryController', [
     };
 
     $scope.showQueryPreview = function() {
-      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Id + '/PreviewQuery/')
+      $http.get(config.adminApiUrl + 'Query/' + $scope.query.Alias + '/PreviewQuery/')
         .success(function(response) {
           console.log(response);
           $scope.previewQuery = angular.copy(response);

@@ -6,21 +6,22 @@ namespace Migrator {
 
   class Program {
 
-    static void Main(string[] args) {			
-	    ParseCommandLineArgumentsAndImportFileRepositories(args);
-    }
+		static void Main(string[] args) {			
+			ParseCommandLineArgumentsAndImportFileRepositories(args);
+		}
 
 
 		private static void ParseCommandLineArgumentsAndImportFileRepositories(string[] args)
-		{			
+		{
 			var options = new Options();
 
 			if (Parser.Default.ParseArguments(args, options))
-			{				
-				if (args.Length == 0)
+			{
+				if (args.Length == 0 || string.IsNullOrEmpty(options.AccountPath) || string.IsNullOrEmpty(options.QueryPath))
 				{
 					Console.WriteLine(options.GetUsage());
-				}								
+					Console.ReadLine();
+				}
 			}
 
 			if (!string.IsNullOrEmpty(options.AccountPath)) {
@@ -67,5 +68,5 @@ namespace Migrator {
 			}
 
 		}
-  }
+	}
 }
