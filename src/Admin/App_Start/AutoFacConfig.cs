@@ -32,6 +32,10 @@ namespace Trezorix.Sparql.Api.Admin.App_Start {
 							.As<IQueryRepository>()
 							.InstancePerRequest();
 
+			builder.Register(x => new MongoQueryLogRepository())
+							.As<IQueryLogRepository>()
+							.InstancePerRequest();
+
 			builder.RegisterType<FormsAuthenticationService>().As<IFormsAuthenticationService>();
 			RavenDbRegistration.Register(builder);
 
