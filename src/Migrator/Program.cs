@@ -31,6 +31,8 @@ namespace Migrator {
 			if (!string.IsNullOrEmpty(options.QueryPath)) {
 				ImportFileQueryRepository(options.QueryPath);
 			}
+
+			ImportQueryLogRepository();
 		}
 
 		private static void ImportFileAccountRepository(string path){
@@ -66,7 +68,14 @@ namespace Migrator {
 			{
 				Console.WriteLine(query.Id + " - " + query.Label);
 			}
+		}
 
+		private static void ImportQueryLogRepository() {
+			var importQueryLogTask = new ImportQueryLogTask("http://localhost:8090", "Project.QueryApi.0.7"); 
+			
+			importQueryLogTask.Execute();
+			
+			Console.WriteLine("Query Log repository was imported");
 		}
 	}
 }

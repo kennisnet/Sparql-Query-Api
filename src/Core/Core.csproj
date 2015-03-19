@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="ObjectIdExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Mongo\QueryLogItem.cs" />
     <Compile Include="Queries\Note.cs" />
     <Compile Include="Queries\Query.cs" />
     <Compile Include="Queries\QueryLogItem.cs" />
