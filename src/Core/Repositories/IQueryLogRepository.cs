@@ -10,5 +10,7 @@
 		QueryLogItem Add(QueryLogItem queryLogItem);
 		IEnumerable<QueryLogItem> All();
 		IEnumerable<QueryLogItem> GetByDateRange(DateTime startDate, DateTime endDate);
+		IList<QueryLogItem> GetStartingFromDate(DateTime startDate);
+		IList<QueryStatistics> GetQueryStatistics();
 	}
 }

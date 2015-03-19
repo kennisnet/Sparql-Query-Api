@@ -3,8 +3,13 @@
 .controller("LogController", [
   '$scope', '$location', '$http', 'config', function($scope, $location, $http, config) {
 
-    $scope.timespan = 'last-24';
-    $scope.downloadsTimespan = 'month';
+    $scope.statisticsTimespans = [
+			{ id: 'last-hour', label: 'afgelopen uur' },
+			{ id: 'last-24', label: 'afgelopen 24 uur' },
+			{ id: 'last-week', label: 'afgelopen 7 dagen' },
+			{ id: 'last-month', label: 'afgelopen maand' }
+    ];
+    $scope.timespan = $scope.statisticsTimespans[1];
 
     $scope.timespans = [
       { id: 'week', label: 'week' },
@@ -23,19 +28,20 @@
       }
     };
 
-    $scope.updateStats = function() {
-      $http.get(config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + $scope.timespan).then(function (response) {
+    $scope.updateStats = function (timespan) {
+    	if (!timespan) {
+		    timespan = $scope.timespan;
+	    }
+      $http.get(config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" +timespan.id).then(function (response) {
         $scope.queryStatistics = angular.copy(response.data);
       });
     };
 
-    $scope.onTimespanChanged = function() {
+    $scope.onTimespanChanged = function (timespan) {
       console.log($scope.timespan);
-      $scope.updateStats();
+      $scope.updateStats(timespan);
     };
-
-    $scope.updateStats();
-
+    
     $scope.previous = function() {
       $scope.updateDownloads($scope.downloads.Start - 10);
     };
@@ -56,5 +62,6 @@
       $scope.updateDownloads(timespan, 0);
     };
 
+    $scope.updateStats();
   }
 ]);
