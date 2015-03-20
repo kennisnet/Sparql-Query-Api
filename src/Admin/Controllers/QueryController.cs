@@ -55,7 +55,10 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 
 			if (model.Groups.Count == 0)
 			{
-				model.Groups.Add(new QueryGroupModel { Label = "Algemeen", Items = new List<QueryModel>()});
+				model.Groups.Add(new QueryGroupModel {
+					Label = "Algemeen", 
+					Items = new List<QueryModel>()
+				});
 			}
 			return View(model);
 		}
