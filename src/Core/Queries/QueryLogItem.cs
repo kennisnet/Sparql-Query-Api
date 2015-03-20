@@ -3,7 +3,9 @@ using System.Web;
 
 namespace Trezorix.Sparql.Api.Core.Queries
 {
-	public class QueryLogItem
+	using MongoRepository;
+
+	public class QueryLogItem : Entity
 	{
 		public string Name { get; set; }
 		public string AccountId { get; set; }

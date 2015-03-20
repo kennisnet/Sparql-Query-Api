@@ -1,10 +1,10 @@
-﻿using System;
-using System.Security.Principal;
-using System.Threading;
-using Trezorix.Sparql.Api.Core.Configuration;
-using Trezorix.Sparql.Api.Core.Repositories;
+﻿namespace Trezorix.Sparql.Api.Application.Accounts {
+  using System;
+  using System.Security.Principal;
+  using System.Threading;
 
-namespace Trezorix.Sparql.Api.Core.Accounts {
+  using Trezorix.Sparql.Api.Core.Accounts;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
   public static class OperatingAccount {
     public static void SetByAccountId(string accountId) {
@@ -12,7 +12,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts {
       Thread.CurrentPrincipal = principal;
     }
 
-    public static Account Current() {
+    public static Account Current(IAccountRepository accountRepository) {
       var anon = Thread.CurrentPrincipal as AnonymousPrincipal;
       if (anon != null) {
         throw new NotImplementedException("AnonymousAccount not implemented");
@@ -35,9 +35,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts {
 
 			string accountId = principal.Identity.Name;
 
-			
-			var accountRepository = new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account");
-	    var acc = accountRepository.Get(accountId);
+	    var acc = accountRepository.GetById(accountId);
 
       if (acc == null) {
         throw new ApplicationException("No account found for account id: " + accountId);
@@ -53,8 +51,8 @@ namespace Trezorix.Sparql.Api.Core.Accounts {
 
     internal class AccountPrincipal : IPrincipal {
       public AccountPrincipal(string accountId) {
-        AccountId = accountId;
-        Identity = new GenericIdentity(accountId, "Forms");
+        this.AccountId = accountId;
+        this.Identity = new GenericIdentity(accountId, "Forms");
       }
 
       public string AccountId { get; private set; }
@@ -69,7 +67,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts {
 
     internal class AnonymousPrincipal : IPrincipal {
       public AnonymousPrincipal() {
-        Identity = new GenericIdentity("anonymous", "declared");
+        this.Identity = new GenericIdentity("anonymous", "declared");
       }
 
       public bool IsInRole(string role) {

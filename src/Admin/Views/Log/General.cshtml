@@ -4,12 +4,7 @@
 	<div class="form-group row">
 		<div class="col-lg-3">
 			&#160;<label class="label">Periode</label>
-			<select class="form-control" data-ng-model="timespan" data-ng-change="onTimespanChanged()">
-				<option value="last-hour">afgelopen uur</option>
-				<option value="last-24">afgelopen 24 uur</option>
-				<option value="last-week">afgelopen 7 dagen</option>
-				<option value="last-month">afgelopen maand</option>
-			</select>
+			<select class="form-control" data-ng-model="timespan" data-ng-options="item.label for item in statisticsTimespans" data-ng-change="onTimespanChanged(timespan)"></select>
 		</div>
 		<div class="col-lg-12 space-above">
 			<table class="table table-striped" style="width:100%">

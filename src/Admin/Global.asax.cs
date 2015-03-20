@@ -17,6 +17,7 @@ namespace Trezorix.Sparql.Api.Admin
   using System.Web.Optimization;
 
   using Trezorix.Sparql.Api.Admin.Models;
+  using Trezorix.Sparql.Api.Application.Accounts;
 
   // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
 	// visit http://go.microsoft.com/?LinkId=9394801

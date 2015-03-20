@@ -10,8 +10,10 @@ using Trezorix.Sparql.Api.Core.Accounts;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers {
+  using Trezorix.Sparql.Api.Application.Accounts;
+  using Trezorix.Sparql.Api.Core;
 
-	public class AccountController : BaseController
+  public class AccountController : BaseController
 	{
 		private readonly IQueryRepository _queryRepository;
 		private readonly IAccountRepository _accountRepository;
@@ -26,7 +28,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 
 		public ActionResult Index()
 		{
-			ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
 			var model = _accountRepository.All().ToList();
 			return View(model);
 		}
@@ -34,11 +36,9 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 		[HttpGet]
 		public ActionResult Item(string id)
 		{
-			ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
 			
-			var model = (id == "new") ? new Account() : _accountRepository.Get(id);
-
-			return View(model);
+			return View();
 		}
 
 		[AllowAnonymous]
@@ -65,16 +65,17 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
         ApiKey = Guid.NewGuid(),
       };
 
-			_accountRepository.Save(account.Id, account);
+			_accountRepository.Add(account);
 
 	    return null; //Login(account.Id, "", "~/Account");
     }
 
     [HttpPost]
     public ActionResult Delete(string id) {
-			Account account = _accountRepository.Get(id);
+      Account account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
+
 			if (account != null) {
-        if (OperatingAccount.Current().Id == account.Id) {
+        if (OperatingAccount.Current(_accountRepository).Id == account.Id) {
           _formsService.SignOut();
           OperatingAccount.SetAnonymous();
         }

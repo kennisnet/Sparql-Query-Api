@@ -7,9 +7,10 @@ using Trezorix.Sparql.Api.Core.Accounts;
 
 namespace Trezorix.Sparql.Api.Core.Repositories
 {
-	public class FileAccountRepository: IAccountRepository
-	{
-		private string _repositoryPath;
+	public class FileAccountRepository: IAccountRepository 
+  {
+	  private bool _loaded;
+    private string _repositoryPath;
 		private IList<Account> _accounts; 
 
 		public FileAccountRepository(string repositoryPath)
@@ -23,9 +24,10 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		}
 
-		private void LoadAllFromPath()
-		{
-			var files = Directory.EnumerateFiles(_repositoryPath);
+		private void LoadAllFromPath() 
+    {
+		  if (_loaded) return;
+      var files = Directory.EnumerateFiles(_repositoryPath);
 			foreach (var file in files)
 			{
 				if (file.ToLower().EndsWith(".json"))
@@ -33,13 +35,14 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 					_accounts.Add(LoadFromFile(file));
 				}
 			}
+		  _loaded = true;
 		}
 
 		public void Delete(Account account)
 		{
-			string filename = FilenameFromAccountName(account.Id);
+			string filename = FilenameFromAccountName(account.ApiKey.ToString());
 
-			if (_accounts.Any(q => q.Id == account.Id))
+			if (_accounts.Any(q => q.ApiKey == account.ApiKey))
 			{
 				_accounts.Remove(account);
 			}
@@ -59,7 +62,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		public Account Get(string id)
 		{
-			var account = _accounts.FirstOrDefault(q => q.Id == id);
+			var account = _accounts.FirstOrDefault(q => q.ApiKey.ToString() == id);
 
 			//if (account == null)
 			{
@@ -70,7 +73,12 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			return account;
 		}
 
-		public Account GetByUserName(string userName)
+	  public Account GetById(string id) 
+    {
+	    return All().SingleOrDefault(a => a.Id == id);
+	  }
+
+	  public Account GetByUserName(string userName)
 		{
 			return All().SingleOrDefault(a => a.UserName == userName);
 		}
@@ -80,18 +88,36 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			if (File.Exists(filename))
 			{
 				string json = File.ReadAllText(filename);
-				var account = JsonConvert.DeserializeObject<Account>(json);
-				return account;
+				var item = JsonConvert.DeserializeObject<dynamic>(json);
+        var account = new Account();
+        account.ApiKey = item.ApiKey;
+			  account.UserName = item.UserName;
+			  account.FullName = item.FullName;
+			  account.Password = item.Password;
+        account.Roles = (item.Roles != null) ? ((Newtonsoft.Json.Linq.JArray) item.Roles).Select(s => s.ToString()) : null;
+
+        account.Id = account.ApiKey.AsObjectId().ToString();
+
+        return account;
 			}
 
 			return null;
 		}
 
-		public void Save(string name, Account account)
-		{
-			string json = JsonConvert.SerializeObject(account, Formatting.Indented);
-			File.WriteAllText(FilenameFromAccountName(name), json);
-		}
+    public Account Add(Account account) 
+    {
+      return this.Update(account);
+    }
+
+    public Account Update(Account account) {
+      account.Id = account.ApiKey.AsObjectId().ToString();
+      dynamic item =
+        new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
+      
+      string json = JsonConvert.SerializeObject(item, Formatting.Indented);
+      File.WriteAllText(FilenameFromAccountName(account.ApiKey.ToString()), json);
+      return account;
+    }
 
 		private string FilenameFromAccountName(string name)
 		{

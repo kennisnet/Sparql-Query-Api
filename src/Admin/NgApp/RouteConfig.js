@@ -7,6 +7,7 @@
       .when('/account', { templateUrl: config.viewsUrl + 'Account/Index', controller: 'AccountIndexController' })
       .when('/log', { templateUrl: config.viewsUrl + 'Log/Index', controller: 'LogController' })
       .when('/settings', { templateUrl: config.viewsUrl + 'Settings/Index', controller: 'SettingsController' })
+      .when('/test', { templateUrl: config.viewsUrl + 'Test/Index', controller: 'TestIndexController' })
       .otherwise({ redirectTo: '/home' });
 
     $sceDelegateProvider.resourceUrlWhitelist(['self', '**']);

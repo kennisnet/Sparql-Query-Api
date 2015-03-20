@@ -1,4 +1,5 @@
 ﻿@using Resources
+@using Trezorix.Sparql.Api.Application.Accounts
 @using Trezorix.Sparql.Api.Core.Accounts
 @using Trezorix.Sparql.Api.Core.Configuration
 @model Trezorix.Sparql.Api.Admin.Models.Queries.GroupedQueryModel
@@ -20,23 +21,23 @@
 		
 			<table class="table table-striped" data-ng-show="isGroupVisible('@group.Id')">
 				<tbody>
-					@foreach (var query in group.Items.OrderBy(q => q.Id))
+					@foreach (var query in group.Items.OrderBy(q => q.Alias))
 					{
-						string queryUrl = ApiConfiguration.Current.QueryApiUrl + "/" + query.Id + 
-							"?api_key=" + OperatingAccount.Current().ApiKey.ToString() + 
+						string queryUrl = ApiConfiguration.Current.QueryApiUrl + "/" + query.Alias +
+              "?api_key=" + ViewBag.Account.ApiKey.ToString() + 
 							query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
 						<tr>
 						  <td>
-                <a href="#/query/@(query.Id)">@query.Id</a>
+                <a href="#/query/@(query.Alias)">@query.Alias</a>
 						  </td>
 							<td style="width: 5%">
-                <a href="@queryUrl" target="_blank" class="btn pull-right glyphicon glyphicon-eye-open icon" title="@query.Id"> </a>
+                <a href="@queryUrl" target="_blank" class="btn pull-right glyphicon glyphicon-eye-open icon" title="@query.Alias"> </a>
 							</td>
 							<td style="width: 5%">
-							  <button type="button" data-ng-click="deleteQuery('@query.Id')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
+							  <button type="button" data-ng-click="deleteQuery('@query.Alias')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
 							</td>
 							<td style="width: 5%">
-								<a href="#/query/@(query.Id)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
+								<a href="#/query/@(query.Alias)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
 							</td>
 						</tr>
 					}

@@ -7,8 +7,9 @@ using Trezorix.Sparql.Api.Core.Accounts;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers {
+  using Trezorix.Sparql.Api.Application.Accounts;
 
-	public class HomeController : BaseController
+  public class HomeController : BaseController
 	{
 		private readonly IAccountRepository _accountRepository;
 		private readonly IFormsAuthenticationService _formsService;
@@ -21,13 +22,13 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 
 		[HttpGet]
     public ActionResult Index() {
-      ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
       return View();
     }
 
 		[HttpGet]
     public ActionResult Overview() {
-      ViewBag.Account = OperatingAccount.Current();
+      ViewBag.Account = OperatingAccount.Current(_accountRepository);
       return View();
     }
 

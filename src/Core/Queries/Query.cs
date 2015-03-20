@@ -3,23 +3,32 @@ using System.Collections.Generic;
 
 namespace Trezorix.Sparql.Api.Core.Queries
 {
-	public class Query
+	using MongoRepository;
+
+	public class Query : Entity
 	{
-		private string _label;
-		public string Id { get; set; }
+		public Query() {
+			Notes = new List<Note>();
+			ApiKeys = new List<Guid>();
+			Parameters = new List<QueryParameter>();
+		}
+		private string label;
+
+		public string Alias { get; set; }
 		public string Label
 		{
-			get { return (string.IsNullOrEmpty(_label)) ? Id : _label; }
-			set { _label = value; }
+			get { return (string.IsNullOrEmpty(this.label)) ? Alias : this.label; }
+			set { this.label = value; }
 		}
 
 		public string SparqlQuery { get; set; }
 		public string Description { get; set; }
 		public string Group { get; set; }
-		public string Endpoint { get; set; }
-		public IEnumerable<Note> Notes { get; set; }
+		public string Endpoint { get; set; }		
 		public bool AllowAnonymous { get; set; }
+
+		public IList<Note> Notes { get; set; }
 		public IList<Guid> ApiKeys { get; set; }
-		public IEnumerable<QueryParameter> Parameters { get; set; }
+		public IList<QueryParameter> Parameters { get; set; }
 	}
 }

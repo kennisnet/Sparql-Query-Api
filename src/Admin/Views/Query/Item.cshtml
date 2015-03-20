@@ -1,32 +1,23 @@
-﻿@model Trezorix.Sparql.Api.Core.Queries.Query
-
-@*<script>
-	app.config.apiRoot = '@Url.Content("~/Api/Query")';
-	var queryId = '@Model.Id';
-	var group = '@Model.Group';
-</script>*@
-
-
-<div>
+﻿<div>
 	<div>
 		<ng-form name="queryForm" ng-init="codeMirrorRefresh = 0">
 			<tabset>
-				<tab heading="Algemeen">
+				<tab heading="Algemeen" active="activeTab['general']" data-select="setTab('general')">
 					@{ Html.RenderPartial("General"); }
 				</tab>
-				<tab heading="SPARQL" select="setSparqlEditorParent()">
+				<tab heading="SPARQL"  active="activeTab['sparql']" data-select="setTab('sparql')">
 					@{ Html.RenderPartial("Sparql"); }
 				</tab>
-				<tab heading="Parameters">
+				<tab heading="Parameters"  active="activeTab['parameters']" data-select="setTab('parameters')">
 					@{ Html.RenderPartial("Parameters"); }
 				</tab>
-				<tab heading="Notities">
+				<tab heading="Notities" active="activeTab['notes']" data-select="setTab('notes')">
 					@{ Html.RenderPartial("Notes"); }
 				</tab>
-				<tab heading="Toegang">
+				<tab heading="Toegang" active="activeTab['access']" data-select="setTab('access')">
 					@{ Html.RenderPartial("Access"); }
 				</tab>
-				<tab heading="Test">
+				<tab heading="Test" active="activeTab['test']" data-select="setTab('test')">
 					@{ Html.RenderPartial("Test"); }
 				</tab>
 			</tabset>

@@ -56,13 +56,17 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			File.Delete(filename);
 		}
 
-		public Query Get(string name)
+		public Query Get(string name) {
+			return this.GetByAlias(name);
+		}
+
+		public Query GetByAlias(string alias)
 		{
-			var query = _queries.FirstOrDefault(q => q.Id == name);
+			var query = _queries.FirstOrDefault(q => q.Id == alias);
 
 			//if (query == null)
 			{
-				string filename = FilenameFromQueryName(name);
+				string filename = FilenameFromQueryName(alias);
 
 				if (!File.Exists(filename))
 				{
@@ -72,18 +76,64 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 				query = LoadFromFile(filename);
 			}
 
-
 			return query;
 		}
 
-		private Query LoadFromFile(string filename)
+    public Query GetById(string id) {
+      return All().SingleOrDefault(a => a.Id == id);
+    }
+    
+    private Query LoadFromFile(string filename)
 		{
 			string json = File.ReadAllText(filename);
-			var query = JsonConvert.DeserializeObject<Query>(json);
+
+			var item = JsonConvert.DeserializeObject<dynamic>(json);
+			var query =
+				new Query()
+				{
+					Id = item.Id,
+					Alias = item.Id,
+					AllowAnonymous = item.AllowAnonymous,
+					Description = item.Description,
+					Endpoint = item.Endpoint,
+					Group = item.Group,
+					Label = item.Label,
+					SparqlQuery = item.SparqlQuery,
+				};
+
+			query.ApiKeys = (item.ApiKeys != null) ? item.ApiKeys.ToObject<List<Guid>>() : new List<Guid>();
+			query.Notes = (item.Notes != null) ? item.Notes.ToObject<List<Note>>() : new List<Note>();
+			query.Parameters = (item.Parameters != null) ? item.Parameters.ToObject<List<QueryParameter>>() : new List<QueryParameter>(); ;
+
 			return query;
 		}
 
-		public void Save(string name, Query query)
+    public Query Add(Query query) {
+      return this.Update(query);
+    }
+
+    public Query Update(Query query) {
+      //query.Id = query.ApiKey.AsObjectId().ToString();
+      dynamic item =
+        new {
+          query.Id,
+          query.AllowAnonymous,
+          query.ApiKeys,
+          query.Description,
+          query.Endpoint,
+          query.Group,
+          query.Label,
+          query.Notes,
+          query.Parameters,
+          query.SparqlQuery,
+        };
+
+      string json = JsonConvert.SerializeObject(item, Formatting.Indented);
+      File.WriteAllText(FilenameFromQueryName(query.Id), json);
+      return query;
+    }
+    
+    public void Save(string name, Query query)
 		{
 			string json = JsonConvert.SerializeObject(query, Formatting.Indented);
 			File.WriteAllText(FilenameFromQueryName(name), json);

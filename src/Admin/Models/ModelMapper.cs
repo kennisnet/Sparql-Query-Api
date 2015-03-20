@@ -1,6 +1,5 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Models {
   using System.Diagnostics.CodeAnalysis;
-  using System.Text.RegularExpressions;
 
   using AutoMapper;
 
@@ -12,6 +11,7 @@
   public static class ModelMapper {
     public static void ConfigureMapper() {
       Mapper.CreateMap<Note, NoteModel>().ReverseMap();
+      Mapper.CreateMap<Query, QueryModel>().ReverseMap();
     }
   }
 }
