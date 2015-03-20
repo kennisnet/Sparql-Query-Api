@@ -12,10 +12,13 @@ namespace Trezorix.Sparql.Api.QueryApi.Authorizer
 
 		private readonly HashSet<string> _apiKeys = new HashSet<string>();
 
+		private readonly IAccountRepository _accountRepository;
+
 		public ApiKeyAuthorizer()
 		{
-			var accountRepository = new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account");
-			var accounts = accountRepository.All();
+			_accountRepository = new MongoAccountRepository();
+			//var accountRepository = new FileAccountRepository(ApiConfiguration.Current.RepositoryRoot + "Account");
+			var accounts = _accountRepository.All();
 
 			foreach (var account in accounts)
 			{

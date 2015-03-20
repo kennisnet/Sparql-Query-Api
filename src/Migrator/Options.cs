@@ -1,9 +1,10 @@
-﻿
-namespace Migrator {
+﻿namespace Migrator 
+{
 	using CommandLine;
 	using CommandLine.Text;
 
-	internal class Options {
+	internal class Options 
+	{
 
 		[Option('a', "AccountPath", Required = true, HelpText = @"Path to file account folder, D:\Projecten\kennisnet-sparql-query-api\src\Data\API\Account")]
 		public string AccountPath { get; set; }

@@ -1,12 +1,15 @@
 ﻿using System;
 using CommandLine;
 
-namespace Migrator {
+namespace Migrator
+{
 	using Trezorix.Sparql.Api.Core.Repositories;
 
-  class Program {
+  class Program 
+	{
 
-		static void Main(string[] args) {			
+		static void Main(string[] args) 
+		{			
 			ParseCommandLineArgumentsAndImportFileRepositories(args);
 		}
 
@@ -24,18 +27,21 @@ namespace Migrator {
 				}
 			}
 
-			if (!string.IsNullOrEmpty(options.AccountPath)) {
+			if (!string.IsNullOrEmpty(options.AccountPath)) 
+			{
 				ImportFileAccountRepository(options.AccountPath);
 			}
 
-			if (!string.IsNullOrEmpty(options.QueryPath)) {
+			if (!string.IsNullOrEmpty(options.QueryPath)) 
+			{
 				ImportFileQueryRepository(options.QueryPath);
 			}
 
 			ImportQueryLogRepository();
 		}
 
-		private static void ImportFileAccountRepository(string path){
+		private static void ImportFileAccountRepository(string path)
+		{
 			var fileAccountRepository = new FileAccountRepository(path);
 
 			var mongoAccountRepository = new MongoAccountRepository();
@@ -50,13 +56,15 @@ namespace Migrator {
 			Console.WriteLine("Account repository was imported");
 		}
 
-		private static void ImportFileQueryRepository(string path) {
+		private static void ImportFileQueryRepository(string path) 
+		{
 			var fileQueryRepository = new FileQueryRepository(path);
 
 			var mongoQueryRepository = new MongoQueryRepository();
 			mongoQueryRepository.DeleteAll();
 
-			foreach (var query in fileQueryRepository.All()) {
+			foreach (var query in fileQueryRepository.All()) 
+			{
 				query.Alias = query.Id;
 				query.Id = null;
 				mongoQueryRepository.Add(query);
@@ -70,8 +78,9 @@ namespace Migrator {
 			}
 		}
 
-		private static void ImportQueryLogRepository() {
-			var importQueryLogTask = new ImportQueryLogTask("http://localhost:8090", "Project.QueryApi.0.7"); 
+		private static void ImportQueryLogRepository() 
+		{
+			var importQueryLogTask = new ImportQueryLogTask("RavenDB"); 
 			
 			importQueryLogTask.Execute();
 			
