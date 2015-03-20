@@ -57,7 +57,7 @@ TestEditor.controller('TestIndexController', [
 				params += "&" + parameter.Name + "=" + parameter.SampleValue;
 			});
     	// create query url
-			var url = config.queryUrl + "/" + query.Id + "?" + "api_key=" + config.apiKey + "&format=json&debug=true" + params;
+			var url = config.queryUrl + "/" + query.Alias + "?" + "api_key=" + config.apiKey + "&format=json&debug=true" + params;
 
 			// run query test with the two endpoints
 			query.test = [];

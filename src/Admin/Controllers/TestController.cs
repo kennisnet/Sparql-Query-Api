@@ -29,27 +29,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 				return RedirectToAction("Login", "Home");
 			}
 
-			var list = _queryRepository.All().ToList();
-			var model = new GroupedQueryModel {
-				Groups = new List<QueryGroup>()
-			};
-			foreach (string group in list.Select(q => q.Group).Distinct()) {
-				string safeId = ((!string.IsNullOrEmpty(group)) ? group.Replace("'", "_") : "");
-				string thisGroup = group;
-				model.Groups.Add(new QueryGroup {
-					Id = safeId,
-					Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"),
-					Items = list.Where(q => q.Group == thisGroup)
-				});
-			}
-
-			if (model.Groups.Count == 0) {
-				model.Groups.Add(new QueryGroup {
-					Label = "Algemeen",
-					Items = new List<Query>()
-				});
-			}
-			return View(model);
+			return View();
 		}
 	}
 }

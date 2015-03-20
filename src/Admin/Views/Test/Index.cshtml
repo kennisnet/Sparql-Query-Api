@@ -1,10 +1,4 @@
-﻿@using Resources
-@using Trezorix.Sparql.Api.Application.Accounts
-@using Trezorix.Sparql.Api.Core.Accounts
-@using Trezorix.Sparql.Api.Core.Configuration
-@model Trezorix.Sparql.Api.Admin.Models.Queries.GroupedQueryModel
-
-<p>&#160;</p>
+﻿<p>&#160;</p>
 
 <div data-ng-model="data">
 	<div class="row">
@@ -25,7 +19,7 @@
 			<tbody>
 				<tr ng-repeat="query in group.Items | orderBy: group.Id">
 					<td>
-						<a href="#/query/{{query.Id}}">{{query.Id}}</a>
+						<a href="#/query/{{query.Alias}}">{{query.Alias}}</a>
 						<div class="alert alert-warning small-space-above" ng-show="query.test[0].error">
 							{{query.test[0].error}}
 						</div>
@@ -41,7 +35,7 @@
 						</span>
 					</td>
 					<td style="width: 5%">
-						<a href ng-click="test(query)" class="btn pull-right glyphicon glyphicon-play icon" title="{{query.Id}}"> </a>
+						<a href ng-click="test(query)" class="btn pull-right glyphicon glyphicon-play icon" title="{{query.Alias}}"> </a>
 					</td>
 				</tr>
 			</tbody>

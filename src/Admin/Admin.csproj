@@ -98,6 +98,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -179,6 +180,7 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Models\ModelMapper.cs" />
     <Compile Include="Models\Queries\NoteModel.cs" />
+    <Compile Include="Models\Queries\QueryModel.cs" />
     <Compile Include="Models\Statistics\QueryStatisticsModel.cs" />
     <Compile Include="Indexes\QueryStatistics.cs" />
     <Compile Include="Models\Queries\GroupedQueryModel.cs" />
@@ -186,7 +188,7 @@
     <Compile Include="Controllers\Core\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
-    <Compile Include="Models\Queries\QueryGroup.cs" />
+    <Compile Include="Models\Queries\QueryGroupModel.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -197,7 +199,7 @@
     <Compile Include="Models\Accounts\SignupModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\Queries\AccessModel.cs" />
-    <Compile Include="Models\Queries\QueryModel.cs" />
+    <Compile Include="Models\Queries\ExtendedQueryModel.cs" />
     <Compile Include="Models\Queries\QueryParameterModel.cs" />
     <Compile Include="Models\Statistics\LogDownloadListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

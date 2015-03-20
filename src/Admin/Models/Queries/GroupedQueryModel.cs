@@ -4,6 +4,6 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 {
 	public class GroupedQueryModel
 	{
-		public IList<QueryGroup> Groups { get; set; }
+		public IList<QueryGroupModel> Groups { get; set; }
 	}
 }

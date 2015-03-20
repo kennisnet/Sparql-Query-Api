@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Trezorix.Sparql.Api.Core.Queries;
 
 namespace Trezorix.Sparql.Api.Admin.Models.Queries
 {
-	public class QueryGroup
+	public class QueryGroupModel
 	{
 		public string Id { get; set; }
 		public string Label { get; set; }
-		public IEnumerable<Query> Items { get; set; }
+		public IEnumerable<QueryModel> Items { get; set; }
 	}
 }

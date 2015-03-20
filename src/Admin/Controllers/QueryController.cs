@@ -10,7 +10,9 @@ using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers
 {
-  using Trezorix.Sparql.Api.Application.Accounts;
+	using AutoMapper;
+
+	using Trezorix.Sparql.Api.Application.Accounts;
 
   public class QueryController : BaseController
 	{
@@ -38,18 +40,22 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 			var list = _queryRepository.All().ToList();
 			var model = new GroupedQueryModel
 				{
-					Groups = new List<QueryGroup>()
+					Groups = new List<QueryGroupModel>()
 				};
 			foreach (string group in list.Select(q => q.Group).Distinct())
 			{
 				string safeId = ((!string.IsNullOrEmpty(group)) ? group.Replace("'", "_") : "");
 				string thisGroup = group;
-				model.Groups.Add(new QueryGroup { Id = safeId, Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"), Items = list.Where(q => q.Group == thisGroup)});
+				model.Groups.Add(new QueryGroupModel {
+					Id = safeId, 
+					Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"), 
+					Items = Mapper.Map<IEnumerable<QueryModel>>(list.Where(q => q.Group == thisGroup))
+				});
 			}
 
 			if (model.Groups.Count == 0)
 			{
-				model.Groups.Add(new QueryGroup { Label = "Algemeen", Items = new List<Query>()});
+				model.Groups.Add(new QueryGroupModel { Label = "Algemeen", Items = new List<QueryModel>()});
 			}
 			return View(model);
 		}

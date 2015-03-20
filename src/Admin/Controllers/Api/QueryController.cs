@@ -7,6 +7,8 @@
 	using System.Net;
 	using System.Web.Http;
 
+	using AutoMapper;
+	
 	using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
 	using Trezorix.Sparql.Api.Admin.Models.Queries;
 	using Trezorix.Sparql.Api.Application.Accounts;
@@ -35,18 +37,25 @@
 			var list = this._queryRepository.All().ToList();
 			var model = new GroupedQueryModel
 				{
-					Groups = new List<QueryGroup>()
+					Groups = new List<QueryGroupModel>()
 				};
 			foreach (string group in list.Select(q => q.Group).Distinct())
 			{
 				string safeId = ((!string.IsNullOrEmpty(group)) ? group.Replace("'", "_") : "");
 				string thisGroup = group;
-				model.Groups.Add(new QueryGroup { Id = safeId, Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"), Items = list.Where(q => q.Group == thisGroup)});
+				model.Groups.Add(new QueryGroupModel {
+					Id = safeId, 
+					Label = ((!string.IsNullOrEmpty(group)) ? group : "Algemeen"), 
+					Items = Mapper.Map<IEnumerable<QueryModel>>(list.Where(q => q.Group == thisGroup))
+				});
 			}
 
 			if (model.Groups.Count == 0)
 			{
-				model.Groups.Add(new QueryGroup { Label = "Algemeen", Items = new List<Query>()});
+				model.Groups.Add(new QueryGroupModel {
+					Label = "Algemeen", 
+					Items = new List<QueryModel>()
+				});
 			}
 			return model;
 		}
@@ -59,7 +68,7 @@
 				ApiKeys = new List<Guid> { OperatingAccount.Current(_accountRepository).ApiKey }
 			} : this._queryRepository.GetByAlias(id);
 
-			var model = new QueryModel();
+			var model = new ExtendedQueryModel();
 			model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
 			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
@@ -69,7 +78,7 @@
 
 		[HttpPost]
 		[Route("{id}")]
-		public dynamic Post(QueryModel model)
+		public dynamic Post(ExtendedQueryModel model)
 		{
 			if (string.IsNullOrEmpty(model.Id))
 			{
@@ -86,7 +95,7 @@
 
 		[HttpPut]
 		[Route("{id}")]
-		public dynamic Put(string id, QueryModel model)
+		public dynamic Put(string id, ExtendedQueryModel model)
 		{
 			var query = this._queryRepository.GetByAlias(id);
 		
@@ -132,7 +141,7 @@
 				return NotFound();
 			}
 
-			var model = new QueryModel();
+			var model = new ExtendedQueryModel();
 			model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
 			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
@@ -154,7 +163,7 @@
 				return NotFound();
 			}
 
-			var model = new QueryModel();
+			var model = new ExtendedQueryModel();
 			model.MapFrom(query, this._accountRepository.All(), this._queryRepository.All().Select(q => q.Group).Distinct());
 
 			model.Link = ApiConfiguration.Current.QueryApiUrl + model.Link.Replace("$$apikey", OperatingAccount.Current(this._accountRepository).ApiKey.ToString());
