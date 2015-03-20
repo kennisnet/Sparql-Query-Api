@@ -5,7 +5,6 @@ using System.Web.Mvc;
 
 using Trezorix.Sparql.Api.Admin.Controllers.Core;
 using Trezorix.Sparql.Api.Admin.Models.Queries;
-using Trezorix.Sparql.Api.Core.Queries;
 using Trezorix.Sparql.Api.Core.Repositories;
 
 namespace Trezorix.Sparql.Api.Admin.Controllers
@@ -67,10 +66,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers
 		public ActionResult Item(string alias, string group)
 		{
       ViewBag.Account = OperatingAccount.Current(_accountRepository);
-
-			var query = (alias == "new") ? new Query() { Group = group } : _queryRepository.GetByAlias(alias);
-
-			return View(query);
+			return View();
 		}
 	
 	}

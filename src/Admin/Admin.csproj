@@ -84,12 +84,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -182,7 +176,6 @@
     <Compile Include="Models\Queries\NoteModel.cs" />
     <Compile Include="Models\Queries\QueryModel.cs" />
     <Compile Include="Models\Statistics\QueryStatisticsModel.cs" />
-    <Compile Include="Indexes\QueryStatistics.cs" />
     <Compile Include="Models\Queries\GroupedQueryModel.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\Core\BaseController.cs" />
