@@ -12,8 +12,8 @@
 		[Option('d', "DatabaseName", Required = true, HelpText = @"Database name to backup [QueryApi]")]
 		public string DatabaseName { get; set; }
 
-		[Option('c', "CollectionName", Required = true, HelpText = @"Collection name to backup [Account]")]
-		public string CollectionName { get; set; }
+		[Option('c', "CollectionNames", Required = true, HelpText = @"Collection name(s) to backup [Account]")]
+		public string CollectionNames { get; set; }
 
 		[Option('r', "RotationDays", Required = true, HelpText = @"How many daily backups (in days) to keep before oldest backups will be deleted [7]")]
 		public string RotationDays { get; set; }
