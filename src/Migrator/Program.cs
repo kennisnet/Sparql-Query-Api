@@ -5,7 +5,7 @@ namespace Migrator
 {
 	using Trezorix.Sparql.Api.Core.Repositories;
 
-  class Program 
+	class Program 
 	{
 
 		static void Main(string[] args) 
