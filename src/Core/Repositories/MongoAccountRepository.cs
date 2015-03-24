@@ -15,7 +15,16 @@
       return this.AsEnumerable().SingleOrDefault(a => a.ApiKey == Guid.Parse(id));
     }
 
-    public Account GetByUserName(string userName) {
+	  public Account GetByApiKey(string apiKey) {
+			return this.AsQueryable().SingleOrDefault(a => a.ApiKey.ToString() == apiKey);
+	  }
+
+		public IEnumerable<Account> GetByApiKeys(IEnumerable<string> apiKeys)
+		{
+			return this.AsQueryable().Where(a => apiKeys.Any(k => k == a.ApiKey.ToString()));
+	  }
+
+	  public Account GetByUserName(string userName) {
       return this.AsQueryable().SingleOrDefault(a => a.UserName == userName);
     }
 

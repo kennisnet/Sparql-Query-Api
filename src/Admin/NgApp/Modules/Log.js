@@ -14,11 +14,15 @@
     $scope.updateStats = function (timespan) {
     	if (!timespan) {
 		    timespan = $scope.timespan;
-    	}
+    	}	    
 
 	    var url = config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + timespan.id;
 	    if ($routeParams.apiKey) {
 		    url += "&accountApiKey=" + $routeParams.apiKey;
+	    }
+
+	    if ($location.url().indexOf("/query/") > -1) {
+	    	url += "&queryAlias=" + $location.url().replace("/query/", "");
 	    }
 
 	    $http.get(url).then(function (response) {

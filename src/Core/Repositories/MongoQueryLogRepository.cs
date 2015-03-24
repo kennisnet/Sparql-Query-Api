@@ -60,6 +60,20 @@
 			return results;
 		}
 
+		public IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias)
+		{
+			var queryItemsColl = this.Collection;
+
+			var query = Query.And(
+				Query<QueryLogItem>.GT(p => p.DateTime, startDate),
+				Query<QueryLogItem>.EQ(p => p.Name, queryAlias)
+				);
+
+			var results = queryItemsColl.Find(query).ToList();
+
+			return results;
+		}
+
 		public IList<QueryStatistics> GetQueryStatistics() {
 			var match = new BsonDocument(
 				"$match",

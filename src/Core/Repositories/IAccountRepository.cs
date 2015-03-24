@@ -8,6 +8,8 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 	{
 		Account Get(string id);
 		Account GetById(string id);
+		Account GetByApiKey(string apiKey);
+		IEnumerable<Account> GetByApiKeys(IEnumerable<string> apiKeys);
 		Account GetByUserName(string userName);
 		Account Add(Account account);
 		Account Update(Account account);
