@@ -67,14 +67,22 @@
 			var queryStatistics = new List<QueryStatisticsModel>();
 			var accountIds = logItems.AsQueryable().Select(q => q.AccountId).Distinct().ToList();
 
-			var accounts = _accountRepository.GetByApiKeys(accountIds).ToList();
+			if (!accountIds.Any()) {
+				return null;
+			}
+
+			//var accounts = _accountRepository.GetByApiKeys(accountIds)
+			//	.Where(a => a != null)
+			//	.Select(a => new { Id = a.Id, ApiKey = a.ApiKey.ToString(), FullName = a.FullName })
+			//	.ToList();
+
 			foreach (var accountId in accountIds) {
 				var set = logItems.Where(q => q.AccountId == accountId).ToList();
 				queryStatistics.Add(
 					new QueryStatisticsModel {
 						//var sum = list.Aggregate((acc, cur) => acc + cur);
 						//var average = ;
-						Name = accounts.First(a => a.ApiKey.ToString() == accountId).FullName,
+						Name = _accountRepository.GetByApiKey(accountId).FullName,
 						//AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
 						AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
 						AverageExecutionTime =
