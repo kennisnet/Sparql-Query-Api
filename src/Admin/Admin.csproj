@@ -306,7 +306,7 @@
     <Content Include="Views\Settings\Control.cshtml" />
     <Content Include="Views\Settings\Endpoints.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
-    <Content Include="Views\Log\General.cshtml" />
+    <Content Include="Views\Shared\LogStats.cshtml" />
     <Content Include="Views\Settings\Access.cshtml" />
     <Content Include="Views\Log\Downloads.cshtml" />
     <Content Include="Views\Query\Preview.cshtml" />

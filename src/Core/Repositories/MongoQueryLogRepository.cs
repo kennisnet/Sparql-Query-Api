@@ -46,6 +46,20 @@
 			return results;
 		}
 
+		public IList<QueryLogItem> GetStartingFromDateForAccount(DateTime startDate, string accountApiKey)
+		{
+			var queryItemsColl = this.Collection;
+
+			var query = Query.And( 
+				Query<QueryLogItem>.GT(p => p.DateTime, startDate),
+				Query<QueryLogItem>.EQ(p => p.AccountId, accountApiKey)
+				);
+
+			var results = queryItemsColl.Find(query).ToList();
+
+			return results;
+		}
+
 		public IList<QueryStatistics> GetQueryStatistics() {
 			var match = new BsonDocument(
 				"$match",

@@ -6,6 +6,7 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Statistics;
+  using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
 
 	[RoutePrefix("Api/Log")]
@@ -21,7 +22,8 @@
 
     [HttpGet]
     [Route("Statistics")]
-    public dynamic Statistics(string timespan) {
+		public dynamic Statistics(string timespan, string accountApiKey = null)
+		{
       DateTime startTime;
       DateTime endTime = DateTime.UtcNow;
       switch (timespan) {
@@ -44,8 +46,16 @@
           }
       }
 
-	    var logItems = _queryLogRepository.GetStartingFromDate(startTime);
-      var queryNames = logItems.AsQueryable().Select(q => q.Name).Distinct().ToList();
+	    IList<QueryLogItem> logItems;
+			if (string.IsNullOrEmpty(accountApiKey))
+			{
+		    logItems = this._queryLogRepository.GetStartingFromDate(startTime);
+	    }
+	    else {
+		    logItems = this._queryLogRepository.GetStartingFromDateForAccount(startTime, accountApiKey);
+	    }
+
+	    var queryNames = logItems.AsQueryable().Select(q => q.Name).Distinct().ToList();
       var queryStatistics = new List<QueryStatisticsModel>();
 
       foreach (var queryName in queryNames) {

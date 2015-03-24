@@ -4,10 +4,10 @@
 	<div>
 @*		<ng-form name="logForm" data-ng-model="queryStatistics">*@
 			<tabset>
-				<tab heading="Statistieken">
-					@{ Html.RenderPartial("General"); }
+				<tab heading="Statistieken" data-ng-controller="LogStatsController">
+					@{ Html.RenderPartial("LogStats"); }
 				</tab>
-				<tab heading="Downloads" select="getTabContent('downloads')">
+				<tab heading="Downloads" select="getTabContent('downloads')" data-ng-controller="LogDownloadController">
 					@{ Html.RenderPartial("Downloads"); }
 				</tab>
 			</tabset>
