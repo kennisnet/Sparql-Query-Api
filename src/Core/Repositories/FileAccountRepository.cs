@@ -78,7 +78,15 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 	    return All().SingleOrDefault(a => a.Id == id);
 	  }
 
-	  public Account GetByUserName(string userName)
+		public Account GetByApiKey(string apiKey) {
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Account> GetByApiKeys(IEnumerable<string> apiKeys) {
+			throw new NotImplementedException();
+		}
+
+		public Account GetByUserName(string userName)
 		{
 			return All().SingleOrDefault(a => a.UserName == userName);
 		}

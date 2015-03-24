@@ -20,6 +20,9 @@
 				<tab heading="Test" active="activeTab['test']" data-select="setTab('test')">
 					@{ Html.RenderPartial("Test"); }
 				</tab>
+				<tab heading="Logs" active="activeTab['logs']" data-select="setTab('logs')" data-ng-controller="LogStatsController">
+					@{ Html.RenderPartial("LogStats"); }
+				</tab>
 			</tabset>
 			@{ Html.RenderPartial("Control"); }  
 			@{ Html.RenderPartial("PreviewQuery"); }  

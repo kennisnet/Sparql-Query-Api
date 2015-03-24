@@ -12,6 +12,7 @@
 		IEnumerable<QueryLogItem> GetByDateRange(DateTime startDate, DateTime endDate);
 		IList<QueryLogItem> GetStartingFromDate(DateTime startDate);
 		IList<QueryLogItem> GetStartingFromDateForAccount(DateTime startDate, string accountApiKey);
+		IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias);
 		IList<QueryStatistics> GetQueryStatistics();
 	}
 }
