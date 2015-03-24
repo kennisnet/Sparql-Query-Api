@@ -52,12 +52,10 @@ QueryEditor.controller('QueryController', [
 
       var saveMethod = (isNewquery) ? $http.post : $http.put;
 
-      saveMethod(config.adminApiUrl + 'Query/' + ((isNewquery) ? 'new' : queryId), $scope.query)
+      saveMethod(config.adminApiUrl + 'Query/' + ((isNewquery) ? 'new' : query.Id), $scope.query)
         .success(function(response) {
           $scope.queryForm.$setPristine();
-          if (isNewquery) {
-            document.location.href = config.viewsUrl + '#/query';
-          }
+          document.location.href = config.viewsUrl + '#/query/' + $scope.query.Alias;
         })
         .error(function() {
           alert('Kan de query niet opslaan. Probeer het nog eens...');
@@ -74,8 +72,9 @@ QueryEditor.controller('QueryController', [
 
     $scope.duplicate = function() {
       queryId = '';
-      $scope.query.Alias = 'copy of ' + $scope.query.Alias;
-      $scope.query.Label = 'copy of ' + $scope.query.Label;
+      $scope.query.Id = null;
+      $scope.query.Alias = 'copy-of-' + $scope.query.Alias;
+      $scope.query.Label = 'Copy of ' + $scope.query.Label;
       $scope.save();
     };
 

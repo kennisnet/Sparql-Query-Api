@@ -2,7 +2,7 @@
 <div id="edit_query_access" class="well space-above">
 	<div class="form-group row">
 		<div class="col-lg-12">
-			<label>Selecter gebruikers die toegang hebben tot de query '{{query.Id}}'.</label>
+			<label>Selecter gebruikers die toegang hebben tot de query '{{query.Alias}}'.</label>
 			<ul class="list-unstyled"  style="margin-top: 8px;">
 				<li data-ng-repeat="access in query.Access">
 					<input type="checkbox" value="{{access.Id}}" data-ng-model="access.Selected" data-ng-disabled="query.AllowAnonymous" />

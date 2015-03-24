@@ -80,7 +80,7 @@
 		[Route("{id}")]
 		public dynamic Post(ExtendedQueryModel model)
 		{
-			if (string.IsNullOrEmpty(model.Id))
+			if (string.IsNullOrEmpty(model.Alias))
 			{
 				return BadRequest("Query moet een naam hebben.");
 			}
@@ -97,7 +97,7 @@
 		[Route("{id}")]
 		public dynamic Put(string id, ExtendedQueryModel model)
 		{
-			var query = this._queryRepository.GetByAlias(id);
+			var query = this._queryRepository.GetById(id);
 		
 			if (query == null)
 			{
