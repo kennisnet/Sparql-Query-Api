@@ -1,7 +1,7 @@
 ﻿angular.module('LogViewer', ['ui.bootstrap'])
 
-.controller("LogController", [
-  '$scope', '$location', '$http', 'config', function($scope, $location, $http, config) {
+.controller("LogStatsController", [
+  '$scope', '$location', '$routeParams', '$http', 'config', function($scope, $location, $routeParams, $http, config) {
 
     $scope.statisticsTimespans = [
 			{ id: 'last-hour', label: 'afgelopen uur' },
@@ -11,28 +11,17 @@
     ];
     $scope.timespan = $scope.statisticsTimespans[1];
 
-    $scope.timespans = [
-      { id: 'week', label: 'week' },
-      { id: 'month', label: 'maand' }
-    ];
-    $scope.downloadsTimespan = $scope.timespans[1];
-
-    $scope.getTabContent = function(tab) {
-      switch (tab) {
-      case 'downloads':
-        if (!angular.isDefined($scope.downloads)) {
-          $scope.updateDownloads(0);
-        }
-        break;
-      default:
-      }
-    };
-
     $scope.updateStats = function (timespan) {
     	if (!timespan) {
 		    timespan = $scope.timespan;
+    	}
+
+	    var url = config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + timespan.id;
+	    if ($routeParams.apiKey) {
+		    url += "&accountApiKey=" + $routeParams.apiKey;
 	    }
-      $http.get(config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" +timespan.id).then(function (response) {
+
+	    $http.get(url).then(function (response) {
         $scope.queryStatistics = angular.copy(response.data);
       });
     };
@@ -42,6 +31,30 @@
       $scope.updateStats(timespan);
     };
     
+    $scope.updateStats();
+  }
+])
+
+.controller("LogDownloadController", [
+  '$scope', '$location', '$http', 'config', function($scope, $location, $http, config) {
+
+  	$scope.getTabContent = function (tab) {
+  		switch (tab) {
+  			case 'downloads':
+  				if (!angular.isDefined($scope.downloads)) {
+  					$scope.updateDownloads(0);
+  				}
+  				break;
+  			default:
+  		}
+  	};
+
+  	$scope.timespans = [
+      { id: 'week', label: 'week' },
+      { id: 'month', label: 'maand' }
+    ];
+    $scope.downloadsTimespan = $scope.timespans[1];
+
     $scope.previous = function() {
       $scope.updateDownloads($scope.downloads.Start - 10);
     };
@@ -61,7 +74,5 @@
     $scope.onDownloadsTimespanChanged = function (timespan) {
       $scope.updateDownloads(timespan, 0);
     };
-
-    $scope.updateStats();
   }
 ]);
