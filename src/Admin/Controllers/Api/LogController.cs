@@ -71,10 +71,7 @@
 				return null;
 			}
 
-			//var accounts = _accountRepository.GetByApiKeys(accountIds)
-			//	.Where(a => a != null)
-			//	.Select(a => new { Id = a.Id, ApiKey = a.ApiKey.ToString(), FullName = a.FullName })
-			//	.ToList();
+			var accounts = _accountRepository.GetByApiKeys(accountIds).Where(a => a != null).ToList();
 
 			foreach (var accountId in accountIds) {
 				var set = logItems.Where(q => q.AccountId == accountId).ToList();
@@ -82,7 +79,7 @@
 					new QueryStatisticsModel {
 						//var sum = list.Aggregate((acc, cur) => acc + cur);
 						//var average = ;
-						Name = _accountRepository.GetByApiKey(accountId).FullName,
+						Name = accounts.First(a => a.ApiKey == accountId).FullName,
 						//AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
 						AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
 						AverageExecutionTime =

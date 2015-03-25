@@ -4,6 +4,8 @@
   using System.Diagnostics.CodeAnalysis;
   using System.Linq;
 
+  using MongoDB.Driver.Linq;
+
   using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
@@ -12,18 +14,16 @@
     Justification = "Reviewed. Suppression is OK here.")]
   public class MongoAccountRepository : MongoRepository<Account>, IAccountRepository {
     public Account Get(string id) {
-      return this.AsEnumerable().SingleOrDefault(a => a.ApiKey == Guid.Parse(id));
+      return this.AsEnumerable().SingleOrDefault(a => a.ApiKey == id);
     }
 
 	  public Account GetByApiKey(string apiKey) {
-			var apiKeyGuid = Guid.Parse(apiKey);
-			return this.AsQueryable().SingleOrDefault(a => a.ApiKey == apiKeyGuid);
+			return this.AsQueryable().SingleOrDefault(a => a.ApiKey == apiKey);
 	  }
 
 		public IEnumerable<Account> GetByApiKeys(IEnumerable<string> apiKeys)
-		{
-			var apiKeyGuids = apiKeys.Select(Guid.Parse).ToList();
-			return this.AsQueryable().Where(a => apiKeyGuids.Any(k => k == a.ApiKey));
+		{	
+			return this.AsQueryable().Where(a => a.ApiKey.In(apiKeys));
 	  }
 
 	  public Account GetByUserName(string userName) {

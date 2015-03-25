@@ -101,7 +101,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 					SparqlQuery = item.SparqlQuery,
 				};
 
-			query.ApiKeys = (item.ApiKeys != null) ? item.ApiKeys.ToObject<List<Guid>>() : new List<Guid>();
+			query.ApiKeys = (item.ApiKeys != null) ? item.ApiKeys.ToObject<List<string>>() : new List<string>();
 			query.Notes = (item.Notes != null) ? item.Notes.ToObject<List<Note>>() : new List<Note>();
 			query.Parameters = (item.Parameters != null) ? item.Parameters.ToObject<List<QueryParameter>>() : new List<QueryParameter>(); ;
 

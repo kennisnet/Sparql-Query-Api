@@ -9,7 +9,7 @@ namespace Trezorix.Sparql.Api.Core.Queries
 	{
 		public Query() {
 			Notes = new List<Note>();
-			ApiKeys = new List<Guid>();
+			ApiKeys = new List<string>();
 			Parameters = new List<QueryParameter>();
 		}
 		private string label;
@@ -28,7 +28,7 @@ namespace Trezorix.Sparql.Api.Core.Queries
 		public bool AllowAnonymous { get; set; }
 
 		public IList<Note> Notes { get; set; }
-		public IList<Guid> ApiKeys { get; set; }
+		public IList<string> ApiKeys { get; set; }
 		public IList<QueryParameter> Parameters { get; set; }
 	}
 }

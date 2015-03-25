@@ -62,7 +62,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 
       var account = new Account {
         UserName = model.Username,
-        ApiKey = Guid.NewGuid(),
+        ApiKey = Guid.NewGuid().ToString(),
       };
 
 			_accountRepository.Add(account);

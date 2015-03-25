@@ -20,15 +20,13 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
 		public ActionResult Index()
 		{
-			var apiKeyString = System.Web.HttpContext.Current.Request.Params["api_key"];
+			var apiKey = System.Web.HttpContext.Current.Request.Params["api_key"];
 
-			Guid apiKey;
-
-			var queries = (Guid.TryParse(apiKeyString, out apiKey))
+			var queries = (!string.IsNullOrEmpty(apiKey))
 				              ? _queryRepository.All().Where(q => q.ApiKeys.Any(k => k == apiKey) || q.AllowAnonymous)
 				              : _queryRepository.All().Where(q => q.AllowAnonymous);
 
-			ViewBag.ApiKey = apiKeyString;
+			ViewBag.ApiKey = apiKey;
 
 			return View(queries);
 		}

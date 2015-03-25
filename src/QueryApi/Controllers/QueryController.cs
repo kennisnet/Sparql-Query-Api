@@ -173,7 +173,7 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 			if (!query.AllowAnonymous)
 			{
 				var apiKey = HttpContext.Current.Request.Params["api_key"];
-				if (query.ApiKeys.All(k => k != Guid.Parse(apiKey)))
+				if (query.ApiKeys.All(k => k != apiKey))
 				{
 					return false;
 				}

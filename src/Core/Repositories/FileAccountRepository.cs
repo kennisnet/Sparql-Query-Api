@@ -104,7 +104,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			  account.Password = item.Password;
         account.Roles = (item.Roles != null) ? ((Newtonsoft.Json.Linq.JArray) item.Roles).Select(s => s.ToString()) : null;
 
-        account.Id = account.ApiKey.AsObjectId().ToString();
+        account.Id = account.ApiKey;
 
         return account;
 			}
@@ -118,7 +118,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
     }
 
     public Account Update(Account account) {
-      account.Id = account.ApiKey.AsObjectId().ToString();
+      account.Id = account.ApiKey;
       dynamic item =
         new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
       

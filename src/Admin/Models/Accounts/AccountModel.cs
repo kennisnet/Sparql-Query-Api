@@ -18,7 +18,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		{
 			Id = account.Id;
 			FullName = account.FullName;
-			ApiKey = account.ApiKey.ToString();
+			ApiKey = account.ApiKey;
 			QueryAccess =
 				queries.Select(
 					q => new QueryAccessModel() { Name = q.Alias, Selected = q.ApiKeys.Contains(account.ApiKey) });
@@ -27,7 +27,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		public void MapTo(Account account, IQueryRepository queryRepository)
 		{
 			account.FullName = FullName;
-			account.ApiKey = Guid.Parse(ApiKey);
+			account.ApiKey = ApiKey;
 			if (QueryAccess != null)
 			{
 				foreach (var queryAccessModel in QueryAccess)

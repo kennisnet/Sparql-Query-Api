@@ -9,7 +9,7 @@
 	{
 		public QueryModel() {
 			this.Notes = new List<Note>();
-			this.ApiKeys = new List<Guid>();
+			this.ApiKeys = new List<string>();
 			this.Parameters = new List<QueryParameter>();
 		}
 
@@ -24,7 +24,7 @@
 		public bool AllowAnonymous { get; set; }
 
 		public IList<Note> Notes { get; set; }
-		public IList<Guid> ApiKeys { get; set; }
+		public IList<string> ApiKeys { get; set; }
 		public IList<QueryParameter> Parameters { get; set; }
 	}
 }

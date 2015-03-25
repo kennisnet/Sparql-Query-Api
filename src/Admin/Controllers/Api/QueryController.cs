@@ -65,7 +65,7 @@
 		public dynamic Get(string id)
 		{
 			var query = (id == "new") ? new Query {
-				ApiKeys = new List<Guid> { OperatingAccount.Current(_accountRepository).ApiKey }
+				ApiKeys = new List<string> { OperatingAccount.Current(_accountRepository).ApiKey }
 			} : this._queryRepository.GetByAlias(id);
 
 			var model = new ExtendedQueryModel();

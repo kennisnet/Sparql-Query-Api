@@ -84,7 +84,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 																ValuesQuery = p.ValuesQuery
 						                  }).ToList()
 					                  : new List<QueryParameter>();
-			query.ApiKeys = Access.Where(a => a.Selected).Select(a => Guid.Parse(a.Key)).ToList();
+			query.ApiKeys = Access.Where(a => a.Selected).Select(a => a.Key).ToList();
 			query.Endpoint = Endpoint;
 			query.AllowAnonymous = AllowAnonymous;
 		}

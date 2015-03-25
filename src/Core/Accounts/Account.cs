@@ -14,7 +14,7 @@ namespace Trezorix.Sparql.Api.Core.Accounts
 		public string UserName { get; set; }
 		public IEnumerable<string> Roles { get; set; }
 		public string Password { get; set; }
-		public Guid ApiKey { get; set; }
+		public string ApiKey { get; set; }
 
     public virtual string ComputeSaltedHash(string password)
 		{
