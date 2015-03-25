@@ -61,8 +61,7 @@
 
       return Ok();
     }
-    
-    
+        
     [HttpPut]
     [Route("{id}")]
     public dynamic Put(string id, ExtendedAccountModel model)
@@ -74,11 +73,29 @@
       }
 
       model.MapTo(account, _queryRepository);
-
+			
       _accountRepository.Update(account);
 
       return Ok();
     }
+
+		[HttpPatch]
+		[Route("{id}")]
+		public dynamic Patch(string id, [FromBody] string password)
+		{
+			var account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
+
+			if (account == null)
+			{
+				return NotFound();
+			}
+
+			account.Password = account.ComputeSaltedHash(password);
+
+			_accountRepository.Update(account);
+
+			return Ok();
+		}
 
     [HttpDelete]
     [Route("{id}")]

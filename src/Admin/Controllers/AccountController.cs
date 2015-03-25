@@ -61,13 +61,16 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
       }
 
       var account = new Account {
+        FullName = model.FullName,
         UserName = model.Username,
         ApiKey = Guid.NewGuid().ToString(),
       };
 
-			_accountRepository.Add(account);
+      account.Password = account.ComputeSaltedHash("123");
 
-	    return null; //Login(account.Id, "", "~/Account");
+      _accountRepository.Add(account);
+
+      return null; //Login(account.Id, "", "~/Account");
     }
 
     [HttpPost]

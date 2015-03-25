@@ -11,6 +11,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 	{
 		public string Id { get; set; }
 		public string FullName { get; set; }
+		public string Email { get; set; }
+		public string PhoneNumber { get; set; }	
 		public string ApiKey { get; set; }
 		public IEnumerable<QueryAccessModel> QueryAccess { get; set; }
 
@@ -18,6 +20,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		{
 			Id = account.Id;
 			FullName = account.FullName;
+			Email = account.Email;
+			PhoneNumber = account.PhoneNumber;
 			ApiKey = account.ApiKey;
 			QueryAccess =
 				queries.Select(
@@ -27,6 +31,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		public void MapTo(Account account, IQueryRepository queryRepository)
 		{
 			account.FullName = FullName;
+			account.Email = Email;
+			account.PhoneNumber = PhoneNumber;
 			account.ApiKey = ApiKey;
 			if (QueryAccess != null)
 			{

@@ -58,7 +58,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 			}
 			Account account = _accountRepository.GetByUserName(userName);
 
-			if (account != null && account.Roles.Contains("administrator"))
+			if (account != null && account.Password != null)
 			{
 				var hashedPassword = account.ComputeSaltedHash(password);
 				if (hashedPassword == account.Password)

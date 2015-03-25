@@ -34,8 +34,20 @@
         .error(function() {
           alert("Kan de query niet opslaan. Probeer het nog eens...");
         });
-
     };
+
+    $scope.savePassword = function () {
+	    var url = config.adminApiUrl + 'Account/' + accountId;
+	    $http({ method: 'PATCH', url: url, data: angular.toJson($scope.account.Password) })
+		    .success(function(response) {
+        	if ($scope.isNewAccount(accountId)) {
+        		document.location.href = config.viewsUrl + '#/Account';
+        	}
+        })
+        .error(function() {
+        	alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
+        });
+		};
 
     $scope.cancel = function() {
       document.location.href = returnUrl;
