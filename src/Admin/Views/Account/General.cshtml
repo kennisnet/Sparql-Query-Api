@@ -2,10 +2,22 @@
 @using Trezorix.Sparql.Api.Core.Configuration
 <div id="edit_account_general" class="well space-above">
 	<div class="form-group row">
+		
 		<div class="col-lg-12">
 			<label>Naam</label>
 			<input type="text" class="form-control" data-ng-model="account.FullName" data-ng-required="true"/>
 		</div>
+		
+		<div class="col-lg-12">
+			<label>Email</label>
+			<input type="text" class="form-control" data-ng-model="account.Email" />
+		</div>
+		
+		<div class="col-lg-12">
+			<label>Telefoonnummer</label>
+			<input type="text" class="form-control" data-ng-model="account.PhoneNumber" />
+		</div>
+		
 		<div class="col-lg-12 space-above">
 			<div class="panel">
 				<a href="@ApiConfiguration.Current.QueryApiUrl/Home/Index/?api_key={{account.ApiKey}}" target="_blank">Toon Query API homepage voor deze gebruiker.</a>

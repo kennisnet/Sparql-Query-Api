@@ -341,6 +341,7 @@
     <Content Include="Views\Menu\User.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Account\Password.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

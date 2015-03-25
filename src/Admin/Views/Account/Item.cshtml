@@ -5,12 +5,15 @@
 				<tab heading="Algemeen">
 					@{ Html.RenderPartial("General"); }
 				</tab>
+				<tab heading="Wachtwoord" data-ng-show="account.Id == user.id">
+					@{ Html.RenderPartial("Password"); }
+				</tab>
 				<tab heading="Toegang">
 					@{ Html.RenderPartial("Access"); }
 				</tab>
-				<tab heading="Logs" data-ng-controller="LogStatsController">
-					@{ Html.RenderPartial("LogStats"); }
-				</tab>
+			  <tab heading="Logs" data-ng-controller="LogStatsController">
+			    @{ Html.RenderPartial("LogStats"); }
+			  </tab>
 			</tabset>
 			@{ Html.RenderPartial("Control"); }  
 		</ng-form>

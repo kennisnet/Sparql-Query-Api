@@ -1,6 +1,7 @@
 ﻿var configModule = angular.module('app.config', [])
     .constant('config', {
-      userName: window.userName,
+      user: window.user,
+      siteRoot: window.configSiteRoot,
       adminApiUrl: window.configSiteRoot + 'Api/',
       queryUrl: window.configQueryUrl,
       apiKey: window.configApiKey,

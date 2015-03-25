@@ -123,6 +123,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Annuleren</value>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Wijzig wachtwoord</value>
+  </data>
   <data name="ClearCache" xml:space="preserve">
     <value>Cache wissen</value>
   </data>
