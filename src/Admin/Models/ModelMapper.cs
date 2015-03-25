@@ -3,7 +3,9 @@
 
   using AutoMapper;
 
+  using Trezorix.Sparql.Api.Admin.Models.Accounts;
   using Trezorix.Sparql.Api.Admin.Models.Queries;
+  using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Queries;
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented",
@@ -12,6 +14,7 @@
     public static void ConfigureMapper() {
       Mapper.CreateMap<Note, NoteModel>().ReverseMap();
       Mapper.CreateMap<Query, QueryModel>().ReverseMap();
+      Mapper.CreateMap<Account, AccountModel>().ReverseMap();
     }
   }
 }

@@ -12,7 +12,7 @@
 }
 
 li {
-	margin-bottom: 4px;
+  line-height: 1em;
 }
 
 .small-space-above {
@@ -23,6 +23,9 @@ li {
 	background-color: #203040;
 }
 
+.navbar-inverse a {
+	color: #999999;
+}
 th.numValue {
 	text-align: right;
 }

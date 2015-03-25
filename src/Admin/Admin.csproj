@@ -172,6 +172,7 @@
     <Compile Include="Controllers\Attributes\AuthenticateUser.cs" />
     <Compile Include="Controllers\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Models\Accounts\AccountModel.cs" />
     <Compile Include="Models\ModelMapper.cs" />
     <Compile Include="Models\Queries\NoteModel.cs" />
     <Compile Include="Models\Queries\QueryModel.cs" />
@@ -187,7 +188,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Accounts\AccessModel.cs" />
-    <Compile Include="Models\Accounts\AccountModel.cs" />
+    <Compile Include="Models\Accounts\ExtendedAccountModel.cs" />
     <Compile Include="Models\Accounts\LogInModel.cs" />
     <Compile Include="Models\Accounts\SignupModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
@@ -202,6 +203,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\css\bda-admin.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\font-awesome.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\loading-bar.css" />
+    <Content Include="Content\css\Site.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\js\bootstrap.js" />
+    <Content Include="Content\js\jquery.js" />
     <Content Include="Global.asax" />
     <Content Include="Lib\angular\angular-file-upload.js" />
     <Content Include="Lib\angular\angular-file-upload.min.js" />
@@ -212,14 +222,18 @@
     <Content Include="Lib\angular\angular-route.min.js" />
     <Content Include="Lib\angular\angular.js" />
     <Content Include="Lib\angular\angular.min.js" />
+    <Content Include="Lib\bg-splitter\css\style.css" />
+    <Content Include="Lib\bg-splitter\js\splitter.js" />
     <Content Include="Lib\ui-bootstrap\ui-bootstrap-tpls-0.11.0.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.min.js" />
     <Content Include="NgApp\App.js" />
     <Content Include="NgApp\Config.js" />
+    <Content Include="NgApp\Controllers\UserController.js" />
     <Content Include="NgApp\Controllers\NavController.js" />
     <Content Include="NgApp\Modules\Alerts.js" />
     <Content Include="NgApp\Modules\NoCache.js" />
+    <Content Include="NgApp\Modules\Navigator.js" />
     <Content Include="NgApp\Modules\Test.js" />
     <Content Include="NgApp\RouteConfig.js" />
     <Content Include="NgApp\Modules\Account.js" />
@@ -298,6 +312,14 @@
     <Content Include="Lib\angular\angular-file-upload.min.map" />
     <Content Include="Lib\angular\angular-resource.min.js.map" />
     <Content Include="Lib\angular\angular.min.js.map" />
+    <Content Include="Content\less\bda-admin.less" />
+    <Content Include="Content\less\mixins.less" />
+    <Content Include="Content\less\Site.less" />
+    <Content Include="Content\less\variables.less" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\Deploy to File.pubxml" />
     <Content Include="Views\Account\Access.cshtml" />
     <Content Include="Views\Query\Test.cshtml" />
@@ -315,6 +337,10 @@
     <Content Include="Views\Query\Notes.cshtml" />
     <Content Include="Views\Home\Overview.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Shared\_Sidebar.cshtml" />
+    <Content Include="Views\Menu\User.cshtml">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

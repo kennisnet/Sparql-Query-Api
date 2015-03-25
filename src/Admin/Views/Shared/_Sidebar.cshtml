@@ -1,0 +1,32 @@
+﻿<div class="sidebar-nav navbar-collapse">
+	<ul class="nav" id="side-menu" data-ng-controller="QueryNavigator" data-ng-show="isVisible">
+		<li data-ng-repeat="group in groupedQueries.Groups | orderBy: 'Label'">
+			<button id="group_{{Id}}" class="side-menu" data-ng-click="toggleGroup($event, group.Id)"><i class="fa fa-sitemap fa-fw"></i> <strong>{{group.Label}}</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible(group.Id), 'fa-angle-down': !isGroupVisible(group.Id)}"></span></button>
+			<ul class="nav nav-second-level" data-ng-show="isGroupVisible(group.Id)">
+				<li data-ng-repeat="query in group.Items">
+					<a href="#/query/{{query.Alias}}">{{query.Alias}}</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<ul class="nav" id="side-menu" data-ng-controller="AccountNavigator" data-ng-show="isVisible">
+		<li data-ng-init="isGroupVisible = true">
+			<button id="accounts" class="side-menu" data-ng-click="isGroupVisible = !isGroupVisible"><i class="fa fa-sitemap fa-fw"></i> <strong>Accounts</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible, 'fa-angle-down': !isGroupVisible}"></span></button>
+			<ul class="nav nav-second-level" data-ng-show="isGroupVisible">
+				<li data-ng-repeat="account in accounts | orderBy: 'FullName'">
+					<a href="#/account/{{account.Id}}/{{account.ApiKey}}">{{account.FullName}}</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<ul class="nav" id="side-menu" data-ng-controller="SettingsNavigator" data-ng-show="isVisible">
+		<li data-ng-init="isGroupVisible = true">
+			<button id="accounts" class="side-menu" data-ng-click="isGroupVisible = !isGroupVisible"><i class="fa fa-sitemap fa-fw"></i> <strong>Settings</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible, 'fa-angle-down': !isGroupVisible}"></span></button>
+		</li>
+	</ul>
+	<ul class="nav" id="side-menu" data-ng-controller="LogsNavigator" data-ng-show="isVisible">
+		<li data-ng-init="isGroupVisible = true">
+			<button id="accounts" class="side-menu" data-ng-click="isGroupVisible = !isGroupVisible"><i class="fa fa-sitemap fa-fw"></i> <strong>Logs</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible, 'fa-angle-down': !isGroupVisible}"></span></button>
+		</li>
+	</ul>
+</div>

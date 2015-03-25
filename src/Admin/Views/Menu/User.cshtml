@@ -1,0 +1,26 @@
+﻿@{
+  Layout = null;
+}
+
+<li class="dropdown" data-ng-controller="UserController">
+  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+    <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+  </a>
+  <ul class="dropdown-menu dropdown-user" data-ng-show="user.userName">
+    <li data-ng-show="user.userName">
+      <a><i class="fa fa-user fa-fw"></i> {{user.userName}}</a>
+    </li>
+    <li>
+      <a href="#"><i class="fa fa-gear fa-fw"></i> Profiel</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href data-ng-click="logout('/home')"><i class="fa fa-sign-out fa-fw"></i> Uitloggen</a>
+    </li>
+  </ul>
+  <ul class="dropdown-menu dropdown-user" data-ng-hide="user.userName">
+    <li>
+      <a href data-ng-click="login('/home')"><i class="fa fa-sign-out fa-fw"></i> Inloggen</a>
+    </li>
+  </ul>
+</li>

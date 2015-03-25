@@ -1,28 +1,36 @@
 ﻿@using Trezorix.Sparql.Api.Core.Configuration
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@ViewBag.Title</title>
-  <script> document.write('<base href="' + document.location + '" />'); </script>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="http://codemirror.net/lib/codemirror.css" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <script> document.write('<base href="' + document.location + '" />'); </script>
+    @Styles.Render("~/bundles/bootstrap-site")
+    <link rel="stylesheet" type="text/css" href="http://codemirror.net/lib/codemirror.css" />
 
-  <link rel="stylesheet" href="~/Static/css/content.css">
+    <link rel="stylesheet" href="~/Static/css/content.css">
 
-  <script>
-		window.configSiteRoot = '@(new Uri(Request.Url, Url.Content("~")).ToString())';
-		window.configQueryUrl = '@(ApiConfiguration.Current.QueryApiUrl)';
-		window.configApiKey = '@((ViewBag.Account != null) ? ViewBag.Account.ApiKey.ToString() : "")';
-  </script>
-</head>
+    <script>
+      window.configSiteRoot = '@(new Uri(Request.Url, Url.Content("~")).ToString())';
+      window.configQueryUrl = '@(ApiConfiguration.Current.QueryApiUrl)';
+      window.configApiKey = '@((ViewBag.Account != null) ? ViewBag.Account.ApiKey.ToString() : "")';
+      window.userName = '@((ViewBag.Account != null) ? ViewBag.Account.FullName: "")';
+    </script>
+  </head>
 <body ng-app="QueryAdmin">
-  <header></header>
-  <div class="container">
-    @if (ViewBag.Account != null) {
-      string controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
-      <div class="navbar navbar-inverse" ng-controller="NavController">
+  @if (ViewBag.Account != null) {
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-default" role="navigation" style="margin-bottom: 0" ng-controller="NavController">
+      <div>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          @*<a class="navbar-brand" href="#/home">Buurtzoeker Beheer Applicatie</a>*@
+        </div>
         <ul class="nav navbar-nav">
           <li ng-class="{ 'active': isRoute('/home') }"><a href="#/home">Home</a></li>
           <li ng-class="{ 'active': isRoute('/query') }"><a href="#/query">Queries</a></li>
@@ -30,38 +38,34 @@
           <li ng-class="{ 'active': isRoute('/settings') }"><a href="#/settings">Settings</a></li>
           <li ng-class="{ 'active': isRoute('/log') }"><a href="#log">Logs</a></li>
         </ul>
-        @if (ViewBag.Account != null) {
-          using (Html.BeginForm("Logout", "Home", FormMethod.Get, new {
-            @class = "navbar-form pull-right"
-          })) {
-            <a href="@Url.Action("Index", "Account")" class="btn">@ViewBag.Account.FullName</a>
-            <button type="submit" class="btn btn-sm btn-info">Log uit</button>
-          }
-        }
-        else {
-          using (Html.BeginForm("Login", "Home", FormMethod.Post, new {
-            @class = "navbar-form pull-right"
-          })) {
-            <input type="text" name="userName" id="userName" class="form-control input-small" style="width: 200px;" />
-            <button type="submit" class="btn btn-sm btn-info">Log in</button>
-          }
-        }
 
+        <ul class="nav navbar-top-links navbar-right">
+          @{ Html.RenderPartial("~/Views/Menu/User.cshtml");}
+        </ul>
       </div>
-    }
-    @RenderBody()
+    </nav>
+  }
+  <div class="content-wrapper">
+    <bg-splitter class="content-panes" orientation="horizontal" >
+      <bg-pane min-size="180" class="navbar-default sidebar" role="navigation">
+         @{ Html.RenderPartial("_Sidebar");}
+      </bg-pane>
+      <bg-pane min-size="180" id="view-wrapper">
+         @RenderBody()
+      </bg-pane>
+    </bg-splitter>
   </div>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap-js")
   @Scripts.Render("~/bundles/angular")
-  @Scripts.Render("~/bundles/angular-components")
-  @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"> </script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-resource.min.js"> </script>*@
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"> </script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"> </script>
-  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="http://codemirror.net/lib/codemirror.js"></script>
   <script type="text/javascript" src="http://codemirror.net/mode/sparql/sparql.js"></script>
   @Scripts.Render("~/bundles/project")
   @RenderSection("Scripts", false)
 </body>
+
+
+
 </html>

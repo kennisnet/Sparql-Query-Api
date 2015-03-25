@@ -1,10 +1,15 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Controllers.Api {
   using System;
+  using System.Collections;
+  using System.Collections.Generic;
   using System.Net;
   using System.Web.Http;
 
+  using AutoMapper;
+
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Accounts;
+  using Trezorix.Sparql.Api.Admin.Models.Queries;
   using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Configuration;
@@ -25,9 +30,8 @@
 		}
     
     [HttpGet]
-    public dynamic Get() 
-    {
-      return Ok();
+    public dynamic Get() {
+			return Mapper.Map<IEnumerable<AccountModel>>(_accountRepository.All());
     }
 
     [HttpGet]
@@ -36,7 +40,7 @@
     {
       var account = (id == "new") ? new Account() : (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
-      var model = new AccountModel();
+      var model = new ExtendedAccountModel();
       model.MapFrom(account, _queryRepository.All());
 
       return model;
@@ -44,7 +48,7 @@
 
     [HttpPost]
     [Route("{id}")]
-    public dynamic Post(string id, AccountModel model)
+    public dynamic Post(string id, ExtendedAccountModel model)
     {
       if (string.IsNullOrEmpty(model.Id) || model.Id == Guid.Empty.ToString()) {
         model.ApiKey = Guid.NewGuid().ToString();
@@ -61,7 +65,7 @@
     
     [HttpPut]
     [Route("{id}")]
-    public dynamic Put(string id, AccountModel model)
+    public dynamic Put(string id, ExtendedAccountModel model)
     {
       var account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 

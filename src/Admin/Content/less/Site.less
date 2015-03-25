@@ -1,0 +1,144 @@
+﻿[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+@unit: 16px;
+@space-horizontal: 1em;
+@space-vertical: 0.8em;
+@text-color: #333;
+
+// Messagebox
+.message-box-container {
+  left: 25%;
+  padding-left: @unit*2;
+  position: fixed;
+  top: @unit;
+  width: 50%;
+  z-index: 9999;
+
+  .alert {
+    margin-top: 1.2em;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 2px;
+  }
+}
+
+.space-left {
+  margin-left: @space-horizontal;
+}
+
+.space-right {
+  margin-right: @space-horizontal;
+}
+
+.space-top {
+  margin-top: @space-vertical;
+}
+
+.space-top-large {
+  margin-top: 2*@space-vertical;
+}
+
+.space-bottom {
+  margin-bottom: @space-vertical;
+}
+
+.btn {
+  &.btn-sm {
+    line-height: 1;
+    margin-top: -0.3em;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.panel-heading {
+  h4 {
+    margin: 0;
+  }
+}
+
+.fa-doublet {
+  margin-left: -12px;
+}
+
+.list-group-item {
+  display: inline-block;
+  width: 100%;
+  a {
+    text-decoration: none;
+    color: @text-color;
+  }
+}
+
+.input-number {
+  width: 6em;
+}
+
+.form-inline.form-group.form-group-sm {
+  .input-inline {
+    width: 100% !important;
+  }
+
+  .input-number {
+    width: 25% !important;
+  }
+
+  .label-sm {
+    font-weight: normal !important;
+    font-size: 90% !important;
+    margin-left: 0.1em;
+  }
+
+  input[type='checkbox'] {
+    vertical-align: text-bottom;
+    margin-left: 0.3em;
+  }
+
+  .btn {
+    margin-top: 0;
+    vertical-align: middle;
+    line-height: 1.5;
+  }
+
+  .btn-radio {
+    padding-right: 0.3em;
+    padding-left: 0.3em;
+  }
+
+  .radio-buttons {
+    input[type='radio'] {
+      display: none;
+    }
+  }
+}
+
+.alert {
+  button {
+    margin-top:-0.5em;
+  }
+}
+@media screen and (max-width: 425px) {
+  .list-group-item {
+    min-height: 60px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .list-group-item {
+    .text-muted {
+      float: left !important;
+    }
+  }
+}
+/*
+#page-wrapper {
+  border-left: none;
+  margin: 0;
+}
+
+#side-bar {
+  display: none;
+}
+*/
