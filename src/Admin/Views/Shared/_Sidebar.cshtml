@@ -3,7 +3,7 @@
 		<li data-ng-repeat="group in groupedQueries.Groups | orderBy: 'Label'">
 			<button id="group_{{Id}}" class="side-menu" data-ng-click="toggleGroup($event, group.Id)"><i class="fa fa-sitemap fa-fw"></i> <strong>{{group.Label}}</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible(group.Id), 'fa-angle-down': !isGroupVisible(group.Id)}"></span></button>
 			<ul class="nav nav-second-level" data-ng-show="isGroupVisible(group.Id)">
-				<li data-ng-repeat="query in group.Items">
+				<li data-ng-repeat="query in group.Items | orderBy: 'Label'">
 					<a href="#/query/{{query.Alias}}">{{query.Alias}}</a>
 				</li>
 			</ul>

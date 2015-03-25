@@ -1,6 +1,6 @@
 ﻿angular.module('AccountEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule'])
 .controller('AccountController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', function($scope, $routeParams, $location, $http, $timeout, config) {
+  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', function ($scope, $routeParams, $location, $http, $timeout, config) {
     var original = null;
     var account = null;
 
@@ -8,52 +8,54 @@
 
     var accountId = $routeParams.id;
 
-    $scope.isNewAccount = function(value) {
+    $scope.user = config.user;
+
+    $scope.isNewAccount = function (value) {
       return (value === null || value === '' || value === 'new' || value.indexOf('000000') > -1);
     };
 
-    $http.get(config.adminApiUrl + 'Account/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function(response) {
+    $http.get(config.adminApiUrl + 'Account/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function (response) {
       account = response.data;
       original = account;
       $scope.account = angular.copy(account);
     });
 
-    $scope.isClean = function() {
+    $scope.isClean = function () {
       return angular.equals(original, $scope.query);
     };
 
-    $scope.save = function() {
+    $scope.save = function () {
       var saveMethod = ($scope.isNewAccount(account.Id)) ? $http.post : $http.put;
 
       saveMethod(config.adminApiUrl + 'Account/' + accountId, $scope.account)
-        .success(function(response) {
+        .success(function (response) {
           if ($scope.isNewAccount(accountId)) {
             document.location.href = config.viewsUrl + '#/Account';
           }
         })
-        .error(function() {
+        .error(function () {
           alert("Kan de query niet opslaan. Probeer het nog eens...");
         });
     };
 
-    $scope.savePassword = function () {
-	    var url = config.adminApiUrl + 'Account/' + accountId;
-	    $http({ method: 'PATCH', url: url, data: angular.toJson($scope.account.Password) })
-		    .success(function(response) {
-        	if ($scope.isNewAccount(accountId)) {
-        		document.location.href = config.viewsUrl + '#/Account';
-        	}
+    $scope.savePassword = function (password) {
+      var url = config.adminApiUrl + 'Account/' + accountId;
+      $http({ method: 'PATCH', url: url, data: angular.toJson(password) })
+        .success(function (response) {
+          if ($scope.isNewAccount(accountId)) {
+            document.location.href = config.viewsUrl + '#/Account';
+          }
         })
-        .error(function() {
-        	alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
+        .error(function () {
+          alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
         });
-		};
+    };
 
-    $scope.cancel = function() {
+    $scope.cancel = function () {
       document.location.href = returnUrl;
     };
 
-    $scope.delete = function() {
+    $scope.delete = function () {
       if (accountId === '') {
         document.location.href = returnUrl;
       } else {
@@ -67,7 +69,7 @@
 ])
 
 .controller('AccountIndexController', [
-  '$scope', '$routeParams', '$location', '$http', '$window', 'config', 'userService', function($scope, $routeParams, $location, $http, $window, config, userService) {
+  '$scope', '$routeParams', '$location', '$http', '$window', 'config', 'userService', function ($scope, $routeParams, $location, $http, $window, config, userService) {
     $scope.isGroupVisible = function (value) {
       return userService.accountGroup(value).visible;
     };
@@ -87,14 +89,14 @@
       userService.accountGroup(value).edit = !userService.accountGroup(value).edit;
     };
 
-    $scope.deleteAccount = function(value) {
+    $scope.deleteAccount = function (value) {
       returnUrl = config.viewsUrl + "#/account";
 
       if (window.confirm("Weet u zeker dat u account '" + value + "' wilt verwijderen?")) {
         if (value === '') {
           document.location.href = returnUrl;
         } else {
-          $http.delete(config.adminApiUrl + 'Account/' + value).then(function(response) {
+          $http.delete(config.adminApiUrl + 'Account/' + value).then(function (response) {
             document.location.href = returnUrl;
             $window.location.reload();
           });
@@ -104,4 +106,36 @@
 
     };
   }
-]);
+])
+
+.directive('passwordForm', [function () {
+  return {
+    restrict: 'A',
+    require: '?form',
+    link: function link(scope, element, iAttrs, formController) {
+
+      if (!formController) {
+        return;
+      }
+
+      // Remove this form from parent controller
+      var parentFormController = element.parent().controller('form');
+      parentFormController.$removeControl(formController);
+
+      // Replace form controller with a "null-controller"
+      var nullFormCtrl = {
+        $addControl: angular.noop,
+        $removeControl: angular.noop,
+        $setValidity: angular.noop,
+        $setDirty: angular.noop,
+        $setPristine: angular.noop
+      };
+
+      scope.isValidPassword = function (val1, val2) {
+        return val1 > 3 && val1 == val2;
+      };
+
+      angular.extend(formController, nullFormCtrl);
+    }
+  };
+}]);
