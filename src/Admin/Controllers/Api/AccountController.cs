@@ -2,6 +2,7 @@
   using System;
   using System.Collections;
   using System.Collections.Generic;
+  using System.Linq;
   using System.Net;
   using System.Web.Http;
 
@@ -10,6 +11,7 @@
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Accounts;
   using Trezorix.Sparql.Api.Admin.Models.Queries;
+  using Trezorix.Sparql.Api.Application.Accounts;
   using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Configuration;
@@ -83,6 +85,13 @@
 		[Route("{id}")]
 		public dynamic Patch(string id, [FromBody] string password)
 		{
+      var operatingAccount = OperatingAccount.Current(_accountRepository);
+		  bool hasRights = operatingAccount.Id == id || operatingAccount.Roles.Any(r => r == "administrator");
+
+      if (!hasRights) {
+        return this.Unauthorized();
+      }
+
 			var account = (id.IsObjectId()) ? _accountRepository.GetById(id) : _accountRepository.Get(id);
 
 			if (account == null)

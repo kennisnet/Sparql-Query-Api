@@ -1,4 +1,4 @@
-﻿@using System
+﻿@using Trezorix.Sparql.Api.Core.Accounts
 @using Trezorix.Sparql.Api.Core.Configuration
 <!DOCTYPE html>
 <html>
@@ -17,11 +17,17 @@
   window.configQueryUrl = '@(ApiConfiguration.Current.QueryApiUrl)';
   window.configApiKey = '@((ViewBag.Account != null) ? ViewBag.Account.ApiKey.ToString() : "")';
   @if (ViewBag.Account != null) {
-        @: window.user = { id: '@(ViewBag.Account.Id)', apiKey: '@(ViewBag.Account.ApiKey)', fullName: '@(ViewBag.Account.FullName)' };
-        }
-      else {
-        @: window.user = {};
-        }
+    var account = (Account)ViewBag.Account;
+    @: window.user = {
+    @:   id: '@(ViewBag.Account.Id)', 
+    @:   apiKey: '@(ViewBag.Account.ApiKey)', 
+    @:   fullName: '@(ViewBag.Account.FullName)',
+    @:   roles: [@if (account.Roles != null) { @Html.Raw(string.Join(",", account.Roles.Select(r => "'" + r + "'"))) }]
+    @: };
+  }
+  else {
+    @: window.user = {};
+  }
     </script>
   </head>
 <body ng-app="QueryAdmin">
@@ -50,17 +56,20 @@
         </ul>
       </div>
     </nav>
+    <div class="content-wrapper">
+      <bg-splitter class="content-panes" orientation="horizontal">
+        <bg-pane min-size="180" class="navbar-default sidebar" role="navigation">
+          @{ Html.RenderPartial("_Sidebar");}
+        </bg-pane>
+        <bg-pane min-size="180" id="view-wrapper">
+          @RenderBody()
+        </bg-pane>
+      </bg-splitter>
+    </div>
   }
-  <div class="content-wrapper">
-    <bg-splitter class="content-panes" orientation="horizontal" >
-      <bg-pane min-size="180" class="navbar-default sidebar" role="navigation">
-         @{ Html.RenderPartial("_Sidebar");}
-      </bg-pane>
-      <bg-pane min-size="180" id="view-wrapper">
-         @RenderBody()
-      </bg-pane>
-    </bg-splitter>
-  </div>
+  else {
+    @RenderBody()
+  }
   @Scripts.Render("~/bundles/jquery")
   @Scripts.Render("~/bundles/bootstrap-js")
   @Scripts.Render("~/bundles/angular")
@@ -71,6 +80,7 @@
   @Scripts.Render("~/bundles/project")
   @RenderSection("Scripts", false)
 </body>
+
 
 
 
