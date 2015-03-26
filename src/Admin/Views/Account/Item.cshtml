@@ -5,7 +5,7 @@
 				<tab heading="Algemeen">
 					@{ Html.RenderPartial("General"); }
 				</tab>
-				<tab heading="Wachtwoord" data-ng-show="account.Id == user.id || user.roles.indexOf('administrator') != -1">
+				<tab heading="Wachtwoord" data-ng-show="(account.Id == user.id || user.roles.indexOf('administrator') != -1) && account.Id != null">
 					@{ Html.RenderPartial("Password"); }
 				</tab>
 				<tab heading="Toegang">

@@ -14,7 +14,7 @@
     $scope.updateStats = function (timespan) {
     	if (!timespan) {
 		    timespan = $scope.timespan;
-    	}	    
+    	}
 
 	    var url = config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + timespan.id;
 	    if ($routeParams.apiKey) {

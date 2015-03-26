@@ -30,7 +30,7 @@
       saveMethod(config.adminApiUrl + 'Account/' + accountId, $scope.account)
         .success(function (response) {
           if ($scope.isNewAccount(accountId)) {
-            document.location.href = config.viewsUrl + '#/Account';
+            document.location.href = config.viewsUrl + '#/account';
           }
         })
         .error(function () {
@@ -42,9 +42,7 @@
       var url = config.adminApiUrl + 'Account/' + accountId;
       $http({ method: 'PATCH', url: url, data: angular.toJson(password) })
         .success(function (response) {
-          if ($scope.isNewAccount(accountId)) {
-            document.location.href = config.viewsUrl + '#/Account';
-          }
+          alert("Wachtwoord gewijzigd.");
         })
         .error(function () {
           alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
