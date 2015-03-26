@@ -59,7 +59,7 @@
 
       var account = new Account();
       model.MapTo(account, _queryRepository);
-      _accountRepository.Add(account);
+      _accountRepository.Save(account);
 
       return Ok();
     }
@@ -76,7 +76,7 @@
 
       model.MapTo(account, _queryRepository);
 			
-      _accountRepository.Update(account);
+      _accountRepository.Save(account);
 
       return Ok();
     }
@@ -101,7 +101,7 @@
 
 			account.Password = account.ComputeSaltedHash(password);
 
-			_accountRepository.Update(account);
+			_accountRepository.Save(account);
 
 			return Ok();
 		}

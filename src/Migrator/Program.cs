@@ -43,14 +43,14 @@ namespace Migrator
 		private static void ImportFileAccountRepository(string path)
 		{
 			var fileAccountRepository = new FileAccountRepository(path);
-
+		  
 			var mongoAccountRepository = new MongoAccountRepository();
 			mongoAccountRepository.DeleteAll();
 
 			foreach (var account in fileAccountRepository.All())
 			{
 				account.Id = null;
-				mongoAccountRepository.Add(account);
+				mongoAccountRepository.Save(account);
 			}
 
 			Console.WriteLine("Account repository was imported");

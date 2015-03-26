@@ -36,9 +36,9 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 				}
 			}
 		  _loaded = true;
-		}
+		}	  
 
-		public void Delete(Account account)
+	  public void Delete(Account account)
 		{
 			string filename = FilenameFromAccountName(account.ApiKey.ToString());
 
@@ -112,18 +112,24 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			return null;
 		}
 
-    public Account Add(Account account) 
+    public Account Save(Account account) {
+      var accountResult = account.Id == null ? this.Add(account) : this.Update(account);
+      return accountResult;
+    }
+
+	  private Account Add(Account account) 
     {
       return this.Update(account);
     }
 
-    public Account Update(Account account) {
+    private Account Update(Account account) {
+
+
       account.Id = account.ApiKey;
-      dynamic item =
-        new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
+      dynamic item = new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
       
       string json = JsonConvert.SerializeObject(item, Formatting.Indented);
-      File.WriteAllText(FilenameFromAccountName(account.ApiKey.ToString()), json);
+      File.WriteAllText(FilenameFromAccountName(account.ApiKey), json);
       return account;
     }
 

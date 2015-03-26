@@ -40,7 +40,7 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
 			
 			return View();
 		}
-
+    
 		[AllowAnonymous]
     [HttpGet]
     public ActionResult Signup(string errorString) {
@@ -67,8 +67,8 @@ namespace Trezorix.Sparql.Api.Admin.Controllers {
       };
 
       account.Password = account.ComputeSaltedHash("123");
-
-      _accountRepository.Add(account);
+      
+      _accountRepository.Save(account);
 
       return null; //Login(account.Id, "", "~/Account");
     }

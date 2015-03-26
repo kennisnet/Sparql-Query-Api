@@ -20,7 +20,6 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 				_repositoryPath += "\\";
 			}
 			_queries = new List<Query>();
-
 		}
 
 		private void LoadAllFromPath()
