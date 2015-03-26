@@ -12,7 +12,7 @@
           "~/Content/css/bootstrap.css",
           "~/Content/css/font-awesome.css",
           "~/Content/css/loading-bar.css",
-          "~/Content/css/bda-admin.css",
+          "~/Content/css/sqa-admin.css",
           "~/Lib/bg-splitter/css/style.css",
           "~/Content/css/site.css"));
 

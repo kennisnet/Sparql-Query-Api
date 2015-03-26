@@ -6,7 +6,7 @@ body {
   height: 100%;
 }
 .split-panes.content-panes {
-  top: 54px;
+  top: 52px;
 }
 #view-wrapper {
   position: absolute;
@@ -80,9 +80,20 @@ body {
 }
 .sidebar ul li {
   border-bottom: 1px solid #e7e7e7;
+  line-height: 1;
+  font-size: 13px;
+}
+.sidebar ul li a {
+  padding: 8px 8px;
 }
 .sidebar ul li a.active {
   background-color: #eeeeee;
+}
+.sidebar ul li a:hover {
+  color: #333;
+}
+.sidebar ul li a:focus {
+  color: #333;
 }
 button.side-menu {
   display: block;
@@ -99,10 +110,10 @@ button.side-menu {
   border-bottom: none !important;
 }
 .sidebar .nav-second-level li a {
-  padding-left: 37px;
+  padding-left: 32px;
 }
 .sidebar .nav-third-level li a {
-  padding-left: 52px;
+  padding-left: 48px;
 }
 @media (min-width: 768px) {
   .sidebar {

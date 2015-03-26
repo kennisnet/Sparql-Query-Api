@@ -11,7 +11,7 @@ html, body {
 }
 
 .split-panes.content-panes {
-  top: 54px;
+  top: @menu-bar-height-offset;
 }
 
 #view-wrapper {
@@ -123,9 +123,18 @@ html, body {
 
 .sidebar ul li {
     border-bottom: 1px solid darken(@gray-lightest, 6.5%);
+    line-height: 1;
+    font-size: 13px;
     a {
+        padding: 8px 8px;
         &.active {
             background-color: @gray-lighter;
+        }
+        &:hover {
+            color: #333;
+        }
+        &:focus {
+            color: #333;
         }
     }
 }
@@ -156,11 +165,11 @@ button.side-menu {
 }
 
 .sidebar .nav-second-level li a {
-    padding-left: 37px;
+    padding-left: 32px;
 }
 
 .sidebar .nav-third-level li a {
-    padding-left: 52px;
+    padding-left: 48px;
 }
 
 @media(min-width:768px) {

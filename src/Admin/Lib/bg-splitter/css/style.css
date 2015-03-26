@@ -20,7 +20,7 @@
 {
   width: 4px;
   top: 0px; 
-  left: 25%;
+  left: 20%;
   bottom: 0px;
   cursor: ew-resize;
 }
@@ -34,14 +34,14 @@
 
 .split-panes.horizontal > .split-pane1
 {
-  width: 25%; 
+  width: 20%; 
 }
 
 .split-panes.horizontal > .split-pane2
 {
-  left: 25%;
+  left: 20%;
   right: 0px;
-  border-left: 1px solid #aaa;
+  border-left: 2px solid #ccc;
 }
 
 
@@ -72,5 +72,5 @@
 {
   top: 50%;
   bottom: 0px;
-  border-top: 1px solid #aaa;
+  border-top: 1px solid #ccc;
 }

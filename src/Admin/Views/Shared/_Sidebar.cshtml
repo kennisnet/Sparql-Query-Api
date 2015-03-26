@@ -4,17 +4,17 @@
 			<button id="group_{{Id}}" class="side-menu" data-ng-click="toggleGroup($event, group.Id)"><i class="fa fa-sitemap fa-fw"></i> <strong>{{group.Label}}</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible(group.Id), 'fa-angle-down': !isGroupVisible(group.Id)}"></span></button>
 			<ul class="nav nav-second-level" data-ng-show="isGroupVisible(group.Id)">
 				<li data-ng-repeat="query in group.Items | orderBy: 'Label'">
-					<a href="#/query/{{query.Alias}}">{{query.Alias}}</a>
+					<a href="#/query/{{query.Alias}}"><i class="fa fa-compass fa-fw"></i> {{query.Alias}}</a>
 				</li>
 			</ul>
 		</li>
 	</ul>
 	<ul class="nav" id="side-menu" data-ng-controller="AccountNavigator" data-ng-show="isVisible">
 		<li data-ng-init="isGroupVisible = true">
-			<button id="accounts" class="side-menu" data-ng-click="isGroupVisible = !isGroupVisible"><i class="fa fa-sitemap fa-fw"></i> <strong>Accounts</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible, 'fa-angle-down': !isGroupVisible}"></span></button>
+			<button id="accounts" class="side-menu" data-ng-click="isGroupVisible = !isGroupVisible"><i class="fa fa-users fa-fw"></i> <strong>Accounts</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible, 'fa-angle-down': !isGroupVisible}"></span></button>
 			<ul class="nav nav-second-level" data-ng-show="isGroupVisible">
 				<li data-ng-repeat="account in accounts | orderBy: 'FullName'">
-					<a href="#/account/{{account.Id}}/{{account.ApiKey}}">{{account.FullName}}</a>
+					<a href="#/account/{{account.Id}}/{{account.ApiKey}}"><i class="fa fa-user fa-fw"></i> {{account.FullName}}</a>
 				</li>
 			</ul>
 		</li>

@@ -203,7 +203,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="Content\css\bda-admin.css" />
+    <Content Include="Content\css\sqa-admin.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\font-awesome.min.css" />
@@ -312,7 +312,7 @@
     <Content Include="Lib\angular\angular-file-upload.min.map" />
     <Content Include="Lib\angular\angular-resource.min.js.map" />
     <Content Include="Lib\angular\angular.min.js.map" />
-    <Content Include="Content\less\bda-admin.less" />
+    <Content Include="Content\less\sqa-admin.less" />
     <Content Include="Content\less\mixins.less" />
     <Content Include="Content\less\Site.less" />
     <Content Include="Content\less\variables.less" />

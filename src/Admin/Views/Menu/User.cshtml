@@ -8,10 +8,7 @@
   </a>
   <ul class="dropdown-menu dropdown-user" data-ng-show="user.id">
     <li data-ng-show="user.id">
-      <a><i class="fa fa-user fa-fw"></i> {{user.fullName}}</a>
-    </li>
-    <li>
-      <a href="#"><i class="fa fa-gear fa-fw"></i> Profiel</a>
+      <a href="#/account/{{user.id}}/{{user.apiKey}}"><i class="fa fa-user fa-fw"></i> {{user.fullName}}</a>
     </li>
     <li class="divider"></li>
     <li>
