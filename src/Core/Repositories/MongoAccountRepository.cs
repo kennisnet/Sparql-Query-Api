@@ -9,17 +9,10 @@
   using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
-  using Trezorix.Sparql.Api.Core.EventSourcing;
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
   public class MongoAccountRepository : MongoRepository<Account>, IAccountRepository {
-    private readonly IEventStoreRepository eventStoreRepository;
-
-    public MongoAccountRepository() {
-      this.eventStoreRepository = new MongoEventStoreRepository();
-    }
-
     public Account Get(string id) {
       return this.AsEnumerable().SingleOrDefault(a => a.ApiKey == id);
     }
@@ -41,24 +34,13 @@
       Account accountResult;
       var newAccount = account.Id == null;
 
-      var eventStore = new EventStore()
-      {
-        AccountId = account.Id,
-        Date = DateTime.UtcNow,
-        EventName = newAccount ? Events.CreateAccount : Events.UpdateAccount,
-        Payload = account
-      };
-
       if (newAccount)
       {
         accountResult = this.Add(account);
-        eventStore.AccountId = accountResult.Id;
-        this.eventStoreRepository.Add(eventStore);
       }
       else
       {
         accountResult = this.Update(account);        
-        this.eventStoreRepository.Add(eventStore);
       }
 
       return accountResult;
