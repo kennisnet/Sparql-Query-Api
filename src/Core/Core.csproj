@@ -79,6 +79,7 @@
     <Compile Include="Repositories\IQueryLogRepository.cs" />
     <Compile Include="Repositories\IQueryRepository.cs" />
     <Compile Include="Repositories\FileQueryRepository.cs" />
+    <Compile Include="Repositories\MongoAccountRepositoryWithEventStore.cs" />
     <Compile Include="Repositories\MongoAccountRepository.cs" />
     <Compile Include="Repositories\MongoEventStoreRepository.cs" />
     <Compile Include="Repositories\MongoQueryLogRepository.cs" />

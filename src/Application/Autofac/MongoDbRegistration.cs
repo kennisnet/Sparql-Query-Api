@@ -18,10 +18,15 @@
               .As<IEventStoreRepository>()
               .InstancePerRequest();
 
-			builder.RegisterType<MongoAccountRepository>()
-							.As<IAccountRepository>()
-							.InstancePerRequest();
+      builder.RegisterType<MongoAccountRepository>()
+              //.As<IAccountRepository>()
+              .Named<IAccountRepository>("account")
+              .InstancePerRequest();
 
+      builder.RegisterDecorator<IAccountRepository>(
+          (c, inner) => new MongoAccountRepositoryWithEventStore(inner, new MongoEventStoreRepository()),
+          fromKey: "account");
+      
 			builder.RegisterType<MongoQueryRepository>()
 							.As<IQueryRepository>()
 							.InstancePerRequest();
