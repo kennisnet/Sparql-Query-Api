@@ -65,5 +65,19 @@
     public IEnumerable<Account> All() {
       return this.accountRepository.All();
     }
+
+    public override void Delete(Account account) {
+
+      var eventStore = new EventStore()
+      {
+        AccountId = account.Id,
+        Date = DateTime.UtcNow,
+        EventName = Events.DeleteAccount,
+        Payload = account
+      };
+
+      this.accountRepository.Delete(account);
+      this.eventStoreRepository.Add(eventStore);      
+    }
   }
 }
