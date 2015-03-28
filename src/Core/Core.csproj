@@ -67,6 +67,7 @@
     <Compile Include="Helpers\WebClientWithTimeout.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="IAccountIdResolver.cs" />
     <Compile Include="ObjectIdExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\Note.cs" />

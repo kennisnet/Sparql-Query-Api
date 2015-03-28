@@ -12,6 +12,12 @@
 
   public class MongoEventStoreRepository: MongoRepository<EventStore>, IEventStoreRepository
   {
+    private readonly IAccountIdResolver accountIdResolver;
+
+    public MongoEventStoreRepository(IAccountIdResolver accountIdResolver) {
+      this.accountIdResolver = accountIdResolver;
+    }
+
     public EventStore Get(string eventStoreId)
     {
       return this.AsEnumerable().SingleOrDefault(a => a.Id == eventStoreId);
@@ -27,6 +33,11 @@
       var result = coll.FindOneAs<EventStore>(query);
 
       return result;
+    }
+
+    public override EventStore Add(EventStore entity) {
+      entity.AccountId = accountIdResolver.GetAccountId();
+      return base.Add(entity);
     }
   }
 }

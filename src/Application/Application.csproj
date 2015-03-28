@@ -111,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accounts\AccountIdResolver.cs" />
     <Compile Include="Accounts\OperatingAccount.cs" />
     <Compile Include="Autofac\FileDbRegistration.cs" />
     <Compile Include="Autofac\MongoDbRegistration.cs" />

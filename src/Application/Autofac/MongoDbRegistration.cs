@@ -5,6 +5,7 @@
 	using MongoDB.Bson;
 	using MongoDB.Bson.Serialization;
 
+	using Trezorix.Sparql.Api.Application.Accounts;
 	using Trezorix.Sparql.Api.Application.MongoRepositories;
 	using Trezorix.Sparql.Api.Core.Accounts;
 	using Trezorix.Sparql.Api.Core.EventSourcing;
@@ -19,14 +20,20 @@
               .As<IEventStoreRepository>()
               .InstancePerRequest();
 
+      builder.Register(c => new AccountIdResolver(new MongoAccountRepository()))
+              .As<IAccountIdResolver>()
+              .InstancePerRequest();
+
       builder.RegisterType<MongoAccountRepository>()
               //.As<IAccountRepository>()
               .Named<IAccountRepository>("account")
               .InstancePerRequest();
 
       builder.RegisterDecorator<IAccountRepository>(
-          (c, inner) => new MongoAccountRepositoryWithEventStore(inner, new MongoEventStoreRepository()),
-          fromKey: "account");
+          (c, inner) => new MongoAccountRepositoryWithEventStore(inner,
+            new MongoEventStoreRepository(c.Resolve<IAccountIdResolver>())),
+          fromKey: "account")
+          .InstancePerRequest();
       
 			builder.RegisterType<MongoQueryRepository>()
 							//.As<IQueryRepository>()
@@ -34,9 +41,10 @@
               .InstancePerRequest();
 
       builder.RegisterDecorator<IQueryRepository>(
-          (c, inner) => new MongoQueryRepositoryWithEventStore(inner, new MongoEventStoreRepository()),
-          fromKey: "query");
-      
+          (c, inner) => new MongoQueryRepositoryWithEventStore(inner, 
+            new MongoEventStoreRepository(c.Resolve<IAccountIdResolver>())),
+          fromKey: "query")
+          .InstancePerRequest();
 
 			builder.RegisterType<MongoQueryLogRepository>()
 							.As<IQueryLogRepository>()

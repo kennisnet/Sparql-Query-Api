@@ -40,7 +40,6 @@
 
       var eventStore = new EventStore()
       {
-        AccountId = queryResult.Id, // ToDo: Sander: inject accountId function
         Date = DateTime.UtcNow,
         EventName = isNewQuery ? Events.CreateAccount : Events.UpdateAccount,
         Payload = queryResult
@@ -48,7 +47,6 @@
 
       if (isNewQuery)
       {
-        eventStore.AccountId = queryResult.Id;  // ToDo: Sander: inject accountId function
         this.eventStoreRepository.Add(eventStore);
       }
       else
@@ -63,7 +61,6 @@
 
       var eventStore = new EventStore()
       {
-        AccountId = query.Id,
         Date = DateTime.UtcNow,
         EventName = Events.DeleteAccount,
         Payload = query

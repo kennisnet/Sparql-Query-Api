@@ -44,7 +44,6 @@
 
       var eventStore = new EventStore()
       {
-        AccountId = account.Id,
         Date = DateTime.UtcNow,
         EventName = newAccount ? Events.CreateAccount : Events.UpdateAccount,
         Payload = account
@@ -52,7 +51,6 @@
 
       if (newAccount)
       {
-        eventStore.AccountId = accountResult.Id;
         this.eventStoreRepository.Add(eventStore);
       }
       else
@@ -71,7 +69,6 @@
 
       var eventStore = new EventStore()
       {
-        AccountId = account.Id,
         Date = DateTime.UtcNow,
         EventName = Events.DeleteAccount,
         Payload = account
