@@ -86,7 +86,7 @@
 			}
 			var query = new Query();
 			model.MapTo(query);
-			this._queryRepository.Add(query);
+			this._queryRepository.Save(query);
 
 			this.ClearCacheInQueryApi(query);
 
@@ -112,7 +112,7 @@
 
 			model.MapTo(query);
 
-			this._queryRepository.Update(query);
+			this._queryRepository.Save(query);
 
 			this.ClearCacheInQueryApi(query);
 		

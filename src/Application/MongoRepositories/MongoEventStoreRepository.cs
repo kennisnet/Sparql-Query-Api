@@ -1,13 +1,14 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories
 {
   using System.Linq;
 
   using MongoDB.Bson;
+  using MongoDB.Driver.Builders;
 
-  using Trezorix.Sparql.Api.Core.EventSourcing;
   using MongoRepository;
 
-  using Query = MongoDB.Driver.Builders.Query;
+  using Trezorix.Sparql.Api.Core.EventSourcing;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
   public class MongoEventStoreRepository: MongoRepository<EventStore>, IEventStoreRepository
   {

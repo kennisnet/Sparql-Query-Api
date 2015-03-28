@@ -5,6 +5,7 @@
 	using MongoDB.Bson;
 	using MongoDB.Bson.Serialization;
 
+	using Trezorix.Sparql.Api.Application.MongoRepositories;
 	using Trezorix.Sparql.Api.Core.Accounts;
 	using Trezorix.Sparql.Api.Core.EventSourcing;
 	using Trezorix.Sparql.Api.Core.Repositories;
@@ -28,8 +29,14 @@
           fromKey: "account");
       
 			builder.RegisterType<MongoQueryRepository>()
-							.As<IQueryRepository>()
-							.InstancePerRequest();
+							//.As<IQueryRepository>()
+              .Named<IQueryRepository>("query")
+              .InstancePerRequest();
+
+      builder.RegisterDecorator<IQueryRepository>(
+          (c, inner) => new MongoQueryRepositoryWithEventStore(inner, new MongoEventStoreRepository()),
+          fromKey: "query");
+      
 
 			builder.RegisterType<MongoQueryLogRepository>()
 							.As<IQueryLogRepository>()

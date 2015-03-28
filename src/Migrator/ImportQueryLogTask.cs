@@ -7,6 +7,7 @@
 	using Raven.Client;
 	using Raven.Client.Document;
 
+	using Trezorix.Sparql.Api.Application.MongoRepositories;
 	using Trezorix.Sparql.Api.Core.Repositories;
 
 	public class ImportQueryLogTask 
@@ -57,7 +58,14 @@
 					foreach (var queryLogItem in items) 
 					{
 						queryLogItem.Id = null;
-						var newItem = new Trezorix.Sparql.Api.Core.Queries.QueryLogItem 
+            
+            // skip log items from monitoring server 
+            if (queryLogItem.RemoteIp == "") 
+            {
+              continue;
+            }
+						
+            var newItem = new Trezorix.Sparql.Api.Core.Queries.QueryLogItem 
 						{
 							Name = queryLogItem.Name,
 							AccountId = queryLogItem.AccountId,

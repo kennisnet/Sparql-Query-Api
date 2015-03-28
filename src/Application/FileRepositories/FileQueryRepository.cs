@@ -1,35 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
-using Trezorix.Sparql.Api.Core.Queries;
-
-namespace Trezorix.Sparql.Api.Core.Repositories
+﻿namespace Trezorix.Sparql.Api.Application.FileRepositories
 {
-	public class FileQueryRepository: IQueryRepository
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+
+  using Newtonsoft.Json;
+
+  using Trezorix.Sparql.Api.Core.Queries;
+  using Trezorix.Sparql.Api.Core.Repositories;
+
+  public class FileQueryRepository: IQueryRepository
 	{
 		private string _repositoryPath;
 		private IList<Query> _queries; 
 
 		public FileQueryRepository(string repositoryPath)
 		{
-			_repositoryPath = repositoryPath;
-			if (!_repositoryPath.EndsWith("\\"))
+			this._repositoryPath = repositoryPath;
+			if (!this._repositoryPath.EndsWith("\\"))
 			{
-				_repositoryPath += "\\";
+				this._repositoryPath += "\\";
 			}
-			_queries = new List<Query>();
+			this._queries = new List<Query>();
 		}
 
 		private void LoadAllFromPath()
 		{
-			var files = Directory.EnumerateFiles(_repositoryPath);
+			var files = Directory.EnumerateFiles(this._repositoryPath);
 			foreach (var file in files)
 			{
 				if (file.ToLower().EndsWith(".json"))
 				{
-					_queries.Add(LoadFromFile(file));
+					this._queries.Add(this.LoadFromFile(file));
 				}
 			}
 		}
@@ -38,18 +40,18 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 		{
 			//if (_queries.Count == 0)
 			{
-				LoadAllFromPath();
+				this.LoadAllFromPath();
 			}
-			return _queries;
+			return this._queries;
 		}
 
 		public void Delete(Query query)
 		{
-			string filename = FilenameFromQueryName(query.Id);
+			string filename = this.FilenameFromQueryName(query.Id);
 
-			if (_queries.Any(q => q.Id == query.Id))
+			if (this._queries.Any(q => q.Id == query.Id))
 			{
-				_queries.Remove(query);
+				this._queries.Remove(query);
 			}
 
 			File.Delete(filename);
@@ -61,25 +63,25 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		public Query GetByAlias(string alias)
 		{
-			var query = _queries.FirstOrDefault(q => q.Id == alias);
+			var query = this._queries.FirstOrDefault(q => q.Id == alias);
 
 			//if (query == null)
 			{
-				string filename = FilenameFromQueryName(alias);
+				string filename = this.FilenameFromQueryName(alias);
 
 				if (!File.Exists(filename))
 				{
 					return null;
 				}
 
-				query = LoadFromFile(filename);
+				query = this.LoadFromFile(filename);
 			}
 
 			return query;
 		}
 
     public Query GetById(string id) {
-      return All().SingleOrDefault(a => a.Id == id);
+      return this.All().SingleOrDefault(a => a.Id == id);
     }
     
     private Query LoadFromFile(string filename)
@@ -127,29 +129,33 @@ namespace Trezorix.Sparql.Api.Core.Repositories
           query.SparqlQuery,
         };
 
-      string json = JsonConvert.SerializeObject(item, Formatting.Indented);
-      File.WriteAllText(FilenameFromQueryName(query.Id), json);
+      this.SaveToFile(query.Id, item);
       return query;
     }
-    
-    public void Save(string name, Query query)
+
+    public Query Save(Query query) 
+    {
+      return this.Update(query);
+    }
+
+    private void SaveToFile(string name, Query query)
 		{
 			string json = JsonConvert.SerializeObject(query, Formatting.Indented);
-			File.WriteAllText(FilenameFromQueryName(name), json);
+			File.WriteAllText(this.FilenameFromQueryName(name), json);
 		}
 		
 		private string FilenameFromQueryName(string name)
 		{
-			string filename = _repositoryPath + name + ".json";
+			string filename = this._repositoryPath + name + ".json";
 			return filename;
 		}
 
 		public void FixAll()
 		{
-			LoadAllFromPath();
-			foreach (var query in _queries)
+			this.LoadAllFromPath();
+			foreach (var query in this._queries)
 			{
-				File.WriteAllText( _repositoryPath + query.Id + ".txt", query.SparqlQuery);
+				File.WriteAllText( this._repositoryPath + query.Id + ".txt", query.SparqlQuery);
 			}
 		}
 

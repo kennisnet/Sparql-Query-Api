@@ -1,5 +1,4 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories {
-  using System;
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories {
   using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
   using System.Linq;
@@ -9,6 +8,7 @@
   using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]

@@ -1,12 +1,13 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories {
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories {
   using System;
   using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
-  
+
   using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.EventSourcing;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
@@ -76,8 +77,8 @@
         Payload = account
       };
 
+      this.eventStoreRepository.Add(eventStore);
       this.accountRepository.Delete(account);
-      this.eventStoreRepository.Add(eventStore);      
     }
   }
 }
