@@ -13,6 +13,7 @@ namespace Trezorix.Sparql.Api.Core.Queries
 			Notes = new List<Note>();
 			ApiKeys = new List<string>();
 			Parameters = new List<QueryParameter>();
+		  Authorization = new List<AuthorizationSettings>();
 		}
 		private string label;
 

@@ -18,6 +18,30 @@ namespace Trezorix.Sparql.Api.Core.Accounts
 		public string Password { get; set; }
 		public string ApiKey { get; set; }
 
+    public Account() {
+      this.Roles = new List<string>();
+    }
+
+    public bool IsEditor {
+      get {
+        return (this.Roles != null) && this.Roles.Any(x => x.ToLower() == "editor" || x.ToLower() == "administrator");
+      }
+      set {
+        if (Roles.All(x => x.ToLower() != "administrator")) {
+          this.SetRole("editor", value);
+        }
+      }
+    }
+
+    public bool IsAdministrator {
+      get {
+        return (this.Roles != null) && Roles.Any(x => x.ToLower() == "administrator");
+      }
+      set {
+        this.SetRole("administrator", value);
+      }
+    }
+
     public virtual string ComputeSaltedHash(string password)
 		{
 			return SHA512(password, ReverseString(UserName.ToLower()));
@@ -50,8 +74,25 @@ namespace Trezorix.Sparql.Api.Core.Accounts
 
 			return sbinary;
 		}
-	
-		/// <summary>
+
+    private void SetRole(string role, bool value) {
+      if (this.Roles == null) {
+        this.Roles = new List<string>();
+      }
+      
+      if (value) {
+        if (this.Roles.All(x => x.ToLower() != role)) {
+          this.Roles = this.Roles.Concat(new[] { role });
+        }
+      }
+      else {
+        if (this.Roles.Any(x => x.ToLower() == role)) {
+          this.Roles = this.Roles.Where(r => r != role);
+        }
+      }
+    }
+
+    /// <summary>
 		/// Receives string and returns the string with its letters reversed.
 		/// </summary>
 		internal static string ReverseString(string s)
