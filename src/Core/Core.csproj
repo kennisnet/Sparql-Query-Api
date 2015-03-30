@@ -62,23 +62,23 @@
   <ItemGroup>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Configuration\ApiConfiguration.cs" />
+    <Compile Include="EventSourcing\Events.cs" />
+    <Compile Include="EventSourcing\EventStore.cs" />
     <Compile Include="Helpers\WebClientWithTimeout.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="IAccountIdResolver.cs" />
     <Compile Include="ObjectIdExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\Note.cs" />
     <Compile Include="Queries\Query.cs" />
     <Compile Include="Queries\QueryLogItem.cs" />
     <Compile Include="Queries\QueryParameter.cs" />
-    <Compile Include="Repositories\FileAccountRepository.cs" />
+    <Compile Include="Queries\QueryStatistics.cs" />
     <Compile Include="Repositories\IAccountRepository.cs" />
+    <Compile Include="Repositories\IEventStoreRepository.cs" />
     <Compile Include="Repositories\IQueryLogRepository.cs" />
     <Compile Include="Repositories\IQueryRepository.cs" />
-    <Compile Include="Repositories\FileQueryRepository.cs" />
-    <Compile Include="Repositories\MongoAccountRepository.cs" />
-    <Compile Include="Repositories\MongoQueryLogRepository.cs" />
-    <Compile Include="Repositories\MongoQueryRepository.cs" />
     <Compile Include="Repositories\XsltRepository.cs" />
     <Compile Include="Sparql\SparqlEndpoint.cs" />
     <Compile Include="Sparql\ParameterizedSparqlQuery.cs" />

@@ -1,20 +1,21 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
 
-	using MongoDB.Bson;
-	using MongoDB.Bson.Serialization;
-	using MongoDB.Driver;
-	using MongoDB.Driver.Builders;
+  using MongoDB.Bson;
+  using MongoDB.Bson.Serialization;
+  using MongoDB.Driver;
+  using MongoDB.Driver.Builders;
 
-	using MongoRepository;
+  using MongoRepository;
 
-	using Trezorix.Sparql.Api.Core.Queries;
+  using Trezorix.Sparql.Api.Core.Queries;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
-	using Query = MongoDB.Driver.Builders.Query;
-	
-	public class MongoQueryLogRepository : MongoRepository<QueryLogItem>, IQueryLogRepository {
+  using Query = MongoDB.Driver.Builders.Query;
+
+  public class MongoQueryLogRepository : MongoRepository<QueryLogItem>, IQueryLogRepository {
 
 		public MongoQueryLogRepository() {
 			this.CreateIndexesIfDoNotExist();
@@ -128,11 +129,4 @@
 		}
 
 	}
-
-	public class QueryStatistics
-	{
-		public string QueryName { get; set; }
-
-		public DateTime First { get; set; }
-	}		
 }

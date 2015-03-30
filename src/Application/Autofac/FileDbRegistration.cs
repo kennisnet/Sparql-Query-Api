@@ -2,6 +2,8 @@
 {
 	using global::Autofac;
 
+	using Trezorix.Sparql.Api.Application.FileRepositories;
+	using Trezorix.Sparql.Api.Application.MongoRepositories;
 	using Trezorix.Sparql.Api.Core.Configuration;
 	using Trezorix.Sparql.Api.Core.Repositories;
 

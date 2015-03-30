@@ -3,9 +3,10 @@ using CommandLine;
 
 namespace Migrator
 {
-	using Trezorix.Sparql.Api.Core.Repositories;
+  using Trezorix.Sparql.Api.Application.FileRepositories;
+  using Trezorix.Sparql.Api.Application.MongoRepositories;
 
-	class Program 
+  class Program 
 	{
 
 		static void Main(string[] args) 
@@ -43,14 +44,14 @@ namespace Migrator
 		private static void ImportFileAccountRepository(string path)
 		{
 			var fileAccountRepository = new FileAccountRepository(path);
-
+		  
 			var mongoAccountRepository = new MongoAccountRepository();
 			mongoAccountRepository.DeleteAll();
 
 			foreach (var account in fileAccountRepository.All())
 			{
 				account.Id = null;
-				mongoAccountRepository.Add(account);
+				mongoAccountRepository.Save(account);
 			}
 
 			Console.WriteLine("Account repository was imported");

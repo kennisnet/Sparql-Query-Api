@@ -1,5 +1,4 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories {
-  using System;
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories {
   using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
   using System.Linq;
@@ -9,6 +8,7 @@
   using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
+  using Trezorix.Sparql.Api.Core.Repositories;
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
@@ -30,13 +30,20 @@
       return this.AsQueryable().SingleOrDefault(a => a.UserName == userName);
     }
 
-    public void Save(string name, Account account) {
-      if (account.Id == null) {
-        this.Add(account);
+    public Account Save(Account account) {
+      Account accountResult;
+      var newAccount = account.Id == null;
+
+      if (newAccount)
+      {
+        accountResult = this.Add(account);
       }
-      else {
-        this.Update(account);
+      else
+      {
+        accountResult = this.Update(account);        
       }
+
+      return accountResult;
     }
 
     public IEnumerable<Account> All() {

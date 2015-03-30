@@ -6,7 +6,9 @@ using Trezorix.Sparql.Api.QueryApi.Filters;
 
 namespace Trezorix.Sparql.Api.QueryApi.Authorizer
 {
-	public class ApiKeyAuthorizer : IApiKeyAuthorizer
+  using Trezorix.Sparql.Api.Application.MongoRepositories;
+
+  public class ApiKeyAuthorizer : IApiKeyAuthorizer
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 

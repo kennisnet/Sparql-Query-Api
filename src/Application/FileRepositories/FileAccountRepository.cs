@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
-using Trezorix.Sparql.Api.Core.Accounts;
-
-namespace Trezorix.Sparql.Api.Core.Repositories
+﻿namespace Trezorix.Sparql.Api.Application.FileRepositories
 {
-	public class FileAccountRepository: IAccountRepository 
+  using System;
+  using System.Collections.Generic;
+  using System.IO;
+  using System.Linq;
+
+  using Newtonsoft.Json;
+
+  using Trezorix.Sparql.Api.Core.Accounts;
+  using Trezorix.Sparql.Api.Core.Repositories;
+
+  public class FileAccountRepository: IAccountRepository 
   {
 	  private bool _loaded;
     private string _repositoryPath;
@@ -15,36 +18,36 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		public FileAccountRepository(string repositoryPath)
 		{
-			_repositoryPath = repositoryPath;
-			if (!_repositoryPath.EndsWith("\\"))
+			this._repositoryPath = repositoryPath;
+			if (!this._repositoryPath.EndsWith("\\"))
 			{
-				_repositoryPath += "\\";
+				this._repositoryPath += "\\";
 			}
-			_accounts = new List<Account>();
+			this._accounts = new List<Account>();
 
 		}
 
 		private void LoadAllFromPath() 
     {
-		  if (_loaded) return;
-      var files = Directory.EnumerateFiles(_repositoryPath);
+		  if (this._loaded) return;
+      var files = Directory.EnumerateFiles(this._repositoryPath);
 			foreach (var file in files)
 			{
 				if (file.ToLower().EndsWith(".json"))
 				{
-					_accounts.Add(LoadFromFile(file));
+					this._accounts.Add(this.LoadFromFile(file));
 				}
 			}
-		  _loaded = true;
-		}
+		  this._loaded = true;
+		}	  
 
-		public void Delete(Account account)
+	  public void Delete(Account account)
 		{
-			string filename = FilenameFromAccountName(account.ApiKey.ToString());
+			string filename = this.FilenameFromAccountName(account.ApiKey.ToString());
 
-			if (_accounts.Any(q => q.ApiKey == account.ApiKey))
+			if (this._accounts.Any(q => q.ApiKey == account.ApiKey))
 			{
-				_accounts.Remove(account);
+				this._accounts.Remove(account);
 			}
 
 			File.Delete(filename);
@@ -55,19 +58,19 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 		{
 			//if (_accounts.Count == 0)
 			{
-				LoadAllFromPath();
+				this.LoadAllFromPath();
 			}
-			return _accounts;
+			return this._accounts;
 		}
 
 		public Account Get(string id)
 		{
-			var account = _accounts.FirstOrDefault(q => q.ApiKey.ToString() == id);
+			var account = this._accounts.FirstOrDefault(q => q.ApiKey.ToString() == id);
 
 			//if (account == null)
 			{
-				string filename = FilenameFromAccountName(id);
-				account = LoadFromFile(filename);
+				string filename = this.FilenameFromAccountName(id);
+				account = this.LoadFromFile(filename);
 			}
 
 			return account;
@@ -75,7 +78,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 	  public Account GetById(string id) 
     {
-	    return All().SingleOrDefault(a => a.Id == id);
+	    return this.All().SingleOrDefault(a => a.Id == id);
 	  }
 
 		public Account GetByApiKey(string apiKey) {
@@ -88,7 +91,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 
 		public Account GetByUserName(string userName)
 		{
-			return All().SingleOrDefault(a => a.UserName == userName);
+			return this.All().SingleOrDefault(a => a.UserName == userName);
 		}
 
 		private Account LoadFromFile(string filename)
@@ -112,24 +115,30 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 			return null;
 		}
 
-    public Account Add(Account account) 
+    public Account Save(Account account) {
+      var accountResult = account.Id == null ? this.Add(account) : this.Update(account);
+      return accountResult;
+    }
+
+	  private Account Add(Account account) 
     {
       return this.Update(account);
     }
 
-    public Account Update(Account account) {
+    private Account Update(Account account) {
+
+
       account.Id = account.ApiKey;
-      dynamic item =
-        new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
+      dynamic item = new { account.Id, account.ApiKey, account.UserName, account.FullName, account.Password, account.Roles };
       
       string json = JsonConvert.SerializeObject(item, Formatting.Indented);
-      File.WriteAllText(FilenameFromAccountName(account.ApiKey.ToString()), json);
+      File.WriteAllText(this.FilenameFromAccountName(account.ApiKey), json);
       return account;
     }
 
 		private string FilenameFromAccountName(string name)
 		{
-			string filename = _repositoryPath + name + ".json";
+			string filename = this._repositoryPath + name + ".json";
 			return filename;
 		}
 

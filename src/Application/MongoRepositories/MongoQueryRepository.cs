@@ -1,13 +1,14 @@
-﻿namespace Trezorix.Sparql.Api.Core.Repositories
+﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+  using System.Collections.Generic;
+  using System.Linq;
 
-	using MongoRepository;
-	using Trezorix.Sparql.Api.Core.Queries;
+  using MongoRepository;
 
-	public class MongoQueryRepository: MongoRepository<Query>, IQueryRepository 
+  using Trezorix.Sparql.Api.Core.Queries;
+  using Trezorix.Sparql.Api.Core.Repositories;
+
+  public class MongoQueryRepository: MongoRepository<Query>, IQueryRepository 
 	{
 		public Query Get(string name)
 		{
@@ -22,7 +23,7 @@
 			return this.AsEnumerable();
 		}
 
-		public void Save(string name, Query query)
+		public Query Save(Query query)
 		{
 			if (query.Id == null)
 			{
@@ -32,6 +33,7 @@
 			{
 				this.Update(query);
 			}
+		  return query;
 		}
 	}
 }

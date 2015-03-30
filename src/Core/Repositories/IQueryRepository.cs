@@ -8,8 +8,7 @@ namespace Trezorix.Sparql.Api.Core.Repositories
 		Query Get(string name);
 		Query GetByAlias(string alias);
 		Query GetById(string id);
-		Query Add(Query query);
-		Query Update(Query query);
+    Query Save(Query query);
 		IEnumerable<Query> All();
 		void Delete(Query query);
 	}
