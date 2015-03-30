@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+  using System.Linq;
 
 	public class AccountModel 
 	{
@@ -17,8 +18,10 @@
 
 		public IEnumerable<string> Roles { get; set; }
 
-		public string Password { get; set; }
-
 		public string ApiKey { get; set; }
+
+    public bool IsEditor { get {
+      return Roles.Any(x => x.ToLower() == "editor" || x.ToLower() == "administrator");
+    }}
 	}
 }

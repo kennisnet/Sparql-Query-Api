@@ -6,6 +6,8 @@ namespace Trezorix.Sparql.Api.Core.Queries {
 
     public DateTime ModificationDate { get; set; }
 
+    // TODO: AccountId objectId toevoegen
+
     public string Content { get; set; }
   }
 }

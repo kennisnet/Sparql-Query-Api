@@ -104,6 +104,10 @@
 				return NotFound();
 			}
 
+      // ToDo: Daniel: 
+      //if not Account hasright edit or admin  on query then
+      //  Unauthorized
+
 			if (model.Id != id)
 			{
 				this._queryRepository.Delete(query);

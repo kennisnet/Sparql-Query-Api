@@ -5,7 +5,9 @@ namespace Trezorix.Sparql.Api.Core.Queries
 {
 	using MongoRepository;
 
-	public class Query : Entity
+	using Trezorix.Sparql.Api.Core.Authorization;
+
+  public class Query : Entity
 	{
 		public Query() {
 			Notes = new List<Note>();
@@ -28,6 +30,7 @@ namespace Trezorix.Sparql.Api.Core.Queries
 		public bool AllowAnonymous { get; set; }
 
 		public IList<Note> Notes { get; set; }
+    public IList<AuthorizationSettings> Authorization { get; set; }
 		public IList<string> ApiKeys { get; set; }
 		public IList<QueryParameter> Parameters { get; set; }
 	}
