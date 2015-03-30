@@ -7,6 +7,7 @@
 
   using MongoRepository;
 
+  using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.EventSourcing;
   using Trezorix.Sparql.Api.Core.Repositories;
 

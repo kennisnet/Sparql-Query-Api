@@ -1,9 +1,6 @@
 ﻿namespace Trezorix.Sparql.Api.Application.MongoRepositories {
   using System;
-  using System.Collections.Generic;
   using System.Diagnostics.CodeAnalysis;
-
-  using MongoRepository;
 
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.EventSourcing;
@@ -11,36 +8,20 @@
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
-  public class MongoAccountRepositoryWithEventStore : MongoRepository<Account>, IAccountRepository {
-    private readonly IAccountRepository accountRepository;
-
+  public class MongoAccountRepositoryWithEventStore : MongoAccountRepositoryDecoratorBase
+  {
     private readonly IEventStoreRepository eventStoreRepository;
 
-    public MongoAccountRepositoryWithEventStore(IAccountRepository accountRepository, IEventStoreRepository eventStoreRepository) {
-      this.accountRepository = accountRepository;
+    public MongoAccountRepositoryWithEventStore(IAccountRepository accountRepository, IEventStoreRepository eventStoreRepository)
+      : base(accountRepository)
+    {
       this.eventStoreRepository = eventStoreRepository;
     }
 
-    public Account Get(string id) {
-      return this.accountRepository.Get(id);
-    }
-
-	  public Account GetByApiKey(string apiKey) {
-      return this.accountRepository.GetByApiKey(apiKey);
-	  }
-
-    public IEnumerable<Account> GetByApiKeys(IEnumerable<string> apiKeys) {
-      return this.accountRepository.GetByApiKeys(apiKeys);
-    }
-
-    public Account GetByUserName(string userName) {
-      return this.accountRepository.GetByUserName(userName);
-    }
-
-    public Account Save(Account account) {
+    public override Account Save(Account account) {
       var newAccount = account.Id == null;
 
-      Account accountResult = this.accountRepository.Save(account);
+      Account accountResult = this.AccountRepository.Save(account);
 
       var eventStore = new EventStore()
       {
@@ -61,10 +42,6 @@
       return accountResult;
     }
 
-    public IEnumerable<Account> All() {
-      return this.accountRepository.All();
-    }
-
     public override void Delete(Account account) {
 
       var eventStore = new EventStore()
@@ -75,7 +52,7 @@
       };
 
       this.eventStoreRepository.Add(eventStore);
-      this.accountRepository.Delete(account);
+      this.AccountRepository.Delete(account);
     }
   }
 }

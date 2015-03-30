@@ -1,5 +1,5 @@
 ﻿namespace Trezorix.Sparql.Api.Application.Accounts {
-  using Trezorix.Sparql.Api.Application.MongoRepositories;
+  using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Repositories;
 
   public class AccountIdResolver : IAccountIdResolver {

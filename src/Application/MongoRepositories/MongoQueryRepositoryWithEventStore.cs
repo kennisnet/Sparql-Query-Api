@@ -11,32 +11,20 @@
 
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", 
     Justification = "Reviewed. Suppression is OK here.")]
-  public class MongoQueryRepositoryWithEventStore : MongoRepository<Query>, IQueryRepository {
-    private readonly IQueryRepository queryRepository;
-
+  public class MongoQueryRepositoryWithEventStore : MongoQueryRepositoryDecoratorBase
+  {
     private readonly IEventStoreRepository eventStoreRepository;
 
-    public MongoQueryRepositoryWithEventStore(IQueryRepository queryRepository, IEventStoreRepository eventStoreRepository) {
-      this.queryRepository = queryRepository;
+    public MongoQueryRepositoryWithEventStore(IQueryRepository queryRepository, IEventStoreRepository eventStoreRepository)
+      : base(queryRepository)
+    {
       this.eventStoreRepository = eventStoreRepository;
     }
 
-    public Query Get(string id) {
-      return this.queryRepository.Get(id);
-    }
-
-    public Query GetByAlias(string alias) {
-      return this.queryRepository.GetByAlias(alias);
-    }
-
-    public IEnumerable<Query> All() {
-      return this.queryRepository.All();
-    }
-
-    public Query Save(Query query) {
+    public override Query Save(Query query) {
       var isNewQuery = query.Id == null;
 
-      var queryResult = this.queryRepository.Save(query);
+      var queryResult = this.QueryRepository.Save(query);
 
       var eventStore = new EventStore()
       {
@@ -67,7 +55,7 @@
       };
 
       this.eventStoreRepository.Add(eventStore);
-      this.queryRepository.Delete(query);
+      this.QueryRepository.Delete(query);
     }
   }
 }

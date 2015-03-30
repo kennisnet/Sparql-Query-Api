@@ -119,6 +119,8 @@
     <Compile Include="FileRepositories\FileQueryRepository.cs" />
     <Compile Include="Filters\ApiKeyAuthAttribute.cs" />
     <Compile Include="Filters\IApiKeyAuthorizer.cs" />
+    <Compile Include="MongoRepositories\MongoAccountRepositoryDecoratorBase.cs" />
+    <Compile Include="MongoRepositories\MongoQueryRepositoryDecoratorBase.cs" />
     <Compile Include="MongoRepositories\MongoQueryRepositoryWithEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MongoRepositories\MongoAccountRepository.cs" />

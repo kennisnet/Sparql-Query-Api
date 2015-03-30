@@ -7,6 +7,7 @@
 
 	using Trezorix.Sparql.Api.Application.Accounts;
 	using Trezorix.Sparql.Api.Application.MongoRepositories;
+	using Trezorix.Sparql.Api.Core;
 	using Trezorix.Sparql.Api.Core.Accounts;
 	using Trezorix.Sparql.Api.Core.EventSourcing;
 	using Trezorix.Sparql.Api.Core.Repositories;
