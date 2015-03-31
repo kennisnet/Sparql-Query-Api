@@ -15,6 +15,16 @@ QueryEditor.controller('QueryController', [
 
     var queryId = $routeParams.id;
 		
+    var emptyNote = function() {
+	    return {
+		    AccountId: $scope.user.id,
+		    CreationDate: new Date(),
+		    ModificationDate: new Date(),
+		    Content: ""
+	    };
+    }
+
+    $scope.newNote = emptyNote();
 
     $http.get(config.adminApiUrl + 'Query/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
     	query = response.data;	    
@@ -33,16 +43,40 @@ QueryEditor.controller('QueryController', [
 
     $scope.addParameter = function(index) {
       $scope.query.Parameters.splice(index + 1, 0, { Name: 'new', Description: '' });
-    };
+    };		
 
-    $scope.addNote = function(index) {
+    $scope.addNote = function(note) {
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }
-      $scope.query.Notes.splice(index + 1, 0, { CreationDate: new Date(), ModificationDate: new Date(), Content: "" });
+      $scope.query.Notes.splice(0, 0, note);
+      $scope.newNote = emptyNote();
+
+	    var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+    	$http.post(url, note)
+        .success(function (response) {
+					// console.log('note added');
+				})
+        .error(function () {
+        	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+        });
+
     };
 
-    $scope.deleteNote = function(index) {
+    $scope.updateNote = function(note) {
+    	var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+	    note.ModificationDate = new Date();
+    	$http.put(url, note)
+        .success(function (response) {
+					// console.log('note updated');
+				})
+        .error(function () {
+        	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+        });
+
+    };
+
+    $scope.deleteNote = function(index) { // TODO: implement this
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }

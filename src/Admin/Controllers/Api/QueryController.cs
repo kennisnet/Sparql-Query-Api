@@ -130,7 +130,50 @@
 			return Ok(); 
 		}
 
-	  [HttpDelete]
+    [HttpPost]
+    [Route("{id}/Note")]
+    public dynamic PostNote(string id, NoteModel noteModel)
+    {
+      var query = this._queryRepository.GetById(id);
+      if (query == null)
+      {
+        return NotFound();
+      }
+
+      var note = Mapper.Map<Note>(noteModel);
+      query.Notes.Insert(0, note);
+
+      this._queryRepository.Save(query);
+
+      return Ok();
+    }
+
+    [HttpPut]
+    [Route("{id}/Note")]
+    public dynamic PutNote(string id, NoteModel noteModel)
+    {
+      var query = this._queryRepository.GetById(id);
+      if (query == null)
+      {
+        return NotFound();
+      }
+
+      var note =
+        query.Notes.FirstOrDefault(n => n.CreationDate == noteModel.CreationDate && n.AccountId == noteModel.AccountId);
+
+      if (note == null)
+      {
+        return NotFound();
+      }
+
+      Mapper.Map(noteModel, note);
+
+      this._queryRepository.Save(query);
+
+      return Ok();
+    }
+
+    [HttpDelete]
 		[Route("{id}")]
 		public dynamic Delete(string id)
 		{
