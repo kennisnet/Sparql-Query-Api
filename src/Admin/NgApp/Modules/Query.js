@@ -5,6 +5,8 @@ QueryEditor.controller('QueryController', [
     var original = null;
     var query = null;
 
+    $scope.user = config.user;
+
     $scope.newGroup = '';
 
     $scope.isNewquery = function(value) {
@@ -12,9 +14,10 @@ QueryEditor.controller('QueryController', [
     };
 
     var queryId = $routeParams.id;
+		
 
     $http.get(config.adminApiUrl + 'Query/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
-      query = response.data;
+    	query = response.data;	    
       original = query;
       $scope.query = angular.copy(query);
     });
@@ -156,8 +159,15 @@ QueryEditor.controller('QueryController', [
       $scope.setSparqlEditorParent();
     };
 
+    $scope.codeMirrorOptions = {
+    	lineNumbers: true,
+    	lineWrapping: true,
+    	mode: 'sparql',
+    	readOnly: $scope.user.isEditor ? '' : 'nocursor'
+    }
+
     $scope.setSparqlEditorParent = function() {
-      var element = $('#sparql-editor').detach();
+    	var element = $('#sparql-editor').detach();
       $('#sparql-editor-parent').append(element);
       $scope.codeMirrorRefresh++;
       $timeout(function() { $scope.codeMirrorRefresh++; }, 100);

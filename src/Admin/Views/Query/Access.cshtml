@@ -13,10 +13,10 @@
 
 		<div class="col-lg-12" data-ng-repeat="access in query.Access">
 			<div class="col-lg-1">
-				<input type="checkbox" value="{{access.Id}}" data-ng-model="access.CanReadSelected" data-ng-disabled="query.AllowAnonymous" />
+				<input type="checkbox" value="{{access.Id}}" data-ng-model="access.CanReadSelected" data-ng-disabled="query.AllowAnonymous || !user.isEditor" />
 			</div>
 			<div class="col-lg-1">
-				<input type="checkbox" value="{{access.Id}}" data-ng-model="access.CanEditSelected" data-ng-disabled="query.AllowAnonymous" data-ng-show="access.Account.IsEditor" />
+				<input type="checkbox" value="{{access.Id}}" data-ng-model="access.CanEditSelected" data-ng-disabled="!user.isEditor" data-ng-show="access.Account.IsEditor" />
 			</div>
 			<div class="col-lg-10">
 				<span class="space-before">{{access.Name}}</span>
@@ -24,7 +24,7 @@
 		</div>
 		
 		<div class="col-lg-12">
-			<div class="col-lg-1"><input type="checkbox" value="anonymous" data-ng-model="query.AllowAnonymous" /></div>
+			<div class="col-lg-1"><input type="checkbox" value="anonymous" data-ng-model="query.AllowAnonymous" data-ng-disabled="!user.isEditor" /></div>
 			<div class="col-lg-1">&nbsp;</div>
 			<div class="col-lg-10"><span class="space-before">Anonieme toegang</span></div>
 		</div>

@@ -6,8 +6,7 @@
 			<label>Endpoint</label>
 		</div>	
 		<div class="col-lg-12">
-			<select class="form-control" data-ng-model="query.Endpoint" data-ng-options="item as item for item in query.Endpoints">
-			</select>
+			<select class="form-control" data-ng-model="query.Endpoint" data-ng-options="item as item for item in query.Endpoints" data-ng-disabled="!user.isEditor"></select>
 		</div>
 		@*<div class="col-lg-12 space-above">
 			<textarea rows="20" class="form-control sparql-editor" data-ng-model="xquery.SparqlQuery" wrap="off" spellcheck='false' ></textarea>
