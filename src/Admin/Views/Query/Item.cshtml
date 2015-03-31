@@ -28,7 +28,7 @@
 			@{ Html.RenderPartial("PreviewQuery"); }  
 			@{ Html.RenderPartial("Preview"); }  
 			<div style="display: none;">
-				<div id="sparql-editor" ui-codemirror="{ lineNumbers: true, lineWrapping : true, mode: 'sparql' }" ui-refresh="codeMirrorRefresh" data-ng-model="query.SparqlQuery"></div>
+				<div id="sparql-editor" ui-codemirror="codeMirrorOptions" ui-refresh="codeMirrorRefresh" data-ng-model="query.SparqlQuery"></div>
 			</div>
 		</ng-form>
 	</div>

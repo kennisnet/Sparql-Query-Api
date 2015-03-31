@@ -5,7 +5,7 @@
 			<label>Selecteer de query's waar gebruiker '{{account.FullName}}' toegang toe heeft.</label>
 			<ul class="list-unstyled" style="margin-top: 8px;">
 				<li data-ng-repeat="queryAccess in account.QueryAccess">
-					<input type="checkbox" value="{{queryAccess.Name}}" data-ng-model="queryAccess.Selected"  />
+					<input type="checkbox" value="{{queryAccess.Name}}" data-ng-model="queryAccess.CanReadSelected"  />
 					<span class="space-before">{{queryAccess.Name}}</span>
 				</li>
 			</ul>   

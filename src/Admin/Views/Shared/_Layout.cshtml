@@ -13,21 +13,22 @@
     <link rel="stylesheet" href="~/Static/css/content.css">
 
     <script>
-  window.configSiteRoot = '@(new Uri(Request.Url, Url.Content("~")).ToString())';
-  window.configQueryUrl = '@(ApiConfiguration.Current.QueryApiUrl)';
-  window.configApiKey = '@((ViewBag.Account != null) ? ViewBag.Account.ApiKey.ToString() : "")';
-  @if (ViewBag.Account != null) {
+	window.configSiteRoot = '@(new Uri(Request.Url, Url.Content("~")).ToString())';
+	window.configQueryUrl = '@(ApiConfiguration.Current.QueryApiUrl)';
+	window.configApiKey = '@((ViewBag.Account != null) ? ViewBag.Account.ApiKey.ToString() : "")';
+	@if (ViewBag.Account != null) {
     var account = (Account)ViewBag.Account;
     @: window.user = {
-    @:   id: '@(ViewBag.Account.Id)', 
-    @:   apiKey: '@(ViewBag.Account.ApiKey)', 
-    @:   fullName: '@(ViewBag.Account.FullName)',
-    @:   roles: [@if (account.Roles != null) { @Html.Raw(string.Join(",", account.Roles.Select(r => "'" + r + "'"))) }]
+				    @:   id: '@(ViewBag.Account.Id)',
+				    @:   apiKey: '@(ViewBag.Account.ApiKey)',
+				    @:   fullName: '@(ViewBag.Account.FullName)',
+				    @:   roles: [@if (account.Roles != null) { @Html.Raw(string.Join(",", account.Roles.Select(r => "'" + r + "'"))) }],
+						@:   isEditor: @(account.IsEditor.ToString().ToLower())
     @: };
-  }
+		  }
   else {
     @: window.user = {};
-  }
+		  }
     </script>
   </head>
 <body ng-app="QueryAdmin">
@@ -43,37 +44,37 @@
           </button>
           @*<a class="navbar-brand" href="#/home">Buurtzoeker Beheer Applicatie</a>*@
         </div>
-        <ul class="nav navbar-nav">
-          <li ng-class="{ 'active': isRoute('/home') }"><a href="#/home">Home</a></li>
-          <li ng-class="{ 'active': isRoute('/query') }"><a href="#/query">Queries</a></li>
-          <li ng-class="{ 'active': isRoute('/account') }"><a href="#/account">Accounts</a></li>
-          <li ng-class="{ 'active': isRoute('/settings') }"><a href="#/settings">Settings</a></li>
-          <li ng-class="{ 'active': isRoute('/log') }"><a href="#log">Logs</a></li>
-        </ul>
+	        <ul class="nav navbar-nav">
+						<li ng-class="{ 'active': isRoute('/home') }"><a href="#/home">Home</a></li>
+						<li ng-class="{ 'active': isRoute('/query') }"><a href="#/query">Queries</a></li>
+						<li ng-class="{ 'active': isRoute('/account') }"><a href="#/account">Accounts</a></li>
+						<li ng-class="{ 'active': isRoute('/settings') }"><a href="#/settings">Settings</a></li>
+						<li ng-class="{ 'active': isRoute('/log') }"><a href="#log">Logs</a></li>
+					</ul>
 
         <ul class="nav navbar-top-links navbar-right">
-          @{ Html.RenderPartial("~/Views/Menu/User.cshtml");}
-        </ul>
+						@{ Html.RenderPartial("~/Views/Menu/User.cshtml");}
+					</ul>
       </div>
     </nav>
     <div class="content-wrapper">
-      <bg-splitter class="content-panes" orientation="horizontal">
-        <bg-pane min-size="180" class="navbar-default sidebar" role="navigation">
-          @{ Html.RenderPartial("_Sidebar");}
-        </bg-pane>
-        <bg-pane min-size="180" id="view-wrapper">
-          @RenderBody()
-        </bg-pane>
-      </bg-splitter>
-    </div>
+				<bg-splitter class="content-panes" orientation="horizontal">
+					<bg-pane min-size="180" class="navbar-default sidebar" role="navigation">
+						@{ Html.RenderPartial("_Sidebar");}
+					</bg-pane>
+					<bg-pane min-size="180" id="view-wrapper">
+						@RenderBody()
+					</bg-pane>
+				</bg-splitter>
+			</div>
   }
   else {
     @RenderBody()
   }
-  @Scripts.Render("~/bundles/jquery")
-  @Scripts.Render("~/bundles/bootstrap-js")
-  @Scripts.Render("~/bundles/angular")
-  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"> </script>
+		@Scripts.Render("~/bundles/jquery")
+		@Scripts.Render("~/bundles/bootstrap-js")
+		@Scripts.Render("~/bundles/angular")
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"> </script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"> </script>
   <script type="text/javascript" src="http://codemirror.net/lib/codemirror.js"></script>
   <script type="text/javascript" src="http://codemirror.net/mode/sparql/sparql.js"></script>

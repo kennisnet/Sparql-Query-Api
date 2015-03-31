@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Trezorix.Sparql.Api.Core.Configuration;
 using Trezorix.Sparql.Api.Core.Queries;
@@ -7,6 +6,9 @@ using Trezorix.Sparql.Api.Core.Queries;
 namespace Trezorix.Sparql.Api.Admin.Models.Queries
 {
   using AutoMapper;
+
+  using Trezorix.Sparql.Api.Admin.Models.Accounts;
+  using Trezorix.Sparql.Api.Core.Authorization;
 
   public class ExtendedQueryModel
 	{
@@ -55,10 +57,11 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 			Access =
 				accounts.Select(
 					a => new AccessModel
-						{
-							Key = a.ApiKey.ToString(), 
+						{              
+              Account = Mapper.Map<AccountModel>(a),
 							Name = a.FullName, 
-							Selected = (query.ApiKeys != null && query.ApiKeys.Contains(a.ApiKey))
+							CanReadSelected = (query.ApiKeys != null && query.ApiKeys.Contains(a.ApiKey)),
+              CanEditSelected = (query.Authorization != null && query.Authorization.Any(aus => aus.AccountId == a.Id && aus.Operation == AuthorizationOperations.Edit))
 						});
 			Endpoints = ApiConfiguration.Current.SparqlEndpoints
 				.Select(e => e.Name);
@@ -84,7 +87,13 @@ namespace Trezorix.Sparql.Api.Admin.Models.Queries
 																ValuesQuery = p.ValuesQuery
 						                  }).ToList()
 					                  : new List<QueryParameter>();
-			query.ApiKeys = Access.Where(a => a.Selected).Select(a => a.Key).ToList();
+			query.ApiKeys = Access.Where(a => a.CanReadSelected).Select(a => a.Account.ApiKey).ToList();      
+
+		  query.Authorization = Access.Where(a => a.CanEditSelected).Select(a => new AuthorizationSettings() { 
+        AccountId = a.Account.Id,
+        Operation = a.Account.IsEditor ? AuthorizationOperations.Edit : AuthorizationOperations.Read
+      }).ToList();
+
 			query.Endpoint = Endpoint;
 			query.AllowAnonymous = AllowAnonymous;
 		}

@@ -13,8 +13,8 @@
       </div>
       <div class="col-lg-4">
         <div class="control-group pull-right">
-          <button data-ng-click="cancel()" class="btn btn-danger">@EditorStrings.Cancel</button>
-          <button data-ng-click="save()" data-ng-disabled="queryForm.$pristine || (queryForm.$dirty && queryForm.$invalid)" class="btn btn-primary">@EditorStrings.Save</button>
+					<button data-ng-click="cancel()" class="btn btn-danger" data-ng-disabled="!user.isEditor">@EditorStrings.Cancel</button>
+					<button data-ng-click="save()" data-ng-disabled="!user.isEditor || queryForm.$pristine || (queryForm.$dirty && queryForm.$invalid)" class="btn btn-primary">@EditorStrings.Save</button>
         </div>
       </div>
     </div>

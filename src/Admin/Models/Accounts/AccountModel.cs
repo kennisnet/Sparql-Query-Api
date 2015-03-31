@@ -1,6 +1,5 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 {
-	using System;
 	using System.Collections.Generic;
 
 	public class AccountModel 
@@ -17,8 +16,11 @@
 
 		public IEnumerable<string> Roles { get; set; }
 
-		public string Password { get; set; }
-
 		public string ApiKey { get; set; }
+
+    public bool IsAdministrator { get; set; }
+    
+    public bool IsEditor { get; set; }
+
 	}
 }

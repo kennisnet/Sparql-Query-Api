@@ -9,6 +9,7 @@
 	using Trezorix.Sparql.Api.Application.MongoRepositories;
 	using Trezorix.Sparql.Api.Core;
 	using Trezorix.Sparql.Api.Core.Accounts;
+	using Trezorix.Sparql.Api.Core.Authorization;
 	using Trezorix.Sparql.Api.Core.EventSourcing;
 	using Trezorix.Sparql.Api.Core.Repositories;
 
@@ -57,6 +58,13 @@
         classMap.AutoMap();
         classMap.GetMemberMap(es => es.EventName).SetRepresentation(BsonType.String);
       });
-		}
+
+      BsonClassMap.RegisterClassMap<AuthorizationSettings>(classMap => { 
+        classMap.AutoMap();
+        classMap.GetMemberMap(aus => aus.Operation).SetRepresentation(BsonType.String);
+        classMap.GetMemberMap(aus => aus.AccountId).SetRepresentation(BsonType.ObjectId);
+      });
+
+    }
   }
 }

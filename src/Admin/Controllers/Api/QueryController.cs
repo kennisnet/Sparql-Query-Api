@@ -1,18 +1,16 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Controllers.Api
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
+  using System.Collections.Generic;
+  using System.Linq;
 	using System.Net;
-	using System.Web.Http;
+  using System.Web.Http;
 
 	using AutoMapper;
 	
 	using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
 	using Trezorix.Sparql.Api.Admin.Models.Queries;
 	using Trezorix.Sparql.Api.Application.Accounts;
-	using Trezorix.Sparql.Api.Core.Accounts;
+  using Trezorix.Sparql.Api.Core.Authorization;
 	using Trezorix.Sparql.Api.Core.Configuration;
 	using Trezorix.Sparql.Api.Core.Queries;
 	using Trezorix.Sparql.Api.Core.Repositories;
@@ -35,10 +33,8 @@
 		public dynamic Get() 
 		{
 			var list = this._queryRepository.All().ToList();
-			var model = new GroupedQueryModel
-				{
-					Groups = new List<QueryGroupModel>()
-				};
+			var model = new GroupedQueryModel { Groups = new List<QueryGroupModel>() };
+
 			foreach (string group in list.Select(q => q.Group).Distinct())
 			{
 				string safeId = ((!string.IsNullOrEmpty(group)) ? group.Replace("'", "_") : "");
@@ -84,9 +80,20 @@
 			{
 				return BadRequest("Query moet een naam hebben.");
 			}
+
+		  var account = OperatingAccount.Current(_accountRepository);
+      if (!account.IsEditor) {
+        return this.Unauthorized();
+      }
+
 			var query = new Query();
 			model.MapTo(query);
-			this._queryRepository.Save(query);
+
+      query.Authorization = new List<AuthorizationSettings> {
+        new AuthorizationSettings { AccountId = account.Id, Operation = AuthorizationOperations.Edit }
+      };
+
+      this._queryRepository.Save(query);
 
 			this.ClearCacheInQueryApi(query);
 
@@ -104,7 +111,11 @@
 				return NotFound();
 			}
 
-			if (model.Id != id)
+		  if (!this.CanEdit(query)) {
+		    return this.Unauthorized();
+		  }
+
+		  if (model.Id != id)
 			{
 				this._queryRepository.Delete(query);
 				this.ClearCacheInQueryApi(query);
@@ -119,13 +130,17 @@
 			return Ok(); 
 		}
 
-		[HttpDelete]
+	  [HttpDelete]
 		[Route("{id}")]
 		public dynamic Delete(string id)
 		{
 			var query = this._queryRepository.GetByAlias(id);
 
-			this._queryRepository.Delete(query);
+      if (!this.CanEdit(query)) {
+        return this.Unauthorized();
+      }
+      
+      this._queryRepository.Delete(query);
 
 			return Ok();
 		}
@@ -174,8 +189,18 @@
 			var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
 			return data;
 		}
-    
-		private void ClearCacheInQueryApi(Query query)
+
+    private bool CanEdit(Query query) {
+      var account = OperatingAccount.Current(this._accountRepository);
+      if (
+        (query.Authorization.Any(a => a.AccountId == account.Id && a.Operation == AuthorizationOperations.Edit)
+          || account.IsAdministrator)) {
+        return true;
+      }
+      return false;
+    }
+
+    private void ClearCacheInQueryApi(Query query)
 		{
 			var webclient = new WebClient();
 			webclient.OpenRead(ApiConfiguration.Current.QueryApiUrl + "/Home/ClearCache?queryName=" + query.Alias);
