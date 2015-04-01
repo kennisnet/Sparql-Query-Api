@@ -4,6 +4,7 @@
 
 	using MongoDB.Bson;
 	using MongoDB.Bson.Serialization;
+	using MongoDB.Bson.Serialization.IdGenerators;
 
 	using Trezorix.Sparql.Api.Application.Accounts;
 	using Trezorix.Sparql.Api.Application.MongoRepositories;
@@ -11,6 +12,7 @@
 	using Trezorix.Sparql.Api.Core.Accounts;
 	using Trezorix.Sparql.Api.Core.Authorization;
 	using Trezorix.Sparql.Api.Core.EventSourcing;
+	using Trezorix.Sparql.Api.Core.Queries;
 	using Trezorix.Sparql.Api.Core.Repositories;
 
 	public class MongoDbRegistration 
@@ -65,6 +67,11 @@
         classMap.GetMemberMap(aus => aus.AccountId).SetRepresentation(BsonType.ObjectId);
       });
 
+      BsonClassMap.RegisterClassMap<Note>(classMap =>
+      {
+        classMap.AutoMap();
+        classMap.GetMemberMap(n => n.AccountId).SetRepresentation(BsonType.ObjectId);
+      });
     }
   }
 }

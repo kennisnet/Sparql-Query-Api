@@ -1,7 +1,9 @@
 ﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule']);
 
 QueryEditor.controller('QueryController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', 'userService', function ($scope, $routeParams, $location, $http, $timeout, config, userService) {
+  '$scope', '$routeParams', '$location', '$http', '$filter', '$timeout', 'config', 'userService', 'AccountService',
+		function ($scope, $routeParams, $location, $http, $filter, $timeout, config, userService, AccountService) {
+
     var original = null;
     var query = null;
 
@@ -15,6 +17,16 @@ QueryEditor.controller('QueryController', [
 
     var queryId = $routeParams.id;
 		
+    var emptyNote = function() {
+	    return {
+	    	AccountId: $scope.user.id,
+		    CreationDate: new Date(),
+		    ModificationDate: new Date(),
+		    Content: ""
+	    };
+    }
+
+    $scope.newNote = emptyNote();
 
     $http.get(config.adminApiUrl + 'Query/' + (($scope.isNewquery(queryId)) ? 'new' : queryId)).then(function (response) {
     	query = response.data;	    
@@ -35,19 +47,58 @@ QueryEditor.controller('QueryController', [
       $scope.query.Parameters.splice(index + 1, 0, { Name: 'new', Description: '' });
     };
 
-    $scope.addNote = function(index) {
+
+		$scope.getNoteAccountName = function(accountId) {
+			var account = AccountService.getAccountById(accountId);
+			return account == null ? '' : account.FullName;
+		};
+
+    $scope.addNote = function(note) {
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }
-      $scope.query.Notes.splice(index + 1, 0, { CreationDate: new Date(), ModificationDate: new Date(), Content: "" });
+      $scope.newNote = emptyNote();
+
+	    var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+    	$http.post(url, note)
+        .success(function (response) {
+          $scope.query.Notes.push(response);
+				})
+        .error(function () {
+        	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+        });
     };
 
-    $scope.deleteNote = function(index) {
+    $scope.updateNote = function(note) {
+    	var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+	    note.ModificationDate = new Date();
+    	$http.put(url, note)
+        .success(function (response) {
+	        note.editMode = false;
+	      })
+        .error(function () {
+        	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+        });
+
+    };
+
+    $scope.deleteNote = function(note) {
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }
-      $scope.query.Notes.splice(index, 1);
-      $scope.queryForm.$setDirty();
+      if (window.confirm("Weet u zeker dat u notitie wilt verwijderen?")) {
+        var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+        $http.delete(url + '?accountId=' + note.AccountId + '&creationDate=' + note.CreationDate)
+          .success(function(response) {
+            var index = $scope.query.Notes.indexOf(note);
+            $scope.query.Notes.splice(index, 1);
+          })
+          .error(function() {
+            alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+          });
+
+        $scope.queryForm.$setDirty();
+      }
     };
 
     $scope.save = function () {
@@ -146,7 +197,7 @@ QueryEditor.controller('QueryController', [
       $scope.activeTab[tab] = true;
 
       // store current tab in user's profile
-      userService.activeQueryTab(tab);
+      $scope.activeQueryTab = userService.activeQueryTab(tab);
 
       // activate the sparql code mirror editor 
       if (tab == 'sparql') {

@@ -1,5 +1,6 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Controllers.Api
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
 	using System.Net;
@@ -130,23 +131,86 @@
 			return Ok(); 
 		}
 
-	  [HttpDelete]
-		[Route("{id}")]
-		public dynamic Delete(string id)
-		{
-			var query = this._queryRepository.GetByAlias(id);
+    [HttpDelete]
+    [Route("{id}")]
+    public dynamic Delete(string id) {
+      var query = this._queryRepository.GetByAlias(id);
 
       if (!this.CanEdit(query)) {
         return this.Unauthorized();
       }
-      
+
       this._queryRepository.Delete(query);
 
-			return Ok();
-		}
+      return Ok();
+    }
 
+    [HttpPost]
+    [Route("{id}/Note")]
+    public dynamic PostNote(string id, NoteModel noteModel)
+    {
+      var query = this._queryRepository.GetById(id);
+      if (query == null)
+      {
+        return NotFound();
+      }
 
-		[HttpGet]
+      var note = Mapper.Map<Note>(noteModel);
+      query.Notes.Insert(0, note);
+
+      this._queryRepository.Save(query);
+
+      return Ok(note);
+    }
+
+    [HttpPut]
+    [Route("{id}/Note")]
+    public dynamic PutNote(string id, NoteModel noteModel)
+    {
+      var query = this._queryRepository.GetById(id);
+      if (query == null)
+      {
+        return NotFound();
+      }
+
+      var note =
+        query.Notes.FirstOrDefault(n => n.CreationDate == noteModel.CreationDate && n.AccountId == noteModel.AccountId);
+
+      if (note == null)
+      {
+        return NotFound();
+      }
+
+      Mapper.Map(noteModel, note);
+
+      this._queryRepository.Save(query);
+
+      return Ok();
+    }
+
+    [HttpDelete]
+    [Route("{id}/Note")]
+    public dynamic DeleteNote(string id, string accountId, DateTime creationDate) {
+      var query = this._queryRepository.GetById(id);
+      if (query == null) {
+        return NotFound();
+      }
+
+      var note =
+        query.Notes.FirstOrDefault(n => n.CreationDate == creationDate.ToUniversalTime() && n.AccountId == accountId);
+
+      if (note == null) {
+        return NotFound();
+      }
+
+      query.Notes.Remove(note);
+
+      this._queryRepository.Save(query);
+
+      return Ok();
+    }
+    
+    [HttpGet]
 		[Route("{id}/Preview")]
 		public dynamic Preview(string id) 
 		{
