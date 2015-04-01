@@ -22,6 +22,15 @@
 			accounts.push(account);
 		}
 
+		service.updateAccount = function (account) {
+			for (var i in accounts) {
+				if (accounts[i].Id == account.Id) {
+					accounts[i] = account;
+					break;
+				}
+			}
+		}
+
 		service.getAccountById = function (accountId) {
 			var result = $.grep(accounts, function (account) { return account.Id == accountId; });
 
@@ -71,6 +80,9 @@
           	document.location.href = config.viewsUrl + '#/account';
 	          AccountService.addAccount($scope.account);
           }
+          else {
+          	AccountService.updateAccount($scope.account);
+          }          
         })
         .error(function () {
           alert("Kan de query niet opslaan. Probeer het nog eens...");
