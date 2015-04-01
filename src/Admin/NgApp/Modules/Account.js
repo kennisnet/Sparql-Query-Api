@@ -1,6 +1,44 @@
 ﻿angular.module('AccountEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule'])
+
+.factory('AccountService', ['$q', '$http', 'config', function ($q, $http, config){
+		var service = {}
+
+		var accounts = null;
+
+		service.getAccounts = function () {
+			var deferred = $q.defer();
+			if (accounts != null) {
+				deferred.resolve(accounts);
+				return deferred.promise;
+			}
+			$http.get(config.adminApiUrl + 'Account/').then(function (response) {
+				accounts = response.data;
+				deferred.resolve(accounts);
+			});
+			return deferred.promise;
+		}
+
+		service.addAccount = function (account) {
+			accounts.push(account);
+		}
+
+		service.getAccountById = function (accountId) {
+			var result = $.grep(accounts, function (account) { return account.Id == accountId; });
+
+			if (result.length == 0) {
+				alert('Account met id ' + accountId + ' bestaat niet.');
+				return null;
+			}
+			
+			return result[0];
+		}
+
+		return service;
+
+	}])
+
 .controller('AccountController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', function ($scope, $routeParams, $location, $http, $timeout, config) {
+  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', 'AccountService', function ($scope, $routeParams, $location, $http, $timeout, config, AccountService) {
     var original = null;
     var account = null;
 
@@ -30,7 +68,8 @@
       saveMethod(config.adminApiUrl + 'Account/' + accountId, $scope.account)
         .success(function (response) {
           if ($scope.isNewAccount(accountId)) {
-            document.location.href = config.viewsUrl + '#/account';
+          	document.location.href = config.viewsUrl + '#/account';
+	          AccountService.addAccount($scope.account);
           }
         })
         .error(function () {

@@ -29,11 +29,11 @@ Navigator.controller('QueryNavigator', [
 ]);
 
 Navigator.controller('AccountNavigator', [
-  '$scope', '$location', '$route', '$http', '$filter', 'config', 'userService', function ($scope, $location, $route, $http, $filter, config, userService) {
+  '$scope', '$location', '$route', '$http', '$filter', 'config', 'AccountService', function ($scope, $location, $route, $http, $filter, config, AccountService) {
 
-  	$http.get(config.adminApiUrl + 'Account/').then(function (response) {
-  		$scope.accounts = response.data;
-  	});
+  	AccountService.getAccounts().then(function (accounts) {
+		  $scope.accounts = accounts;
+	  });
 
   	function setVisibility() {
   		$scope.isVisible = angular.isDefined($route.current.originalPath) ? $route.current.originalPath.indexOf('/account') == 0 : false;

@@ -1,7 +1,9 @@
 ﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule']);
 
 QueryEditor.controller('QueryController', [
-  '$scope', '$routeParams', '$location', '$http', '$filter', '$timeout', 'config', 'userService', function ($scope, $routeParams, $location, $http, $filter, $timeout, config, userService) {
+  '$scope', '$routeParams', '$location', '$http', '$filter', '$timeout', 'config', 'userService', 'AccountService',
+		function ($scope, $routeParams, $location, $http, $filter, $timeout, config, userService, AccountService) {
+
     var original = null;
     var query = null;
 
@@ -17,7 +19,7 @@ QueryEditor.controller('QueryController', [
 		
     var emptyNote = function() {
 	    return {
-		    AccountId: $scope.user.id,
+	    	AccountId: $scope.user.id,
 		    CreationDate: new Date(),
 		    ModificationDate: new Date(),
 		    Content: ""
@@ -43,7 +45,13 @@ QueryEditor.controller('QueryController', [
 
     $scope.addParameter = function(index) {
       $scope.query.Parameters.splice(index + 1, 0, { Name: 'new', Description: '' });
-    };		
+    };
+
+
+		$scope.getNoteAccountName = function(accountId) {
+			var account = AccountService.getAccountById(accountId);
+			return account == null ? '' : account.FullName;
+		};
 
     $scope.addNote = function(note) {
       if ($scope.query.Notes == null) {
@@ -59,7 +67,6 @@ QueryEditor.controller('QueryController', [
         .error(function () {
         	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
         });
-
     };
 
     $scope.updateNote = function(note) {
@@ -190,7 +197,7 @@ QueryEditor.controller('QueryController', [
       $scope.activeTab[tab] = true;
 
       // store current tab in user's profile
-      userService.activeQueryTab(tab);
+      $scope.activeQueryTab = userService.activeQueryTab(tab);
 
       // activate the sparql code mirror editor 
       if (tab == 'sparql') {
