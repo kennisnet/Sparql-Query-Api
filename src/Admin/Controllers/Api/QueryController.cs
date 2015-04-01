@@ -1,5 +1,6 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Controllers.Api
 {
+  using System;
   using System.Collections.Generic;
   using System.Linq;
 	using System.Net;
@@ -130,6 +131,20 @@
 			return Ok(); 
 		}
 
+    [HttpDelete]
+    [Route("{id}")]
+    public dynamic Delete(string id) {
+      var query = this._queryRepository.GetByAlias(id);
+
+      if (!this.CanEdit(query)) {
+        return this.Unauthorized();
+      }
+
+      this._queryRepository.Delete(query);
+
+      return Ok();
+    }
+
     [HttpPost]
     [Route("{id}/Note")]
     public dynamic PostNote(string id, NoteModel noteModel)
@@ -145,7 +160,7 @@
 
       this._queryRepository.Save(query);
 
-      return Ok();
+      return Ok(note);
     }
 
     [HttpPut]
@@ -174,22 +189,28 @@
     }
 
     [HttpDelete]
-		[Route("{id}")]
-		public dynamic Delete(string id)
-		{
-			var query = this._queryRepository.GetByAlias(id);
-
-      if (!this.CanEdit(query)) {
-        return this.Unauthorized();
+    [Route("{id}/Note")]
+    public dynamic DeleteNote(string id, string accountId, DateTime creationDate) {
+      var query = this._queryRepository.GetById(id);
+      if (query == null) {
+        return NotFound();
       }
-      
-      this._queryRepository.Delete(query);
 
-			return Ok();
-		}
+      var note =
+        query.Notes.FirstOrDefault(n => n.CreationDate == creationDate.ToUniversalTime() && n.AccountId == accountId);
 
+      if (note == null) {
+        return NotFound();
+      }
 
-		[HttpGet]
+      query.Notes.Remove(note);
+
+      this._queryRepository.Save(query);
+
+      return Ok();
+    }
+    
+    [HttpGet]
 		[Route("{id}/Preview")]
 		public dynamic Preview(string id) 
 		{

@@ -1,7 +1,7 @@
 ﻿var QueryEditor = angular.module('QueryEditor', ['ui.bootstrap', 'ui.codemirror', 'UserModule']);
 
 QueryEditor.controller('QueryController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', 'userService', function ($scope, $routeParams, $location, $http, $timeout, config, userService) {
+  '$scope', '$routeParams', '$location', '$http', '$filter', '$timeout', 'config', 'userService', function ($scope, $routeParams, $location, $http, $filter, $timeout, config, userService) {
     var original = null;
     var query = null;
 
@@ -49,13 +49,12 @@ QueryEditor.controller('QueryController', [
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }
-      $scope.query.Notes.splice(0, 0, note);
       $scope.newNote = emptyNote();
 
 	    var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
     	$http.post(url, note)
         .success(function (response) {
-					// console.log('note added');
+          $scope.query.Notes.push(response);
 				})
         .error(function () {
         	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
@@ -68,20 +67,31 @@ QueryEditor.controller('QueryController', [
 	    note.ModificationDate = new Date();
     	$http.put(url, note)
         .success(function (response) {
-					// console.log('note updated');
-				})
+	        note.editMode = false;
+	      })
         .error(function () {
         	alert('Kan de notitie niet opslaan. Probeer het nog eens...');
         });
 
     };
 
-    $scope.deleteNote = function(index) { // TODO: implement this
+    $scope.deleteNote = function(note) {
       if ($scope.query.Notes == null) {
         $scope.query.Notes = [];
       }
-      $scope.query.Notes.splice(index, 1);
-      $scope.queryForm.$setDirty();
+      if (window.confirm("Weet u zeker dat u notitie wilt verwijderen?")) {
+        var url = config.adminApiUrl + 'Query/' + query.Id + '/Note';
+        $http.delete(url + '?accountId=' + note.AccountId + '&creationDate=' + note.CreationDate)
+          .success(function(response) {
+            var index = $scope.query.Notes.indexOf(note);
+            $scope.query.Notes.splice(index, 1);
+          })
+          .error(function() {
+            alert('Kan de notitie niet opslaan. Probeer het nog eens...');
+          });
+
+        $scope.queryForm.$setDirty();
+      }
     };
 
     $scope.save = function () {
