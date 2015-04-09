@@ -128,6 +128,9 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
       var endpoint = (model != null && model["endpoint"] != null) ? FindEndpointByName(model["endpoint"]) : FindEndpointForQuery(query);
 
+			queryLogItem.Endpoint = (endpoint != null) ? ((SparqlEndpoint)endpoint).Name : "";
+			queryLogItem.AcceptFormat = GetOutputFormat();
+
 			if (!IsAuthorized(query))
 			{
 				var message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
@@ -167,6 +170,17 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
 			return typeof(object);
 		}
+
+    private static string GetOutputFormat() {
+			string accept = HttpContext.Current.Request.Headers["Accept"];
+			string format = HttpContext.Current.Request.Params["format"];
+
+			if (!string.IsNullOrEmpty(format)) {
+			  return format;
+			}
+
+      return accept;
+    }
 
 		private static bool IsAuthorized(Query query)
 		{

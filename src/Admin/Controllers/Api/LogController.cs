@@ -90,6 +90,8 @@
 							(set.Any(q => q.CacheHit))
 								? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
 								: 0,
+						Formats = set.Select(q => q.AcceptFormat).Distinct().ToArray(),
+						Endpoints = set.Select(q => q.Endpoint).Distinct().ToArray(),
 						Hits = set.Count(),
 						CacheHits = set.Count(ed => ed.CacheHit == true)
 					});

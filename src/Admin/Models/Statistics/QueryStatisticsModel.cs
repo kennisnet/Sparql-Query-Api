@@ -3,6 +3,8 @@
 	public class QueryStatisticsModel
 	{
 		public string Name { get; set; }
+		public string[] Formats { get; set; }
+		public string[] Endpoints { get; set; }
 		public int AverageTime { get; set; }
 		public int AverageExecutionTime { get; set; }
 		public int AverageCachedTime { get; set; }
