@@ -101,6 +101,10 @@
 
 			account.Password = account.ComputeSaltedHash(password);
 
+			if (account.Roles.All(r => r != "editor")) {
+				account.Roles = account.Roles.Concat(new List<string> { "editor" });
+			}
+
 			_accountRepository.Save(account);
 
 			return Ok();

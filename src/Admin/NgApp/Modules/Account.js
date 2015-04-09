@@ -35,7 +35,6 @@
 			var result = $.grep(accounts, function (account) { return account.Id == accountId; });
 
 			if (result.length == 0) {
-				alert('Account met id ' + accountId + ' bestaat niet.');
 				return null;
 			}
 			

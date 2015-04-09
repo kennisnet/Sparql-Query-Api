@@ -7,6 +7,8 @@ Navigator.controller('QueryNavigator', [
   		$scope.groupedQueries = response.data;
   	});
 
+  	$scope.activeItem = null;
+
   	$scope.isGroupVisible = function (value) {
   		return userService.queryGroup(value).visible;
   	};
@@ -19,8 +21,9 @@ Navigator.controller('QueryNavigator', [
   	};
 
   	function setVisibility() {
-  		$scope.isVisible = angular.isDefined($route.current.originalPath) ? $route.current.originalPath.indexOf('/query') == 0 : false;
-  	}
+  	  $scope.isVisible = angular.isDefined($route.current.originalPath) ? $route.current.originalPath.indexOf('/query') == 0 : false;
+  	  $scope.activeItem = ($scope.isVisible) ? $route.current.params.id : null;
+	  }
 
   	$scope.$on('$routeChangeSuccess', setVisibility);
 
@@ -31,13 +34,16 @@ Navigator.controller('QueryNavigator', [
 Navigator.controller('AccountNavigator', [
   '$scope', '$location', '$route', '$http', '$filter', 'config', 'AccountService', function ($scope, $location, $route, $http, $filter, config, AccountService) {
 
-  	AccountService.getAccounts().then(function (accounts) {
+    $scope.activeItem = null;
+
+    AccountService.getAccounts().then(function (accounts) {
 		  $scope.accounts = accounts;
 	  });
 
   	function setVisibility() {
   		$scope.isVisible = angular.isDefined($route.current.originalPath) ? $route.current.originalPath.indexOf('/account') == 0 : false;
-  	}
+  		$scope.activeItem = ($scope.isVisible) ? $route.current.params.id : null;
+    }
 
   	$scope.$on('$routeChangeSuccess', setVisibility);
 

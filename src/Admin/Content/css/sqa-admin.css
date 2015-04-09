@@ -83,17 +83,24 @@ body {
   line-height: 1;
   font-size: 13px;
 }
+.sidebar ul li.active {
+  background-color: #eeeeee;
+}
 .sidebar ul li a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555;
   padding: 8px 8px;
 }
 .sidebar ul li a.active {
   background-color: #eeeeee;
 }
 .sidebar ul li a:hover {
-  color: #333;
+  color: #000;
 }
 .sidebar ul li a:focus {
-  color: #333;
+  color: #000;
 }
 button.side-menu {
   display: block;
@@ -128,6 +135,20 @@ button.side-menu {
   .navbar-top-links .dropdown-alerts {
     margin-left: auto;
   }
+}
+.account-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.account-list li {
+  padding: 5px 10px;
+}
+.account-list li:nth-child(odd) {
+  background-color: #ebebeb;
+}
+.account-list li:first-child {
+  font-weight: 700;
 }
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,

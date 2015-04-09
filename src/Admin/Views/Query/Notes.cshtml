@@ -16,10 +16,11 @@
           <div class="list-group-item" data-ng-repeat="note in query.Notes | orderBy: '-CreationDate'">
 
             <div class="row" data-ng-hide="note.editMode">
-              <div class="col-lg-10">
-                {{note.CreationDate | date:'dd-MM-yyyy HH:mm'}} | {{getNoteAccountName(note.AccountId)}} | {{note.Content}}
+              <div class="col-lg-12">
+                {{note.CreationDate | date:'dd-MM-yyyy HH:mm'}} | {{getNoteAccountName(note.AccountId)}}
+                <p><pre>{{note.Content}}</pre></p>
               </div>
-              <div class="col-lg-2">
+              <div class="col-lg-12">
                 <button data-ng-click="note.editMode = !note.editMode" class="btn btn-sm btn-default glyphicon glyphicon-pencil pull-right" data-ng-disabled="!user.isEditor" title="@EditorStrings.Edit"></button>
                 <button data-ng-click="deleteNote(note)" class="btn btn-sm btn-danger glyphicon glyphicon-trash pull-right space-right" data-ng-disabled="!user.isEditor" title="@EditorStrings.Delete"></button>
               </div>
@@ -27,7 +28,7 @@
 
             <div class="row" data-ng-show="note.editMode">
               <div class="col-lg-10">
-								<textarea rows="4" class="form-control" style="resize: vertical" data-ng-model="note.Content" wrap="off" spellcheck='false' data-ng-disabled="!user.isEditor"></textarea>
+                <textarea rows="4" class="form-control" style="resize: vertical" data-ng-model="note.Content" wrap="off" spellcheck='false' data-ng-disabled="!user.isEditor"></textarea>
               </div>
               <div class="col-lg-2">
                 <button data-ng-click="updateNote(note)" class="btn btn-sm btn-success glyphicon glyphicon-check pull-right" data-ng-disabled="!user.isEditor" title="@EditorStrings.Save"></button>

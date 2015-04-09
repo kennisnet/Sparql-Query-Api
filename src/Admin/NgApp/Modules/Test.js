@@ -3,7 +3,8 @@
 TestEditor.controller('TestIndexController', [
   '$scope', '$location', '$http', '$window', '$filter', 'config', 'userService', function ($scope, $location, $http, $window, $filter, config, userService) {
 
-  	$scope.endpoint = { source: "OBK", compare: "OBK-Virtuoso" };
+  	$scope.endpoint = { source: "OBK", compare: "OBK" };
+  	$scope.version = { source: "0.8", compare: "0.7" };
 
   	$http.get(config.adminApiUrl + 'Query/').then(function (response) {
   		$scope.groupedQueries = response.data;
@@ -62,9 +63,9 @@ TestEditor.controller('TestIndexController', [
 			// run query test with the two endpoints
 			query.test = [];
 
-	    runQueryTest(query, url + "&endpoint=" + $scope.endpoint.source);
+			runQueryTest(query, url + (($scope.endpoint.source != $scope.endpoint.compare) ? "&endpoint=" + $scope.endpoint.source : ""));
 
-	    runQueryTest(query, url + "&endpoint=" + $scope.endpoint.compare);
+			runQueryTest(query, url.replace($scope.version.source, $scope.version.compare) + (($scope.endpoint.source != $scope.endpoint.compare) ? "&endpoint=" + $scope.endpoint.compare : ""));
 		  
     };
 

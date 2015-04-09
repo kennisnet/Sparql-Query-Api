@@ -5,7 +5,7 @@
 	
 	<div class="panel panel-default" >
 		<div id="account_" class="panel-heading form-inline" data-ng-click="toggleGroup($event, '')">
-			<strong style="font-size: 1.5em">Algemeen</strong>
+			<strong style="font-size: 1.5em">Accounts</strong>
 			<a href="#/account/new/new" class="btn btn-sm btn-primary pull-right space-below">@EditorStrings.CreateAccount</a>
 		</div>
 
@@ -14,7 +14,7 @@
 				@foreach (var account in Model.OrderBy(a => a.FullName))
 				{
 					<tr>
-						<td>@account.FullName</td>
+						<td><a href="#/account/@(account.Id)/@(account.ApiKey)">@account.FullName</a></td>
 						<td>@account.ApiKey.ToString()</td>
 						<td style="width: 5%">
               <button type="button" data-ng-click="deleteAccount('@account.Id')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
