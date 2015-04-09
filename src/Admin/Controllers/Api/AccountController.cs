@@ -1,20 +1,16 @@
 ﻿namespace Trezorix.Sparql.Api.Admin.Controllers.Api {
   using System;
-  using System.Collections;
   using System.Collections.Generic;
   using System.Linq;
-  using System.Net;
   using System.Web.Http;
 
   using AutoMapper;
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Accounts;
-  using Trezorix.Sparql.Api.Admin.Models.Queries;
   using Trezorix.Sparql.Api.Application.Accounts;
   using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Accounts;
-  using Trezorix.Sparql.Api.Core.Configuration;
   using Trezorix.Sparql.Api.Core.Repositories;
 
   [RoutePrefix("Api/Account")]
