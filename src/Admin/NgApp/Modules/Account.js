@@ -70,6 +70,14 @@
       return angular.equals(original, $scope.query);
     };
 
+    $scope.toggleAccess = function (permission, value) {
+      if (angular.isDefined($scope.account)) {
+        angular.forEach($scope.account.QueryAccess, function (item) {
+          item[permission] = value;
+        });
+      }
+    }
+
     $scope.save = function () {
       var saveMethod = ($scope.isNewAccount(account.Id)) ? $http.post : $http.put;
 

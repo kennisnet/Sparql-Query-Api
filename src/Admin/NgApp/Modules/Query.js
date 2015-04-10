@@ -101,6 +101,21 @@ QueryEditor.controller('QueryController', [
       }
     };
 
+    $scope.toggleAccess = function (permission, value) {
+      if (angular.isDefined($scope.query)) {
+        angular.forEach($scope.query.Access, function (item) {
+          if (permission == 'CanEditSelected') {
+            if (item.Account.IsEditor) {
+              item[permission] = value;
+              console.log(item.Account, value);
+            }
+          } else {
+            item[permission] = value;
+          }
+        });
+      }
+    }
+
     $scope.save = function () {
       var isNewquery = $scope.isNewquery(queryId);
 

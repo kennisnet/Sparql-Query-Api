@@ -47,6 +47,7 @@
           "~/NgApp/Modules/Account.js",
           "~/NgApp/Modules/Log.js",
           "~/NgApp/Modules/Test.js",
+					"~/NgApp/Directives/CheckboxSelector.js",
           "~/NgApp/Controllers/NavController.js",
           "~/NgApp/Controllers/UserController.js"
           )

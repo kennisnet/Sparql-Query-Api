@@ -210,6 +210,7 @@
     <Content Include="Content\css\loading-bar.css" />
     <Content Include="Content\css\Site.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\jquery.js" />
     <Content Include="Global.asax" />
@@ -231,6 +232,7 @@
     <Content Include="NgApp\Config.js" />
     <Content Include="NgApp\Controllers\UserController.js" />
     <Content Include="NgApp\Controllers\NavController.js" />
+    <Content Include="NgApp\Directives\CheckBoxSelector.js" />
     <Content Include="NgApp\Modules\Alerts.js" />
     <Content Include="NgApp\Modules\NoCache.js" />
     <Content Include="NgApp\Modules\Navigator.js" />
@@ -320,6 +322,10 @@
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\Deploy to File.pubxml" />
     <Content Include="Views\Account\Access.cshtml" />
     <Content Include="Views\Query\Test.cshtml" />

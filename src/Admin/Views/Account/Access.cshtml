@@ -15,6 +15,23 @@
             </div>
           </div>
         </li>
+        <li>
+          <div class="row">
+            <div data-ng-class="{ 'col-lg-11': !account.isEditor, 'col-lg-10': account.IsEditor}">
+              <span></span>
+            </div>
+            <div class="col-lg-1">
+              <div class="text-center">
+                <checkbox-selector data-ng-disabled="!user.isEditor" data-select-all="toggleAccess('View', true)"  data-select-none="toggleAccess('View', false)"></checkbox-selector>
+              </div>
+            </div>
+            <div class="col-lg-1" data-ng-show="account.IsEditor">
+              <div class="text-center">
+                <checkbox-selector data-ng-disabled="!user.isEditor" data-select-all="toggleAccess('Edit', true)"  data-select-none="toggleAccess('Edit', false)"></checkbox-selector>
+              </div>
+            </div>
+          </div>
+        </li>
         <li data-ng-repeat="queryAccess in account.QueryAccess">
           <div class="row">
             <div data-ng-class="{ 'col-lg-11': !account.isEditor, 'col-lg-10': account.IsEditor}">

@@ -18,6 +18,21 @@
             </div>
           </div>
         </li>
+        <li>
+          <div class="row">
+            <div class="col-lg-10"></div>
+            <div class="col-lg-1">
+              <div class="text-center">
+                <checkbox-selector data-ng-disabled="!user.isEditor" data-select-all="toggleAccess('CanReadSelected', true)"  data-select-none="toggleAccess('CanReadSelected', false)"></checkbox-selector>
+              </div>
+            </div>
+            <div class="col-lg-1">
+              <div class="text-center">
+                <checkbox-selector data-ng-disabled="!user.isEditor" data-select-all="toggleAccess('CanEditSelected', true)"  data-select-none="toggleAccess('CanEditSelected', false)"></checkbox-selector>
+              </div>
+            </div>
+          </div>
+        </li>
         <li data-ng-repeat="access in query.Access">
           <div class="row">
             <div class="col-lg-10">
