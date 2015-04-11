@@ -1,33 +1,32 @@
 ﻿@using Resources
 <div id="edit_query_general" class="well space-above">
-	
-	<div class="form-group row">
-		<div class="col-lg-12">
-			<label>Id</label>
-			<input type="text" class="form-control" data-ng-model="query.Alias" data-ng-required="true" data-ng-disabled="!user.isEditor" />
-		</div>
-		<div class="col-lg-12">
-			<label>Label</label>
-			<input type="text" class="form-control" data-ng-model="query.Label" data-ng-required="true" data-ng-disabled="!user.isEditor" />
-		</div>
-		<div class="col-lg-12 space-above">
-			<label>Beschrijving</label>
-			<textarea rows="12" class="form-control" data-ng-model="query.Description" wrap="off" spellcheck='false' data-ng-disabled="!user.isEditor"></textarea>
-		</div>
-		<div class="space-above">
-			<div class="col-lg-12 space-above">
-				<label>Groep</label>
-			</div>
-			<div class="col-lg-4">
-				<select class="form-control" data-ng-model="query.Group" data-ng-options="item as item for item in query.Groups" data-ng-disabled="!user.isEditor">
-				</select>
-			</div>      
-			<div class="col-lg-3">
-				<input type="text" data-ng-model="newGroup" class="form-control form-inline" data-ng-disabled="!user.isEditor" />
-			</div>
-			<div class="col-lg-2">
-				<button data-ng-click="addGroup(newGroup)" class="btn btn-sm btn-default" style="margin-top: 0.3em;" data-ng-disabled="!user.isEditor">Toevoegen</button>
-			</div>
-		</div>
-	</div>
+
+  <div class="form-group row">
+    <div class="col-xs-12">
+      <label>Id</label>
+      <input type="text" class="form-control" data-ng-model="query.Alias" data-ng-required="true" data-ng-disabled="!user.isEditor" />
+      <label>Label</label>
+      <input type="text" class="form-control" data-ng-model="query.Label" data-ng-required="true" data-ng-disabled="!user.isEditor" />
+      <label>Beschrijving</label>
+      <textarea rows="12" class="form-control" data-ng-model="query.Description" wrap="off" spellcheck='false' data-ng-disabled="!user.isEditor"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-12">
+        <label>Groep</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <select class="form-control" data-ng-model="query.Group" data-ng-options="item as item for item in query.Groups" data-ng-disabled="!user.isEditor"></select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" data-ng-model="newGroup" class="form-control form-inline" data-ng-disabled="!user.isEditor" />
+      </div>
+      <div class="col-md-4">
+        <button data-ng-click="addGroup(newGroup)" class="btn btn-sm btn-default" style="margin-top: 0.3em;" data-ng-disabled="!user.isEditor">Toevoegen</button>
+      </div>
+    </div>
+  </div>
 </div>
