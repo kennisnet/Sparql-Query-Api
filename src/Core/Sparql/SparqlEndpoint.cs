@@ -60,13 +60,19 @@ namespace Trezorix.Sparql.Api.Core.Sparql
 			switch (output)
 			{
 				case "json":
-					client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+json");
-					//// client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+json, application/rdf+json, application/ld+json");
+				client.Headers.Add(
+					HttpRequestHeader.Accept,
+					query.ToLowerInvariant().Contains("construct")
+					? "application/sparql-results+json, application/rdf+json, application/ld+json"
+					: "application/sparql-results+json");
 					break;
 				case "xml":
-					client.Headers.Add(HttpRequestHeader.Accept, "application/sparql-results+xml");
-					//// client.Headers.Add(HttpRequestHeader.Accept, "application/rdf+xml, application/sparql-results+xml");
-					break;
+				client.Headers.Add(
+					HttpRequestHeader.Accept,
+					query.ToLowerInvariant().Contains("construct")
+					? "application/rdf+xml, application/sparql-results+xml"
+					: "application/sparql-results+xml");
+				break;
 			}
 			client.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
 			client.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-16");

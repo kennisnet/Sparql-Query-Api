@@ -48,8 +48,8 @@ namespace Trezorix.Sparql.Api.QueryApi.Controllers
 
 		public ActionResult Reload()
 		{
-			var cfg = ApiConfiguration.Init(HostingEnvironment.SiteName);
-			ApiConfiguration.Current = cfg;
+			//var cfg = ApiConfiguration.Init(HostingEnvironment.SiteName);
+			//ApiConfiguration.Current = cfg;
 			
 			return Json(new {Action = "Reload", Succes = true}, JsonRequestBehavior.AllowGet);
 		}

@@ -17,3 +17,6 @@ Publish
 packages
 !packages/Microsoft.Bcl.Build*/tools/Microsoft.Bcl.Build.targets
 src/.nuget/
+/bootstrap-customize
+/extractor
+/json-ld
