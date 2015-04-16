@@ -11,6 +11,8 @@
     ];
     $scope.timespan = $scope.statisticsTimespans[1];
 
+    $scope.logStatsFirstColumnLabel = "Query";
+
     $scope.updateStats = function (timespan) {
     	if (!timespan) {
 		    timespan = $scope.timespan;
@@ -22,6 +24,7 @@
 	    }
 
 	    if ($location.url().indexOf("/query/") > -1) {
+		    $scope.logStatsFirstColumnLabel = "Account";
 	    	url += "&queryAlias=" + $location.url().replace("/query/", "");
 	    }
 
