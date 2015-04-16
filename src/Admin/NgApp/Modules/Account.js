@@ -46,7 +46,8 @@
 	}])
 
 .controller('AccountController', [
-  '$scope', '$routeParams', '$location', '$http', '$timeout', 'config', 'AccountService', function ($scope, $routeParams, $location, $http, $timeout, config, AccountService) {
+  '$scope', '$routeParams', '$location', '$http', '$window', '$timeout', 'config', 'AccountService',
+  function ($scope, $routeParams, $location, $http, $window, $timeout, config, AccountService) {
     var original = null;
     var account = null;
 
@@ -101,6 +102,7 @@
       $http({ method: 'PATCH', url: url, data: angular.toJson(password) })
         .success(function (response) {
           alert("Wachtwoord gewijzigd.");
+          $window.location.reload();
         })
         .error(function () {
           alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
@@ -145,14 +147,14 @@
       userService.accountGroup(value).edit = !userService.accountGroup(value).edit;
     };
 
-    $scope.deleteAccount = function (value) {
-      returnUrl = config.viewsUrl + "#/account";
+    $scope.deleteAccount = function (accountId, fullname) {
+      var returnUrl = config.viewsUrl + "#/account";
 
-      if (window.confirm("Weet u zeker dat u account '" + value + "' wilt verwijderen?")) {
-        if (value === '') {
+      if (window.confirm("Weet u zeker dat u account '" + fullname + "' wilt verwijderen?")) {
+        if (accountId === '') {
           document.location.href = returnUrl;
         } else {
-          $http.delete(config.adminApiUrl + 'Account/' + value).then(function (response) {
+          $http.delete(config.adminApiUrl + 'Account/' + accountId).then(function (response) {
             document.location.href = returnUrl;
             $window.location.reload();
           });
@@ -188,7 +190,10 @@
       };
 
       scope.isValidPassword = function (val1, val2) {
-        return val1 > 3 && val1 == val2;
+        if (angular.isDefined(val1) && angular.isDefined(val2)) {
+          return val1.length >= 3 && val1 == val2;
+        }
+        return false;
       };
 
       angular.extend(formController, nullFormCtrl);
