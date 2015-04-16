@@ -15,7 +15,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 		public string FullName { get; set; }
 	  public string UserName { get; set; }
 		public string Email { get; set; }
-		public string PhoneNumber { get; set; }	
+		public string PhoneNumber { get; set; }
+    public string Notitie { get; set; }
 		public string ApiKey { get; set; }
     public bool IsAdministrator { get; set; }
     public bool IsEditor { get; set; }		
@@ -28,6 +29,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 			UserName = account.UserName;
 			Email = account.Email;
 			PhoneNumber = account.PhoneNumber;
+		  Notitie = account.Notitie;
 			ApiKey = account.ApiKey;
 			IsAdministrator = account.IsAdministrator;
 			IsEditor = account.IsEditor;
@@ -46,6 +48,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 			account.UserName = UserName;
 			account.Email = Email;
 			account.PhoneNumber = PhoneNumber;
+	    account.Notitie = Notitie;
 			account.ApiKey = ApiKey;
 			if (QueryAccess != null)
 			{

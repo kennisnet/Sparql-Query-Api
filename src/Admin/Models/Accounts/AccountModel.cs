@@ -12,7 +12,9 @@
 
 		public string Email { get; set; }
 
-		public string PhoneNumber { get; set; }	
+		public string PhoneNumber { get; set; }
+
+    public string Notitie { get; set; }
 
 		public IEnumerable<string> Roles { get; set; }
 
