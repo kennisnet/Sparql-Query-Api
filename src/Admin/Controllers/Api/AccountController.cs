@@ -96,6 +96,9 @@
 			}
 
 			account.Password = account.ComputeSaltedHash(password);
+      if (account.Roles == null) {
+        account.Roles = new List<string>();
+      }
 
 			if (account.Roles.All(r => r != "editor")) {
 				account.Roles = account.Roles.Concat(new List<string> { "editor" });

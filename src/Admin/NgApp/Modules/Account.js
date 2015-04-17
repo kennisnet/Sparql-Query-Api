@@ -49,20 +49,28 @@
   '$scope', '$routeParams', '$location', '$http', '$window', '$timeout', 'config', 'AccountService',
   function ($scope, $routeParams, $location, $http, $window, $timeout, config, AccountService) {
     var original = null;
-    var account = null;
 
     var returnUrl = config.viewsUrl + "#/account";
 
     var accountId = $routeParams.id;
-
     $scope.user = config.user;
+
+    var addEditorRoleIfNotExists = function (account) {
+      if (account.roles == null) {
+        account.roles = [];
+      }
+      if (account.roles.indexOf('editor') < 0) {
+        account.roles.push('editor');
+      }
+      account.IsEditor = true;
+    };
 
     $scope.isNewAccount = function (value) {
       return (value === null || value === '' || value === 'new' || value.indexOf('000000') > -1);
     };
 
     $http.get(config.adminApiUrl + 'Account/' + (($scope.isNewAccount(accountId)) ? 'new' : accountId)).then(function (response) {
-      account = response.data;
+      var account = response.data;
       original = account;
       $scope.account = angular.copy(account);
     });
@@ -80,7 +88,7 @@
     }
 
     $scope.save = function () {
-      var saveMethod = ($scope.isNewAccount(account.Id)) ? $http.post : $http.put;
+      var saveMethod = ($scope.isNewAccount($scope.account.Id)) ? $http.post : $http.put;
 
       saveMethod(config.adminApiUrl + 'Account/' + accountId, $scope.account)
         .success(function (response) {
@@ -102,7 +110,8 @@
       $http({ method: 'PATCH', url: url, data: angular.toJson(password) })
         .success(function (response) {
           alert("Wachtwoord gewijzigd.");
-          $window.location.reload();
+          addEditorRoleIfNotExists($scope.account);
+          AccountService.updateAccount($scope.account);
         })
         .error(function () {
           alert("Kan het wachtwoord niet opslaan. Probeer het nog eens...");
