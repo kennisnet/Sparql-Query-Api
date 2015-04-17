@@ -35,6 +35,7 @@
           "~/Lib/ui-codemirror-0.1.1/ui-codemirror.js",
           "~/Lib/ui-bootstrap/ui-bootstrap-tpls-0.11.0.js",
           "~/Lib/bg-splitter/js/splitter.js",
+          "~/Lib/monospaced/autosize-text.js",
           "~/NgApp/App.js",
           "~/NgApp/Loading.js",
           "~/NgApp/RouteConfig.js",

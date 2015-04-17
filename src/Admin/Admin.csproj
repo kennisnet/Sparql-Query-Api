@@ -225,6 +225,7 @@
     <Content Include="Lib\angular\angular.min.js" />
     <Content Include="Lib\bg-splitter\css\style.css" />
     <Content Include="Lib\bg-splitter\js\splitter.js" />
+    <Content Include="Lib\monospaced\autosize-text.js" />
     <Content Include="Lib\ui-bootstrap\ui-bootstrap-tpls-0.11.0.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.js" />
     <Content Include="Lib\ui-codemirror-0.1.1\ui-codemirror.min.js" />
