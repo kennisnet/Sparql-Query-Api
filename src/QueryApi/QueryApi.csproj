@@ -192,7 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Attributes\" />
     <Folder Include="Handlers\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />

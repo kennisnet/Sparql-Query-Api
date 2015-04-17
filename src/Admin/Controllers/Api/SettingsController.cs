@@ -3,9 +3,11 @@
   using System.Web.Http;
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
+  using Trezorix.Sparql.Api.Application.Attributes;
   using Trezorix.Sparql.Api.Core.Configuration;
 
   [RoutePrefix("Api/Settings")]
+  [NLogWebApi]
   [AuthenticateUser]
   [Authorize]
   public class SettingsController : ApiController

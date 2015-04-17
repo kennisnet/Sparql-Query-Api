@@ -28,7 +28,8 @@ namespace Trezorix.Sparql.Api.Core.Accounts
         return (this.Roles != null) && this.Roles.Any(x => x.ToLower() == "editor" || x.ToLower() == "administrator");
       }
       set {
-        if (this.Roles == null || Roles.All(x => x.ToLower() != "administrator")) {
+//        if (this.Roles == null || Roles.All(x => x.ToLower() != "administrator")) {
+        if (Roles.All(x => x.ToLower() != "administrator")) {
           this.SetRole("editor", value);
         }
       }

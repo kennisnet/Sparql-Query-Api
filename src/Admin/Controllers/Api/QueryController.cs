@@ -11,12 +11,14 @@
 	using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
 	using Trezorix.Sparql.Api.Admin.Models.Queries;
 	using Trezorix.Sparql.Api.Application.Accounts;
+  using Trezorix.Sparql.Api.Application.Attributes;
   using Trezorix.Sparql.Api.Core.Authorization;
 	using Trezorix.Sparql.Api.Core.Configuration;
 	using Trezorix.Sparql.Api.Core.Queries;
 	using Trezorix.Sparql.Api.Core.Repositories;
 
-	[RoutePrefix("Api/Query")]
+  [RoutePrefix("Api/Query")]
+  [NLogWebApi]
 	[AuthenticateUser]
 	[Authorize]
 	public class QueryController : ApiController

@@ -11,8 +11,9 @@ using Trezorix.Sparql.Api.QueryApi.Filters;
 
 namespace Trezorix.Sparql.Api.Application.Filters
 {
+  using NLog;
 
-	public class ApiKeyAuthAttribute : AuthorizationFilterAttribute
+  public class ApiKeyAuthAttribute : AuthorizationFilterAttribute
 	{
 
 		private static readonly string[] _emptyArray = new string[0];
@@ -115,22 +116,27 @@ namespace Trezorix.Sparql.Api.Application.Filters
 
 		private bool IsAuthorized(string apiKey, string ipAddress, string referrer)
 		{
-			object apiKeyAuthorizerClassInstance = Activator.CreateInstance(_apiKeyAuthorizerType);
-			object result = null;
+      object result = null;
+      try {
+        object apiKeyAuthorizerClassInstance = Activator.CreateInstance(_apiKeyAuthorizerType);
 
-			if (_rolesSplit == _emptyArray)
-			{
-				result = _apiKeyAuthorizerType.GetMethod(_apiKeyAuthorizerMethodName, new Type[] { typeof(string), typeof(string), typeof(string) }).
-							Invoke(apiKeyAuthorizerClassInstance, new object[] { apiKey, ipAddress, referrer });
-			}
-			else
-			{
-				result = _apiKeyAuthorizerType.GetMethod(_apiKeyAuthorizerMethodName, new Type[] { typeof(string), typeof(string[]) }).
-						Invoke(apiKeyAuthorizerClassInstance, new object[] { apiKey, ipAddress, referrer, _rolesSplit });
-			}
+			  if (_rolesSplit == _emptyArray)
+			  {
+				  result = _apiKeyAuthorizerType.GetMethod(_apiKeyAuthorizerMethodName, new Type[] { typeof(string), typeof(string), typeof(string) }).
+							  Invoke(apiKeyAuthorizerClassInstance, new object[] { apiKey, ipAddress, referrer });
+			  }
+			  else
+			  {
+				  result = _apiKeyAuthorizerType.GetMethod(_apiKeyAuthorizerMethodName, new Type[] { typeof(string), typeof(string[]) }).
+						  Invoke(apiKeyAuthorizerClassInstance, new object[] { apiKey, ipAddress, referrer, _rolesSplit });
+			  }
+      }
+      catch (Exception e) {
+        LogManager.GetCurrentClassLogger().Error("Exception during execution of apiKey authorizer", e);
+      }
 
-			return (bool)result;
-		}
+      return (bool)result;
+    }
 
 		private static string[] SplitString(string original)
 		{

@@ -20,3 +20,4 @@ src/.nuget/
 /bootstrap-customize
 /extractor
 /json-ld
+/src/QueryApi/logs

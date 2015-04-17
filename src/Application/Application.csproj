@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="Accounts\AccountIdResolver.cs" />
     <Compile Include="Accounts\OperatingAccount.cs" />
+    <Compile Include="Attributes\NLogWebApiAttribute.cs" />
     <Compile Include="Autofac\FileDbRegistration.cs" />
     <Compile Include="Autofac\MongoDbRegistration.cs" />
     <Compile Include="FileRepositories\FileAccountRepository.cs" />

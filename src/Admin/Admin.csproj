@@ -251,6 +251,9 @@
     <Content Include="NgApp\Modules\Log.js" />
     <Content Include="NgApp\Modules\Settings.js" />
     <Content Include="NgApp\Modules\Query.js" />
+    <Content Include="nlog.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Static\css\content.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
