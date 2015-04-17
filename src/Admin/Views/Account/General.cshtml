@@ -23,6 +23,11 @@
 			<input type="text" class="form-control" data-ng-model="account.PhoneNumber" />
 		</div>
 		
+		<div class="col-lg-12 small-space-above">
+			<label>Notitie</label>
+			<textarea class="form-control" msd-elastic="\n" style="resize:vertical" data-ng-model="account.Notitie"></textarea>
+		</div>
+
 		<div class="col-lg-12 space-above">
 			<div class="panel">
 				<a href="@ApiConfiguration.Current.QueryApiUrl/Home/Index/?api_key={{account.ApiKey}}" target="_blank">Toon Query API homepage voor deze gebruiker.</a>
