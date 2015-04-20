@@ -14,5 +14,7 @@
 		IList<QueryLogItem> GetStartingFromDateForAccount(DateTime startDate, string accountApiKey);
 		IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias);
 		IList<QueryStatistics> GetQueryStatistics();
+
+	  IList<QueryLogStatisticsByAccount> GetQueryLogStatisticsByAccount(DateTime startDate, string queryAlias, string accountId, bool cacheHit);
 	}
 }

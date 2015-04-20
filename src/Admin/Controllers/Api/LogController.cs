@@ -6,6 +6,7 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Statistics;
+  using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
 
 	[RoutePrefix("Api/Log")]
@@ -64,6 +65,7 @@
 		private dynamic GetLogStatsForQuery(string queryAlias, DateTime startTime) {
 			var logItems = this._queryLogRepository.GetStartingFromDateForQuery(startTime, queryAlias);
 
+
 			var queryStatistics = new List<QueryStatisticsModel>();
 			var accountIds = logItems.AsQueryable().Select(q => q.AccountId).Distinct().ToList();
 
@@ -73,28 +75,67 @@
 
 			var accounts = _accountRepository.GetByApiKeys(accountIds).Where(a => a != null).ToList();
 
-			foreach (var accountId in accountIds) {
-				var set = logItems.Where(q => q.AccountId == accountId).ToList();
-				queryStatistics.Add(
-					new QueryStatisticsModel {
-						//var sum = list.Aggregate((acc, cur) => acc + cur);
-						//var average = ;
-						Name = accounts.First(a => a.ApiKey == accountId).FullName,
-						//AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
-						AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
-						AverageExecutionTime =
-							(set.Any(q => !q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => !q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						AverageCachedTime =
-							(set.Any(q => q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						Formats = set.Select(q => q.AcceptFormat).Distinct().ToArray(),
-						Endpoints = set.Select(q => q.Endpoint).Distinct().ToArray(),
-						Hits = set.Count(),
-						CacheHits = set.Count(ed => ed.CacheHit == true)
-					});
+			foreach (var accountId in accountIds) {			  
+
+			  var setWithoutCacheHit = this._queryLogRepository.GetQueryLogStatisticsByAccount(startTime, queryAlias, accountId, false);
+        var setWithCacheHit = this._queryLogRepository.GetQueryLogStatisticsByAccount(startTime, queryAlias, accountId, true);
+
+        var setMain = new List<QueryLogStatisticsByAccount>();
+        setMain.AddRange(setWithoutCacheHit);
+        setMain.AddRange(setWithCacheHit);
+
+        var set = logItems.Where(q => q.AccountId == accountId).ToList();
+
+        
+
+        foreach (var item in setMain)
+        {          
+          var averageTime = Convert.ToInt32(Math.Round(setMain.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint).Average(ed => ed.AverageTime)));
+          var averageExecutionTime = setWithoutCacheHit.Count > 0 ? Convert.ToInt32(Math.Round(setWithoutCacheHit.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint).Average(ed => ed.AverageTime))) : 0;
+          var averageCachedTime = setWithCacheHit.Count > 0 ? Convert.ToInt32(Math.Round(setWithCacheHit.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint).Average(ed => ed.AverageTime))) : 0;
+          
+
+          var setHits = set.Count(s => s.AcceptFormat == item.Format && s.Endpoint == item.Endpoint);
+
+          queryStatistics.Add(new QueryStatisticsModel
+          {
+            Name = accounts.First(a => a.ApiKey == accountId).FullName,
+            AverageTime = averageTime,
+            AverageExecutionTime = averageExecutionTime,
+            AverageCachedTime = averageCachedTime,
+            Format = item.Format,
+            Endpoint = item.Endpoint,
+            Hits = setHits,
+            CacheHits = set.Count(ed => ed.CacheHit == true)
+          });
+        }
+
+
+
+        //var set = logItems.Where(q => q.AccountId == accountId).ToList();
+        //queryStatistics.Add(
+        //  new QueryStatisticsModel
+        //  {
+        //    //var sum = list.Aggregate((acc, cur) => acc + cur);
+        //    //var average = ;
+        //    Name = accounts.First(a => a.ApiKey == accountId).FullName,
+        //    //AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
+        //    AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
+        //    AverageExecutionTime =
+        //      (set.Any(q => !q.CacheHit))
+        //        ? Convert.ToInt32(Math.Round(set.Where(q => !q.CacheHit).Average(ed => ed.ExecutionTime)))
+        //        : 0,
+        //    AverageCachedTime =
+        //      (set.Any(q => q.CacheHit))
+        //        ? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
+        //        : 0,
+        //    Format = "TODO: format", // set.Select(q => q.Format).Distinct().ToArray(),
+        //    Endpoint = "TODO: endpoint", // set.Select(q => q.Endpoint).Distinct().ToArray(),
+        //    Hits = set.Count(),
+        //    CacheHits = set.Count(ed => ed.CacheHit == true)
+        //  });
+
+
 			}
 
 			return queryStatistics;
@@ -126,6 +167,8 @@
 							(set.Any(q => q.CacheHit))
 								? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
 								: 0,
+            Format = "TODO: format", // set.Select(q => q.Format).Distinct().ToArray(),
+            Endpoint = "TODO: endpoint", // set.Select(q => q.Endpoint).Distinct().ToArray(),
 						Hits = set.Count(),
 						CacheHits = set.Count(ed => ed.CacheHit == true)
 					});

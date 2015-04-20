@@ -12,7 +12,7 @@
 
   using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
-
+  
   using Query = MongoDB.Driver.Builders.Query;
 
   public class MongoQueryLogRepository : MongoRepository<QueryLogItem>, IQueryLogRepository {
@@ -74,6 +74,52 @@
 
 			return results;
 		}
+
+
+    public IList<QueryLogStatisticsByAccount> GetQueryLogStatisticsByAccount(DateTime startDate, string queryAlias, string accountId, bool cacheHit)
+    {
+      var match = new BsonDocument(
+        "$match",
+        new BsonDocument { 										
+					{ "DateTime", new BsonDocument { { "$gt", startDate } }  },
+          { "Name", queryAlias  },
+          { "AccountId", accountId },
+          { "CacheHit", new BsonDocument { { "$eq", cacheHit } }  },
+				});
+
+      var group = new BsonDocument(
+        "$group",
+        new BsonDocument {					
+          { "_id", new BsonDocument { { "AccountId", "$AccountId" }, { "Endpoint", "$Endpoint" }, {"Format", "$AcceptFormat"} } },
+					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },          
+				});
+
+      var project = new BsonDocument(
+        "$project",
+        new BsonDocument { 
+          {"_id", 0}, 
+          {"AccountId", "$_id.AccountId"},
+          {"Endpoint", "$_id.Endpoint"},
+          {"Format", "$_id.Format"},
+          {"AverageTime", "$AverageTime"}          
+        });
+
+      var pipeline = new[] { match, group, project };
+
+      var args = new AggregateArgs()
+      {
+        Pipeline = pipeline,
+      };
+
+      var coll = this.Collection;
+
+      var aggregationResult = coll.Aggregate(args);
+
+      var result = aggregationResult.Select(BsonSerializer.Deserialize<QueryLogStatisticsByAccount>).ToList();
+
+      return result;
+    }
+
 
 		public IList<QueryStatistics> GetQueryStatistics() {
 			var match = new BsonDocument(
