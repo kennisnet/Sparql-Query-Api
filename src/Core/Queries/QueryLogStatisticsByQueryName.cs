@@ -10,6 +10,14 @@
 
     public double AverageTime { get; set; }
 
-    public double SumTime { get; set; }
+    public long TotalHits { get; set; }
+
+    public double NoCacheSumTime { get; set; }
+
+    public long NoCacheTotalHits { get; set; }
+
+    public double CacheSumTime { get; set; }
+
+    public long CacheTotalHits { get; set; }
   }
 }

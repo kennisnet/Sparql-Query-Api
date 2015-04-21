@@ -73,7 +73,7 @@
 		}
 
 
-    public IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(DateTime startDate, string accountApiKey, string queryName, bool cacheHit)
+    public IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(DateTime startDate, string accountApiKey, string queryName, IEnumerable<string> columns )
     {
       //var logItems = !string.IsNullOrEmpty(accountApiKey)
       //                   ? this._queryLogRepository.GetStartingFromDateForAccount(startTime, accountApiKey)
@@ -86,7 +86,6 @@
           { "DateTime", new BsonDocument { { "$gt", startDate } }  },
           { "AccountId", accountApiKey },
           { "Name", queryName },
-          { "CacheHit", new BsonDocument { { "$eq", cacheHit } }  },
         };
         
       }
@@ -95,7 +94,6 @@
         matchCondition = new BsonDocument { 										
           { "DateTime", new BsonDocument { { "$gt", startDate } }  },
           { "Name", queryName },
-          { "CacheHit", new BsonDocument { { "$eq", cacheHit } }  },
         };
       }
 
@@ -103,12 +101,22 @@
         "$match",
         matchCondition); ;
 
+
+      var groups = new BsonDocument { { "QueryName", "$Name" } };
+      foreach (var column in columns) {
+        groups.Add(column, "$" + column);
+      }
+
       var group = new BsonDocument(
         "$group",
         new BsonDocument {
-          { "_id", new BsonDocument { { "QueryName", "$Name" }, { "Endpoint", "$Endpoint" }, {"Format", "$AcceptFormat"}, {"RemoteIp", "$RemoteIp"} } },
+          { "_id", groups },
 					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },
-          { "SumTime", new BsonDocument { { "$sum", "$ExecutionTime" } } }
+          { "TotalHits", new BsonDocument { { "$sum", 1 } } },
+          { "NoCacheSumTime", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 0, "$ExecutionTime" } } } } } },
+          { "NoCacheTotalHits", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 0, 1 } } } } } },
+          { "CacheSumTime", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", "$ExecutionTime", 0 } } } } } },
+          { "CacheTotalHits", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 1, 0 } } } } } }
         });
 
       var project = new BsonDocument(
@@ -117,10 +125,14 @@
           {"_id", 0}, 
           {"QueryName", "$_id.QueryName"},
           {"Endpoint", "$_id.Endpoint"},
-          {"Format", "$_id.Format"},
+          {"Format", "$_id.AcceptFormat"},
           {"RemoteIp", "$_id.RemoteIp"},
           {"AverageTime", "$AverageTime"},
-          {"SumTime", "$SumTime"}
+          {"TotalHits", "$TotalHits"},
+          {"NoCacheSumTime", "$NoCacheSumTime"},
+          {"NoCacheTotalHits", "$NoCacheTotalHits"},
+          {"CacheSumTime", "$CacheSumTime"},
+          {"CacheTotalHits", "$CacheTotalHits"}
         });
 
       var pipeline = new[] { match, group, project };

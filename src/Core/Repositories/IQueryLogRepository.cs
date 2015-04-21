@@ -28,7 +28,7 @@
     IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(
       DateTime startDate, 
       string accountApiKey, 
-      string queryName, 
-      bool cacheHit);
+      string queryName,
+      IEnumerable<string> columns);
   }
 }

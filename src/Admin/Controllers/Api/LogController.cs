@@ -147,59 +147,23 @@
      
 			foreach (var queryName in queryNames) {
 				
-        var setWithoutCacheHit = this._queryLogRepository.GetQueryLogStatisticsByQueryName(startTime, accountApiKey, queryName, false);
-        var setWithCacheHit = this._queryLogRepository.GetQueryLogStatisticsByQueryName(startTime, accountApiKey, queryName, true);
+        var groupedSet = this._queryLogRepository.GetQueryLogStatisticsByQueryName(startTime, accountApiKey, queryName, new[] { "Endpoint", "AcceptFormat", "RemoteIp" });
 
-        var setMain = new List<QueryLogStatisticsByQueryName>();
-        setMain.AddRange(setWithoutCacheHit);
-        setMain.AddRange(setWithCacheHit);
-        
-        var set = logItems.Where(q => q.Name == queryName).ToList();
-
-        foreach (var item in setMain) {
-          var averageTime = setMain.Count > 0 ? Convert.ToInt32(Math.Round(setMain.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint && s.RemoteIp == item.RemoteIp).Average(ed => ed.AverageTime))) : 0;
-          var averageExecutionTime = setWithoutCacheHit.Count > 0 ? Convert.ToInt32(Math.Round(setWithoutCacheHit.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint && s.RemoteIp == item.RemoteIp).Average(ed => ed.AverageTime))) : 0;
-          var averageCachedTime = setWithCacheHit.Count > 0 ? Convert.ToInt32(Math.Round(setWithCacheHit.Where(s => s.Format == item.Format && s.Endpoint == item.Endpoint && s.RemoteIp == item.RemoteIp).Average(ed => ed.AverageTime))) : 0;
-
-          var setHits = set.Count(s => s.AcceptFormat == item.Format && s.Endpoint == item.Endpoint && s.RemoteIp == item.RemoteIp);
-
+        foreach (var item in groupedSet) {
           queryStatistics.Add(
             new QueryStatisticsModel
             {
               Name = queryName,
-              AverageTime = averageTime,
-              AverageExecutionTime = averageExecutionTime,
-              AverageCachedTime = averageCachedTime,
-              Format = item.Format,
+              AverageTime = Convert.ToInt32(item.AverageTime),
+              AverageExecutionTime = (item.NoCacheTotalHits != 0) ? Convert.ToInt32(item.NoCacheSumTime / item.NoCacheTotalHits) : 0,
+              AverageCachedTime = (item.CacheTotalHits != 0) ? Convert.ToInt32(item.CacheSumTime / item.CacheTotalHits) : 0,
+              Format = (item.Format.Contains("text/html")) ? "text/html" : item.Format,
               Endpoint = item.Endpoint,
               RemoteIp = item.RemoteIp,
-              Hits = setHits,
-              CacheHits = set.Count(ed => ed.CacheHit == true)
+              Hits = Convert.ToInt32(item.CacheTotalHits + item.NoCacheTotalHits),
+              CacheHits = Convert.ToInt32(item.CacheTotalHits)
             });
         }
-
-
-
-        //queryStatistics.Add(
-        //  new QueryStatisticsModel {
-        //    //var sum = list.Aggregate((acc, cur) => acc + cur);
-        //    //var average = ;
-        //    Name = queryName,
-        //    //AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
-        //    AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
-        //    AverageExecutionTime =
-        //      (set.Any(q => !q.CacheHit))
-        //        ? Convert.ToInt32(Math.Round(set.Where(q => !q.CacheHit).Average(ed => ed.ExecutionTime)))
-        //        : 0,
-        //    AverageCachedTime =
-        //      (set.Any(q => q.CacheHit))
-        //        ? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
-        //        : 0,
-        //    Format = "TODO: format", 
-        //    Endpoint = "TODO: endpoint", 
-        //    Hits = set.Count(),
-        //    CacheHits = set.Count(ed => ed.CacheHit == true)
-        //  });
 			}
 
 			return queryStatistics;
