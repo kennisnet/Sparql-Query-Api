@@ -38,6 +38,11 @@
 			return results;
 		}
 
+    /// <summary>
+    /// Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <returns></returns>
 		public IList<QueryLogItem> GetStartingFromDate(DateTime startDate) {
 			var queryItemsColl = this.Collection;
 
@@ -47,6 +52,12 @@
 			return results;
 		}
 
+    /// <summary>
+    /// Accounts > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="accountApiKey"></param>
+    /// <returns></returns>
 		public IList<QueryLogItem> GetStartingFromDateForAccount(DateTime startDate, string accountApiKey)
 		{
 			var queryItemsColl = this.Collection;
@@ -61,21 +72,102 @@
 			return results;
 		}
 
-		public IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias)
-		{
-			var queryItemsColl = this.Collection;
 
-			var query = Query.And(
-				Query<QueryLogItem>.GT(p => p.DateTime, startDate),
-				Query<QueryLogItem>.EQ(p => p.Name, queryAlias)
-				);
+    public IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(DateTime startDate, string accountApiKey, string queryName, bool cacheHit)
+    {
+      //var logItems = !string.IsNullOrEmpty(accountApiKey)
+      //                   ? this._queryLogRepository.GetStartingFromDateForAccount(startTime, accountApiKey)
+      //                   : this._queryLogRepository.GetStartingFromDate(startTime);
 
-			var results = queryItemsColl.Find(query).ToList();
+      BsonDocument matchCondition;
+           
+      if (!string.IsNullOrEmpty(accountApiKey)) {
+        matchCondition = new BsonDocument { 										
+          { "DateTime", new BsonDocument { { "$gt", startDate } }  },
+          { "AccountId", accountApiKey },
+          { "Name", queryName },
+          { "CacheHit", new BsonDocument { { "$eq", cacheHit } }  },
+        };
+        
+      }
+      else
+      {
+        matchCondition = new BsonDocument { 										
+          { "DateTime", new BsonDocument { { "$gt", startDate } }  },
+          { "Name", queryName },
+          { "CacheHit", new BsonDocument { { "$eq", cacheHit } }  },
+        };
+      }
 
-			return results;
-		}
+      var match = new BsonDocument(
+        "$match",
+        matchCondition); ;
 
+      var group = new BsonDocument(
+        "$group",
+        new BsonDocument {
+          { "_id", new BsonDocument { { "QueryName", "$Name" }, { "Endpoint", "$Endpoint" }, {"Format", "$AcceptFormat"}, {"RemoteIp", "$RemoteIp"} } },
+					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },
+          { "SumTime", new BsonDocument { { "$sum", "$ExecutionTime" } } }
+        });
 
+      var project = new BsonDocument(
+        "$project",
+        new BsonDocument { 
+          {"_id", 0}, 
+          {"QueryName", "$_id.QueryName"},
+          {"Endpoint", "$_id.Endpoint"},
+          {"Format", "$_id.Format"},
+          {"RemoteIp", "$_id.RemoteIp"},
+          {"AverageTime", "$AverageTime"},
+          {"SumTime", "$SumTime"}
+        });
+
+      var pipeline = new[] { match, group, project };
+
+      var args = new AggregateArgs()
+      {
+        Pipeline = pipeline,
+      };
+
+      var coll = this.Collection;
+
+      var aggregationResult = coll.Aggregate(args);
+
+      var result = aggregationResult.Select(BsonSerializer.Deserialize<QueryLogStatisticsByQueryName>).ToList();
+
+      return result;
+
+    }
+
+    /// <summary>
+    /// Queries > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="queryAlias"></param>
+    /// <returns></returns>
+    public IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias)
+    {
+      var queryItemsColl = this.Collection;
+
+      var query = Query.And(
+        Query<QueryLogItem>.GT(p => p.DateTime, startDate),
+        Query<QueryLogItem>.EQ(p => p.Name, queryAlias)
+        );
+
+      var results = queryItemsColl.Find(query).ToList();
+
+      return results;
+    }
+
+    /// <summary>
+    /// Queries > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="queryAlias"></param>
+    /// <param name="accountId"></param>
+    /// <param name="cacheHit"></param>
+    /// <returns></returns>
     public IList<QueryLogStatisticsByAccount> GetQueryLogStatisticsByAccount(DateTime startDate, string queryAlias, string accountId, bool cacheHit)
     {
       var match = new BsonDocument(
@@ -90,8 +182,9 @@
       var group = new BsonDocument(
         "$group",
         new BsonDocument {					
-          { "_id", new BsonDocument { { "AccountId", "$AccountId" }, { "Endpoint", "$Endpoint" }, {"Format", "$AcceptFormat"} } },
-					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },          
+          { "_id", new BsonDocument { { "AccountId", "$AccountId" }, { "Endpoint", "$Endpoint" }, {"Format", "$AcceptFormat"}, {"RemoteIp", "$RemoteIp"} } },
+					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },
+          { "SumTime", new BsonDocument { { "$sum", "$ExecutionTime" } } }
 				});
 
       var project = new BsonDocument(
@@ -101,7 +194,9 @@
           {"AccountId", "$_id.AccountId"},
           {"Endpoint", "$_id.Endpoint"},
           {"Format", "$_id.Format"},
-          {"AverageTime", "$AverageTime"}          
+          {"RemoteIp", "$_id.RemoteIp"},
+          {"AverageTime", "$AverageTime"},         
+          {"SumTime", "$SumTime"}
         });
 
       var pipeline = new[] { match, group, project };
@@ -121,7 +216,7 @@
     }
 
 
-		public IList<QueryStatistics> GetQueryStatistics() {
+		public IList<QueryStatistics> GetQueryStatisticsForDownloads() {
 			var match = new BsonDocument(
 				"$match",
 				new BsonDocument { 					

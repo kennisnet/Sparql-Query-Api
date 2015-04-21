@@ -1,6 +1,6 @@
 ﻿namespace Trezorix.Sparql.Api.Core.Queries {
-  public class QueryLogStatisticsByAccount {
-    public string AccountId { get; set; }
+  public class QueryLogStatisticsByQueryName {
+    public string QueryName { get; set; }
 
     public string Endpoint { get; set; }
 
