@@ -12,7 +12,7 @@
 
   using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
-
+  
   using Query = MongoDB.Driver.Builders.Query;
 
   public class MongoQueryLogRepository : MongoRepository<QueryLogItem>, IQueryLogRepository {
@@ -38,6 +38,11 @@
 			return results;
 		}
 
+    /// <summary>
+    /// Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <returns></returns>
 		public IList<QueryLogItem> GetStartingFromDate(DateTime startDate) {
 			var queryItemsColl = this.Collection;
 
@@ -47,6 +52,12 @@
 			return results;
 		}
 
+    /// <summary>
+    /// Accounts > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="accountApiKey"></param>
+    /// <returns></returns>
 		public IList<QueryLogItem> GetStartingFromDateForAccount(DateTime startDate, string accountApiKey)
 		{
 			var queryItemsColl = this.Collection;
@@ -61,21 +72,113 @@
 			return results;
 		}
 
-		public IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias)
-		{
-			var queryItemsColl = this.Collection;
+    /// <summary>
+    /// Queries > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="queryAlias"></param>
+    /// <returns></returns>
+    public IList<QueryLogItem> GetStartingFromDateForQuery(DateTime startDate, string queryAlias)
+    {
+      var queryItemsColl = this.Collection;
 
-			var query = Query.And(
-				Query<QueryLogItem>.GT(p => p.DateTime, startDate),
-				Query<QueryLogItem>.EQ(p => p.Name, queryAlias)
-				);
+      var query = Query.And(
+        Query<QueryLogItem>.GT(p => p.DateTime, startDate),
+        Query<QueryLogItem>.EQ(p => p.Name, queryAlias)
+        );
 
-			var results = queryItemsColl.Find(query).ToList();
+      var results = queryItemsColl.Find(query).ToList();
 
-			return results;
-		}
+      return results;
+    }
 
-		public IList<QueryStatistics> GetQueryStatistics() {
+    /// <summary>
+    /// Queries > Logs
+    /// </summary>
+    /// <param name="startDate"></param>
+    /// <param name="queryAlias"></param>
+    /// <param name="accountApiKey"></param>
+    /// <param name="columns"></param>
+    /// <returns></returns>
+    public IList<QueryLogStatisticsByColumn> GetQueryLogStatistics(DateTime startDate, string queryAlias, string accountApiKey, IEnumerable<string> columns)
+    {
+      BsonDocument matchCondition;
+
+      if (!string.IsNullOrEmpty(accountApiKey))
+      {
+        matchCondition = new BsonDocument {
+          { "DateTime", new BsonDocument { { "$gt", startDate } }  },
+          { "AccountId", accountApiKey },
+          { "Name", queryAlias },
+        };
+
+      }
+      else
+      {
+        matchCondition = new BsonDocument {
+          { "DateTime", new BsonDocument { { "$gt", startDate } }  },
+          { "Name", queryAlias },
+        };
+      }
+
+      var match = new BsonDocument(
+        "$match",
+        matchCondition); ;
+
+      var columnList = columns as IList<string> ?? columns.ToList();
+
+      var groups = new BsonDocument();
+      foreach (var column in columnList)
+      {
+        groups.Add(column, "$" + column);
+      }
+
+      var group = new BsonDocument(
+        "$group",
+        new BsonDocument {
+          { "_id", groups },
+					{ "AverageTime", new BsonDocument { { "$avg", "$ExecutionTime" } } },
+          { "TotalHits", new BsonDocument { { "$sum", 1 } } },
+          { "NoCacheSumTime", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 0, "$ExecutionTime" } } } } } },
+          { "NoCacheTotalHits", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 0, 1 } } } } } },
+          { "CacheSumTime", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", "$ExecutionTime", 0 } } } } } },
+          { "CacheTotalHits", new BsonDocument { { "$sum", new BsonDocument { { "$cond", new BsonArray { "$CacheHit", 1, 0 } } } } } }
+				});
+
+      var project = new BsonDocument(
+        "$project",
+        new BsonDocument { 
+          {"_id", 0}, 
+          {"MasterColumn", "$_id." + columnList.First()},
+          {"Endpoint", "$_id.Endpoint"},
+          {"Format", "$_id.AcceptFormat"},
+          {"RemoteIp", "$_id.RemoteIp"},
+          {"AverageTime", "$AverageTime"},
+          {"TotalHits", "$TotalHits"},
+          {"NoCacheSumTime", "$NoCacheSumTime"},
+          {"NoCacheTotalHits", "$NoCacheTotalHits"},
+          {"CacheSumTime", "$CacheSumTime"},
+          {"CacheTotalHits", "$CacheTotalHits"}
+        });
+
+      var pipeline = new[] { match, group, project };
+
+      var args = new AggregateArgs()
+      {
+        Pipeline = pipeline,
+      };
+
+      var coll = this.Collection;
+
+      var aggregationResult = coll.Aggregate(args);
+
+      var result = aggregationResult.Select(BsonSerializer.Deserialize<QueryLogStatisticsByColumn>).ToList();
+
+      return result;
+    }
+
+
+		public IList<QueryStatistics> GetQueryStatisticsForDownloads() {
 			var match = new BsonDocument(
 				"$match",
 				new BsonDocument { 					
@@ -120,12 +223,21 @@
 
 			var indexes = coll.GetIndexes().ToList();
 
-			var queryStatisticsIndexExists = indexes.Exists(ind => ind.Name == "QueryStatisticsIndex");
-			if (!queryStatisticsIndexExists) {
-				var queryStatisticsIndexKeys = IndexKeys.Ascending("Name", "DateTime");
-				var queryStatisticsIndexOptions = IndexOptions.SetName("QueryStatisticsIndex");
-				coll.CreateIndex(queryStatisticsIndexKeys, queryStatisticsIndexOptions);
-			}
+      // Drop old index if applicable
+      var queryStatisticsIndexExists = indexes.Exists(ind => ind.Name == "QueryStatisticsIndex");
+      if (queryStatisticsIndexExists) {
+        coll.DropIndexByName("QueryStatisticsIndex");
+      }
+
+      // Create new index if applicable
+      var queryLogStatisticsIndexExists = indexes.Exists(ind => ind.Name == "QueryLogStatisticsIndex");
+      if (!queryLogStatisticsIndexExists)
+      {
+        var queryLogStatisticsIndexKeys = IndexKeys.Ascending("AccountId", "Name", "DateTime", "Endpoint", "AcceptFormat", "RemoteIp");
+        var queryLogStatisticsIndexOptions = IndexOptions.SetName("QueryLogStatisticsIndex");
+        coll.CreateIndex(queryLogStatisticsIndexKeys, queryLogStatisticsIndexOptions);
+      }
+
 		}
 
 	}

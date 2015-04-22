@@ -17,7 +17,10 @@
       <table class="table table-striped" style="width:100%">
         <thead>
           <tr>
-            <th>{{logStatsFirstColumnLabel}}</th>
+	          <th>{{logStatsFirstColumnLabel}}</th>
+	          <th>Formaat</th>
+	          <th>Endpoint</th>
+						<th>IP adres</th>
             <th class="numValue">Gemiddelde tijd (ms)</th>
             <th class="numValue">Uitvoeringstijd (ms)</th>
             <th class="numValue">Cache tijd (ms)</th>
@@ -27,7 +30,10 @@
         </thead>
         <tbody>
           <tr data-ng-repeat="log in queryStatistics">
-            <td>{{log.Name}}</td>
+	          <td>{{log.Name}}</td>
+						<td>{{log.Format}}</td>
+	          <td>{{log.Endpoint}}</td>
+						<td>{{log.RemoteIp}}</td>
             <td class="numValue">{{log.AverageTime}}</td>
             <td class="numValue">{{log.AverageExecutionTime}}</td>
             <td class="numValue">{{log.AverageCachedTime}}</td>

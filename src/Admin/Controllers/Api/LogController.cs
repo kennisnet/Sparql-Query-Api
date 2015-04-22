@@ -6,6 +6,7 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Statistics;
+  using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
 
 	[RoutePrefix("Api/Log")]
@@ -64,6 +65,7 @@
 		private dynamic GetLogStatsForQuery(string queryAlias, DateTime startTime) {
 			var logItems = this._queryLogRepository.GetStartingFromDateForQuery(startTime, queryAlias);
 
+
 			var queryStatistics = new List<QueryStatisticsModel>();
 			var accountIds = logItems.AsQueryable().Select(q => q.AccountId).Distinct().ToList();
 
@@ -74,27 +76,25 @@
 			var accounts = _accountRepository.GetByApiKeys(accountIds).Where(a => a != null).ToList();
 
 			foreach (var accountId in accountIds) {
-				var set = logItems.Where(q => q.AccountId == accountId).ToList();
-				queryStatistics.Add(
-					new QueryStatisticsModel {
-						//var sum = list.Aggregate((acc, cur) => acc + cur);
-						//var average = ;
-						Name = accounts.First(a => a.ApiKey == accountId).FullName,
-						//AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
-						AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
-						AverageExecutionTime =
-							(set.Any(q => !q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => !q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						AverageCachedTime =
-							(set.Any(q => q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						Formats = set.Select(q => q.AcceptFormat).Distinct().ToArray(),
-						Endpoints = set.Select(q => q.Endpoint).Distinct().ToArray(),
-						Hits = set.Count(),
-						CacheHits = set.Count(ed => ed.CacheHit == true)
-					});
+
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryAlias, accountId, new[] { "AccountId", "Endpoint", "AcceptFormat", "RemoteIp" });        
+
+        foreach (var item in groupedSet)
+        {
+          queryStatistics.Add(
+            new QueryStatisticsModel
+            {
+              Name = accounts.First(a => a.ApiKey == accountId).FullName,
+              AverageTime = Convert.ToInt32(item.AverageTime),
+              AverageExecutionTime = (item.NoCacheTotalHits != 0) ? Convert.ToInt32(item.NoCacheSumTime / item.NoCacheTotalHits) : 0,
+              AverageCachedTime = (item.CacheTotalHits != 0) ? Convert.ToInt32(item.CacheSumTime / item.CacheTotalHits) : 0,
+              Format = (!string.IsNullOrEmpty(item.Format) && item.Format.Contains("text/html")) ? "text/html" : item.Format,
+              Endpoint = item.Endpoint,
+              RemoteIp = item.RemoteIp,
+              Hits = Convert.ToInt32(item.CacheTotalHits + item.NoCacheTotalHits),
+              CacheHits = Convert.ToInt32(item.CacheTotalHits)
+            });
+        }
 			}
 
 			return queryStatistics;
@@ -106,29 +106,28 @@
 				                 : this._queryLogRepository.GetStartingFromDate(startTime);
 
 			var queryStatistics = new List<QueryStatisticsModel>();
+
 			var queryNames = logItems.AsQueryable().Select(q => q.Name).Distinct().ToList();
-
+     
 			foreach (var queryName in queryNames) {
-				var set = logItems.Where(q => q.Name == queryName).ToList();
 
-				queryStatistics.Add(
-					new QueryStatisticsModel {
-						//var sum = list.Aggregate((acc, cur) => acc + cur);
-						//var average = ;
-						Name = queryName,
-						//AverageExecutionTime = items.Select(q => q.ExecutionTime).Aggregate((acc, cur) => acc + cur) / items.Count(), 
-						AverageTime = Convert.ToInt32(Math.Round(set.Average(ed => ed.ExecutionTime))),
-						AverageExecutionTime =
-							(set.Any(q => !q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => !q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						AverageCachedTime =
-							(set.Any(q => q.CacheHit))
-								? Convert.ToInt32(Math.Round(set.Where(q => q.CacheHit).Average(ed => ed.ExecutionTime)))
-								: 0,
-						Hits = set.Count(),
-						CacheHits = set.Count(ed => ed.CacheHit == true)
-					});
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryName, accountApiKey, new[] { "Name", "Endpoint", "AcceptFormat", "RemoteIp" });
+
+        foreach (var item in groupedSet) {
+          queryStatistics.Add(
+            new QueryStatisticsModel
+            {
+              Name = queryName,
+              AverageTime = Convert.ToInt32(item.AverageTime),
+              AverageExecutionTime = (item.NoCacheTotalHits != 0) ? Convert.ToInt32(item.NoCacheSumTime / item.NoCacheTotalHits) : 0,
+              AverageCachedTime = (item.CacheTotalHits != 0) ? Convert.ToInt32(item.CacheSumTime / item.CacheTotalHits) : 0,
+              Format = (!string.IsNullOrEmpty(item.Format) && item.Format.Contains("text/html")) ? "text/html" : item.Format,
+              Endpoint = item.Endpoint,
+              RemoteIp = item.RemoteIp,
+              Hits = Convert.ToInt32(item.CacheTotalHits + item.NoCacheTotalHits),
+              CacheHits = Convert.ToInt32(item.CacheTotalHits)
+            });
+        }
 			}
 
 			return queryStatistics;
@@ -154,7 +153,7 @@
 		private LogDownloadListModel ListWeeklyDownloads(int start, int count)
 		{
 			// get the min dates per query			
-			var queryStatistics = _queryLogRepository.GetQueryStatistics();
+			var queryStatistics = _queryLogRepository.GetQueryStatisticsForDownloads();
 
 			// get the min date from all queries
 			var minTimestamp = queryStatistics.Where(q => q.First > DateTime.MinValue).Min(q => q.First).Date;
@@ -189,7 +188,7 @@
 		private LogDownloadListModel ListMonthlyDownloads(int start, int count)
 		{
 			// get the min dates per query
-			var queryStatistics = _queryLogRepository.GetQueryStatistics();
+			var queryStatistics = _queryLogRepository.GetQueryStatisticsForDownloads();
 
 			if (queryStatistics.Count == 0)
 				return null;

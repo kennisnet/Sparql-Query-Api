@@ -28,7 +28,7 @@ namespace Trezorix.Sparql.Api.QueryApi.MediaTypeFormatters
 		public override bool CanWriteType(Type type)
 		{
 			return true;
-			return typeof(XmlNode).IsAssignableFrom(type);
+			//return typeof(XmlNode).IsAssignableFrom(type);
 		}
 		
 		public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, System.Net.TransportContext transportContext)
