@@ -23,7 +23,7 @@
       DateTime startDate, 
       string queryAlias, 
       string accountId, 
-      bool cacheHit);
+      IEnumerable<string> columns);
 
     IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(
       DateTime startDate, 
