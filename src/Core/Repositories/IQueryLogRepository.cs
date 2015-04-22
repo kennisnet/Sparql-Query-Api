@@ -19,16 +19,10 @@
 
     IList<QueryStatistics> GetQueryStatisticsForDownloads();
 
-    IList<QueryLogStatisticsByAccount> GetQueryLogStatisticsByAccount(
+    IList<QueryLogStatisticsByColumn> GetQueryLogStatistics(
       DateTime startDate, 
       string queryAlias, 
-      string accountId, 
-      IEnumerable<string> columns);
-
-    IList<QueryLogStatisticsByQueryName> GetQueryLogStatisticsByQueryName(
-      DateTime startDate, 
       string accountApiKey, 
-      string queryName,
       IEnumerable<string> columns);
   }
 }

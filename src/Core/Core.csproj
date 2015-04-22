@@ -75,7 +75,7 @@
     <Compile Include="Queries\Query.cs" />
     <Compile Include="Authorization\AuthorizationSettings.cs" />
     <Compile Include="Queries\QueryLogItem.cs" />
-    <Compile Include="Queries\QueryLogStatisticsByAccount.cs" />
+    <Compile Include="Queries\QueryLogStatisticsByColumn.cs" />
     <Compile Include="Queries\QueryLogStatisticsByQueryName.cs" />
     <Compile Include="Queries\QueryParameter.cs" />
     <Compile Include="Queries\QueryStatistics.cs" />

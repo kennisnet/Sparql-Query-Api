@@ -77,7 +77,7 @@
 
 			foreach (var accountId in accountIds) {
 
-        var groupedSet = this._queryLogRepository.GetQueryLogStatisticsByAccount(startTime, queryAlias, accountId, new[] { "Endpoint", "AcceptFormat", "RemoteIp" });        
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryAlias, accountId, new[] { "AccountId", "Endpoint", "AcceptFormat", "RemoteIp" });        
 
         foreach (var item in groupedSet)
         {
@@ -110,8 +110,8 @@
 			var queryNames = logItems.AsQueryable().Select(q => q.Name).Distinct().ToList();
      
 			foreach (var queryName in queryNames) {
-				
-        var groupedSet = this._queryLogRepository.GetQueryLogStatisticsByQueryName(startTime, accountApiKey, queryName, new[] { "Endpoint", "AcceptFormat", "RemoteIp" });
+
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryName, accountApiKey, new[] { "Name", "Endpoint", "AcceptFormat", "RemoteIp" });
 
         foreach (var item in groupedSet) {
           queryStatistics.Add(
