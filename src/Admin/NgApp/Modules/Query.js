@@ -192,9 +192,13 @@ QueryEditor.controller('QueryController', [
       if (queryId === '') {
         document.location.href = $scope.returnUrl;
       } else {
-        $http.delete(config.adminApiUrl + 'Query/' + queryId).then(function (response) {
-          document.location.href = $scope.returnUrl;
-        });
+        if (window.confirm("Weet u zeker dat u query '" + $scope.query.Label + "' wilt verwijderen?")) {
+          $http.delete(config.adminApiUrl + 'Query/' + queryId).then(function(response) {
+            document.location.href = $scope.returnUrl;
+          }, function() {
+            alert('Verwijderen is niet mogelijk.');
+          });
+        }
       }
     };
 
@@ -281,6 +285,8 @@ QueryEditor.controller('QueryIndexController', [
           $http.delete(config.adminApiUrl + 'Query/' + value).then(function (response) {
             document.location.href = $scope.returnUrl;
             $window.location.reload();
+          }, function () {
+            alert('Verwijderen is niet mogelijk.');
           });
         }
       }

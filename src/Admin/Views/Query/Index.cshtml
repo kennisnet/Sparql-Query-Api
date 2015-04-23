@@ -1,6 +1,7 @@
 ﻿@using Resources
 @using Trezorix.Sparql.Api.Application.Accounts
 @using Trezorix.Sparql.Api.Core.Accounts
+@using Trezorix.Sparql.Api.Core.Authorization
 @using Trezorix.Sparql.Api.Core.Configuration
 @model Trezorix.Sparql.Api.Admin.Models.Queries.GroupedQueryModel
 
@@ -26,6 +27,7 @@
 						string queryUrl = ApiConfiguration.Current.QueryApiUrl + "/" + query.Alias +
               "?api_key=" + ViewBag.Account.ApiKey.ToString() + 
 							query.Parameters.Aggregate("", (current, queryParameter) => current + ("&" + queryParameter.Name + "=" + (queryParameter.SampleValue ?? "")));
+            bool canEdit = query.Authorization.Any(a => a.Operation == AuthorizationOperations.Edit && a.AccountId == ViewBag.Account.Id) || ViewBag.Account.IsAdministrator;
 						<tr>
 						  <td>
                 <a href="#/query/@(query.Alias)">@query.Alias</a>
@@ -34,10 +36,11 @@
                 <a href="@queryUrl" target="_blank" class="btn pull-right glyphicon glyphicon-eye-open icon" title="@query.Alias"> </a>
 							</td>
 							<td style="width: 5%">
-							  <button type="button" data-ng-click="deleteQuery('@query.Alias')" class="btn pull-right glyphicon glyphicon-trash icon" title="@EditorStrings.Delete"> </button>
+							  <button type="button" data-ng-click="deleteQuery('@query.Alias')" class="btn pull-right glyphicon glyphicon-trash icon" data-ng-if="@(canEdit.ToString().ToLower())" title="@EditorStrings.Delete"></button>
 							</td>
 							<td style="width: 5%">
-								<a href="#/query/@(query.Alias)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" title="@EditorStrings.Edit"> </a>
+								<a href="#/query/@(query.Alias)" class="btn btn-default pull-right glyphicon glyphicon-expand icon" data-ng-if="@((!canEdit).ToString().ToLower())" title="@EditorStrings.Edit"> </a>
+								<a href="#/query/@(query.Alias)" class="btn btn-default pull-right glyphicon glyphicon-pencil icon" data-ng-if="@(canEdit.ToString().ToLower())" title="@EditorStrings.Edit"> </a>
 							</td>
 						</tr>
 					}
