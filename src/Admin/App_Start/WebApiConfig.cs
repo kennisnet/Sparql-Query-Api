@@ -2,10 +2,7 @@
 
 namespace Trezorix.Sparql.Api.Admin.App_Start
 {
-  using System.Linq;
   using System.Net.Http.Formatting;
-
-  using Newtonsoft.Json.Serialization;
 
   public static class WebApiConfig
 	{

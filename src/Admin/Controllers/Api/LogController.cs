@@ -24,7 +24,7 @@
 
 		[HttpGet]
     [Route("Statistics")]
-		public dynamic Statistics(string timespan, string accountApiKey = null, string queryAlias = null)
+		public dynamic Statistics(string timespan, string accountApiKey = null, string queryAlias = null, string columns = null)
 		{
       DateTime startTime;
       DateTime endTime = DateTime.UtcNow;
@@ -47,10 +47,11 @@
             break;
           }
       }
-	    
-	    return !string.IsNullOrEmpty(queryAlias) ? 
-				this.GetLogStatsForQuery(queryAlias, startTime) : 
-				this.GetLogStatsForAccountOrAllLogsQueryItems(accountApiKey, startTime);
+
+		  var optionalColumns = (columns != null) ? columns.Split(',') : new string[] {}; 
+	    return !string.IsNullOrEmpty(queryAlias) ?
+        this.GetLogStatsForQuery(queryAlias, startTime, optionalColumns) :
+        this.GetLogStatsForAccountOrAllLogsQueryItems(accountApiKey, startTime, optionalColumns);
 
 
 	    //var sum = list.Aggregate((acc, cur) => acc + cur);
@@ -62,7 +63,7 @@
       //return Content(s);// Json(ApiConfiguration.Current, JsonRequestBehavior.AllowGet);
     }
 
-		private dynamic GetLogStatsForQuery(string queryAlias, DateTime startTime) {
+		private dynamic GetLogStatsForQuery(string queryAlias, DateTime startTime, string [] columns) {
 			var logItems = this._queryLogRepository.GetStartingFromDateForQuery(startTime, queryAlias);
 
 
@@ -77,7 +78,7 @@
 
 			foreach (var accountId in accountIds) {
 
-        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryAlias, accountId, new[] { "AccountId", "Endpoint", "AcceptFormat", "RemoteIp" });        
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryAlias, accountId, (new[] { "AccountId" }).Concat(columns));        
 
         foreach (var item in groupedSet)
         {
@@ -88,7 +89,7 @@
               AverageTime = Convert.ToInt32(item.AverageTime),
               AverageExecutionTime = (item.NoCacheTotalHits != 0) ? Convert.ToInt32(item.NoCacheSumTime / item.NoCacheTotalHits) : 0,
               AverageCachedTime = (item.CacheTotalHits != 0) ? Convert.ToInt32(item.CacheSumTime / item.CacheTotalHits) : 0,
-              Format = (!string.IsNullOrEmpty(item.Format) && item.Format.Contains("text/html")) ? "text/html" : item.Format,
+              AcceptFormat = (!string.IsNullOrEmpty(item.AcceptFormat) && item.AcceptFormat.Contains("text/html")) ? "text/html" : item.AcceptFormat,
               Endpoint = item.Endpoint,
               RemoteIp = item.RemoteIp,
               Hits = Convert.ToInt32(item.CacheTotalHits + item.NoCacheTotalHits),
@@ -100,7 +101,7 @@
 			return queryStatistics;
 		}
 
-		private dynamic GetLogStatsForAccountOrAllLogsQueryItems(string accountApiKey, DateTime startTime) {
+    private dynamic GetLogStatsForAccountOrAllLogsQueryItems(string accountApiKey, DateTime startTime, string[] columns) {
 			var logItems = !string.IsNullOrEmpty(accountApiKey)
 				                 ? this._queryLogRepository.GetStartingFromDateForAccount(startTime, accountApiKey)
 				                 : this._queryLogRepository.GetStartingFromDate(startTime);
@@ -111,7 +112,7 @@
      
 			foreach (var queryName in queryNames) {
 
-        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryName, accountApiKey, new[] { "Name", "Endpoint", "AcceptFormat", "RemoteIp" });
+        var groupedSet = this._queryLogRepository.GetQueryLogStatistics(startTime, queryName, accountApiKey, (new[] { "Name" }).Concat(columns));
 
         foreach (var item in groupedSet) {
           queryStatistics.Add(
@@ -121,7 +122,7 @@
               AverageTime = Convert.ToInt32(item.AverageTime),
               AverageExecutionTime = (item.NoCacheTotalHits != 0) ? Convert.ToInt32(item.NoCacheSumTime / item.NoCacheTotalHits) : 0,
               AverageCachedTime = (item.CacheTotalHits != 0) ? Convert.ToInt32(item.CacheSumTime / item.CacheTotalHits) : 0,
-              Format = (!string.IsNullOrEmpty(item.Format) && item.Format.Contains("text/html")) ? "text/html" : item.Format,
+              AcceptFormat = (!string.IsNullOrEmpty(item.AcceptFormat) && item.AcceptFormat.Contains("text/html")) ? "text/html" : item.AcceptFormat,
               Endpoint = item.Endpoint,
               RemoteIp = item.RemoteIp,
               Hits = Convert.ToInt32(item.CacheTotalHits + item.NoCacheTotalHits),

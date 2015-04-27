@@ -1,4 +1,4 @@
-﻿<div class="sidebar-nav navbar-collapse">
+﻿<div class="sidebar-nav navbar-collapse" ng-cloak>
 	<ul class="nav" id="side-menu" data-ng-controller="QueryNavigator" data-ng-show="isVisible">
 		<li data-ng-repeat="group in groupedQueries.Groups | orderBy: 'Label'">
 			<button id="group_{{Id}}" class="side-menu" data-ng-click="toggleGroup($event, group.Id)"><i class="fa fa-sitemap fa-fw"></i> <strong>{{group.Label}}</strong><span class="arrow fa" data-ng-class="{ 'fa-angle-left': isGroupVisible(group.Id), 'fa-angle-down': !isGroupVisible(group.Id)}"></span></button>

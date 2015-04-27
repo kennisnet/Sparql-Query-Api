@@ -35,16 +35,16 @@
         <li data-ng-repeat="queryAccess in account.QueryAccess">
           <div class="row">
             <div data-ng-class="{ 'col-xs-10': !account.IsEditor, 'col-xs-8': account.IsEditor}">
-              <span>{{queryAccess.Name}}</span>
+              <a data-ng-href="/#/query/{{queryAccess.Alias}}">{{queryAccess.Label}}</a>
             </div>
             <div class="col-xs-2">
               <div class="text-center">
-                <input type="checkbox" value="{{queryAccess.Name}}" data-ng-model="queryAccess.View" data-ng-disabled="!user.isEditor" />
+                <input type="checkbox" value="{{queryAccess.Alias}}" data-ng-model="queryAccess.View" data-ng-disabled="!user.isEditor" />
               </div>
             </div>
             <div class="col-xs-2" data-ng-show="account.IsEditor">
               <div class="text-center">
-                <input type="checkbox" value="{{queryAccess.Name}}" data-ng-model="queryAccess.Edit" data-ng-disabled="!user.isEditor" />
+                <input type="checkbox" value="{{queryAccess.Alias}}" data-ng-model="queryAccess.Edit" data-ng-disabled="!user.isEditor" />
               </div>
             </div>
           </div>

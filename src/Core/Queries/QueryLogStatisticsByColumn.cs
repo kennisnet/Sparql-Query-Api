@@ -4,7 +4,7 @@
 
     public string Endpoint { get; set; }
 
-    public string Format { get; set; }
+    public string AcceptFormat { get; set; }
 
     public string RemoteIp { get; set; }
 

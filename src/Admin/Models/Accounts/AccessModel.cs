@@ -2,7 +2,8 @@
 {
 	public class QueryAccessModel
 	{
-		public string Name { get; set; }
+		public string Alias { get; set; }
+		public string Label { get; set; }
 		public bool View { get; set; }
 		public bool Edit { get; set; }
 	}

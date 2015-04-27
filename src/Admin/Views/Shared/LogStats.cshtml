@@ -1,14 +1,20 @@
 ﻿@using Resources
 <div id="view_log_general" class="well space-above form-inline">
 
-  <div class="form-horizontal">
-    <div class="form-group">
-      <div class="col-lg-1">
-        <label class="control-label">Periode</label>
-      </div>
-      <div class="col-lg-11">
-        <select class="form-control" data-ng-model="timespan" data-ng-options="item.label for item in statisticsTimespans" data-ng-change="onTimespanChanged(timespan)"></select>
-      </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <label class="control-label">Periode</label>
+      <select class="form-control" data-ng-model="timespan" data-ng-options="item.label for item in statisticsTimespans" data-ng-change="onTimespanChanged(timespan)"></select>
+      <button type="button" class="btn btn-toolbar dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false">
+        Kolommen <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li class="" ng-repeat="column in availableColums">
+          <span class="control">
+            <input type="checkbox" id="column_{{column.key}}" data-ng-model="column.selected" data-ng-change="updateStats()" /> <label for="column_{{column.key}}" class="control-label"> {{column.label}}</label>
+          </span>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -17,10 +23,8 @@
       <table class="table table-striped" style="width:100%">
         <thead>
           <tr>
-	          <th>{{logStatsFirstColumnLabel}}</th>
-	          <th>Formaat</th>
-	          <th>Endpoint</th>
-						<th>IP adres</th>
+            <th>{{logStatsFirstColumnLabel}}</th>
+            <th data-ng-repeat="column in availableColums | filter: { selected: true }">{{column.label}}</th>
             <th class="numValue">Gemiddelde tijd (ms)</th>
             <th class="numValue">Uitvoeringstijd (ms)</th>
             <th class="numValue">Cache tijd (ms)</th>
@@ -30,10 +34,8 @@
         </thead>
         <tbody>
           <tr data-ng-repeat="log in queryStatistics">
-	          <td>{{log.Name}}</td>
-						<td>{{log.Format}}</td>
-	          <td>{{log.Endpoint}}</td>
-						<td>{{log.RemoteIp}}</td>
+            <td>{{log.Name}}</td>
+            <td data-ng-repeat="column in availableColums | filter: { selected: true }">{{log[column.key]}}</td>
             <td class="numValue">{{log.AverageTime}}</td>
             <td class="numValue">{{log.AverageExecutionTime}}</td>
             <td class="numValue">{{log.AverageCachedTime}}</td>
