@@ -101,7 +101,7 @@
           }          
         })
         .error(function () {
-          alert("Kan de query niet opslaan. Probeer het nog eens...");
+          alert("Kan de account niet opslaan. Probeer het nog eens...");
         });
     };
 

@@ -126,8 +126,8 @@ QueryEditor.controller('QueryController', [
           $scope.queryForm.$setPristine();
           document.location.href = config.viewsUrl + '#/query/' + $scope.query.Alias;
         })
-        .error(function() {
-          alert('Kan de query niet opslaan. Probeer het nog eens...');
+        .error(function(response) {
+          alert('Kan de query niet opslaan. ' + response.Message + ' Probeer het nog eens...');
         });
 
     };

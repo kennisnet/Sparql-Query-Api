@@ -87,7 +87,11 @@
         return this.Unauthorized();
       }
 
-			var query = new Query();
+      if (this._queryRepository.GetByAlias(model.Alias) != null) {
+        return BadRequest("Query met dezelfde naam bestaat reeds.");
+      }
+      
+      var query = new Query();
 			model.MapTo(query);
 
       query.Authorization = new List<AuthorizationSettings> {
@@ -116,6 +120,10 @@
 		    return this.Unauthorized();
 		  }
 
+      if (this._queryRepository.All().FirstOrDefault(q => q.Alias == model.Alias && q.Id != id) != null) {
+        return BadRequest("Query met dezelfde naam bestaat reeds.");
+      }
+      
 		  if (model.Id != id)
 			{
 				this._queryRepository.Delete(query);
