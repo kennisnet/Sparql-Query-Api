@@ -151,7 +151,7 @@
           {"_id", 0}, 
           {"MasterColumn", "$_id." + columnList.First()},
           {"Endpoint", "$_id.Endpoint"},
-          {"Format", "$_id.AcceptFormat"},
+          {"AcceptFormat", "$_id.AcceptFormat"},
           {"RemoteIp", "$_id.RemoteIp"},
           {"AverageTime", "$AverageTime"},
           {"TotalHits", "$TotalHits"},
