@@ -1,32 +1,34 @@
 ﻿angular.module('UserModule', [])
 
-.factory('userService', ['$q', function ($q) {
+.factory('userService', ['$q', '$localStorage', function ($q, $localStorage) {
 
-  var _queryGroups = [];
-  var _activeQueryTab = "sparql";
+  $localStorage.$default({
+    queryGroups: {},
+    accountGroups: {},
+    activeQueryTab: "sparql"
+  });
 
   var ensureQueryGroup = function (value) {
-    if (angular.isUndefined(_queryGroups[value]) || _queryGroups[value] === null) {
-      _queryGroups[value] = { visible: true, edit: false };
+    if (angular.isUndefined($localStorage.queryGroups[value]) || $localStorage.queryGroups[value] === null) {
+      $localStorage.queryGroups[value] = { visible: true, edit: false };
     }
-    return _queryGroups[value];
+    return $localStorage.queryGroups[value];
   };
 
-  var accountGroups = [];
 
   var ensureAccountGroup = function (value) {
-    if (angular.isUndefined(accountGroups[value]) || accountGroups[value] === null) {
-      accountGroups[value] = { visible: true, edit: false };
+    if (angular.isUndefined($localStorage.accountGroups[value]) || $localStorage.accountGroups[value] === null) {
+      $localStorage.accountGroups[value] = { visible: true, edit: false };
     }
-    return accountGroups[value];
+    return $localStorage.accountGroups[value];
   };
 
   var user = {
     activeQueryTab: function(value) {
       if (angular.isDefined(value)) {
-        _activeQueryTab = value;
+        $localStorage.activeQueryTab = value;
       }
-      return _activeQueryTab;
+      return $localStorage.activeQueryTab;
     },
 
     queryGroup: function (name) {

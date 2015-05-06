@@ -9,6 +9,7 @@ var app = angular.module('QueryAdmin', [
 	'no-cache',
   'bgDirectives',
 	'loadingScreen',
+  'ngStorage',
   'monospaced.elastic',
 	'Navigator',
 	'QueryEditor',
