@@ -71,6 +71,21 @@ body {
     margin-left: auto;
   }
 }
+.dropdown-menu > li > span.control {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+.dropdown-menu > li label {
+  font-weight: normal;
+}
+.btn.dropdown-toggle {
+  border: solid 1px #c7c7c7;
+}
 .sidebar .sidebar-nav.navbar-collapse {
   padding-left: 0;
   padding-right: 0;

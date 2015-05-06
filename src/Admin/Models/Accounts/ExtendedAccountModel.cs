@@ -36,7 +36,8 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 			QueryAccess =
 				queries.Select(
 					q => new QueryAccessModel() {
-						Name = q.Alias,
+						Alias = q.Alias,
+						Label = q.Label,
 						View = q.ApiKeys.Any(k => k.Equals(account.ApiKey)),
 						Edit = q.Authorization.Any(a => a.Operation == AuthorizationOperations.Edit && a.AccountId == account.Id)
 					});
@@ -54,7 +55,7 @@ namespace Trezorix.Sparql.Api.Admin.Models.Accounts
 			{
 				foreach (var queryAccessModel in QueryAccess)
 				{
-					var query = queryRepository.GetByAlias(queryAccessModel.Name);
+					var query = queryRepository.GetByAlias(queryAccessModel.Alias);
 					if (queryAccessModel.View && query.ApiKeys.All(a => a != account.ApiKey))
 					{
 						query.ApiKeys.Add(account.ApiKey);

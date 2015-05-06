@@ -1,7 +1,7 @@
 ﻿angular.module('LogViewer', ['ui.bootstrap'])
 
 .controller("LogStatsController", [
-  '$scope', '$location', '$routeParams', '$http', 'config', function($scope, $location, $routeParams, $http, config) {
+  '$scope', '$location', '$routeParams', '$http', '$filter', 'config', function ($scope, $location, $routeParams, $http, $filter, config) {
 
     $scope.statisticsTimespans = [
 			{ id: 'last-hour', label: 'afgelopen uur' },
@@ -11,68 +11,77 @@
     ];
     $scope.timespan = $scope.statisticsTimespans[1];
 
+    $scope.availableColums = [
+      { key: 'AcceptFormat', label: 'Formaat', selected: false },
+      { key: 'Endpoint', label: 'Endpoint', selected: false },
+      { key: 'RemoteIp', label: 'IP adres', selected: false }
+    ];
+
     $scope.logStatsFirstColumnLabel = "Query";
 
     $scope.updateStats = function (timespan) {
-    	if (!timespan) {
-		    timespan = $scope.timespan;
-    	}
+      if (!timespan) {
+        timespan = $scope.timespan;
+      }
 
-	    var url = config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + timespan.id;
-	    if ($routeParams.apiKey) {
-		    url += "&accountApiKey=" + $routeParams.apiKey;
-	    }
+      var url = config.adminApiUrl + 'Log/Statistics' + "/?" + "timespan=" + timespan.id;
+      if ($routeParams.apiKey) {
+        url += "&accountApiKey=" + $routeParams.apiKey;
+      }
 
-	    if ($location.url().indexOf("/query/") > -1) {
-		    $scope.logStatsFirstColumnLabel = "Account";
-	    	url += "&queryAlias=" + $location.url().replace("/query/", "");
-	    }
+      if ($location.url().indexOf("/query/") > -1) {
+        $scope.logStatsFirstColumnLabel = "Account";
+        url += "&queryAlias=" + $location.url().replace("/query/", "");
+      }
 
-	    $http.get(url).then(function (response) {
+      var columns = [];
+      angular.forEach($filter('filter')($scope.availableColums, { selected: true }), function(item) { columns.push(item.key); });
+      url += '&columns=' + columns.join(',');
+
+      $http.get(url).then(function (response) {
         $scope.queryStatistics = angular.copy(response.data);
       });
     };
 
     $scope.onTimespanChanged = function (timespan) {
-      console.log($scope.timespan);
       $scope.updateStats(timespan);
     };
-    
+
     $scope.updateStats();
   }
 ])
 
 .controller("LogDownloadController", [
-  '$scope', '$location', '$http', 'config', function($scope, $location, $http, config) {
+  '$scope', '$location', '$http', 'config', function ($scope, $location, $http, config) {
 
-  	$scope.getTabContent = function (tab) {
-  		switch (tab) {
-  			case 'downloads':
-  				if (!angular.isDefined($scope.downloads)) {
-  					$scope.updateDownloads(0);
-  				}
-  				break;
-  			default:
-  		}
-  	};
+    $scope.getTabContent = function (tab) {
+      switch (tab) {
+        case 'downloads':
+          if (!angular.isDefined($scope.downloads)) {
+            $scope.updateDownloads(0);
+          }
+          break;
+        default:
+      }
+    };
 
-  	$scope.timespans = [
+    $scope.timespans = [
       { id: 'week', label: 'week' },
       { id: 'month', label: 'maand' }
     ];
     $scope.downloadsTimespan = $scope.timespans[1];
 
-    $scope.previous = function() {
+    $scope.previous = function () {
       $scope.updateDownloads($scope.downloads.Start - 10);
     };
 
-    $scope.next = function() {
+    $scope.next = function () {
       if ($scope.downloads.End < $scope.downloads.TotalCount) {
         $scope.updateDownloads($scope.downloads.Start + 10);
       }
     };
 
-    $scope.updateDownloads = function(timespan, start) {
+    $scope.updateDownloads = function (timespan, start) {
       $http.get(config.adminApiUrl + 'Log/Downloads' + '/?start=' + start + '&timespan=' + timespan.id).then(function (response) {
         $scope.downloads = angular.copy(response.data);
       });
