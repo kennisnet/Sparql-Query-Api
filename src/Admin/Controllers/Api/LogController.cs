@@ -6,10 +6,12 @@
 
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Statistics;
+  using Trezorix.Sparql.Api.Application.Attributes;
   using Trezorix.Sparql.Api.Core.Queries;
   using Trezorix.Sparql.Api.Core.Repositories;
 
-	[RoutePrefix("Api/Log")]
+  [RoutePrefix("Api/Log")]
+  [NLogWebApi]
   [AuthenticateUser]
   [Authorize]
   public class LogController : ApiController

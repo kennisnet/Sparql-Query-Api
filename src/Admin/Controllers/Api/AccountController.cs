@@ -9,11 +9,13 @@
   using Trezorix.Sparql.Api.Admin.Controllers.Attributes;
   using Trezorix.Sparql.Api.Admin.Models.Accounts;
   using Trezorix.Sparql.Api.Application.Accounts;
+  using Trezorix.Sparql.Api.Application.Attributes;
   using Trezorix.Sparql.Api.Core;
   using Trezorix.Sparql.Api.Core.Accounts;
   using Trezorix.Sparql.Api.Core.Repositories;
 
   [RoutePrefix("Api/Account")]
+  [NLogWebApi]
   [AuthenticateUser]
   [Authorize]
   public class AccountController : ApiController

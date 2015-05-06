@@ -10,7 +10,9 @@ using NLog;
 
 namespace Trezorix.Sparql.Api.QueryApi.Controllers.Core
 {
+  using Trezorix.Sparql.Api.Application.Attributes;
 
+  [NLogWebApi]
 	public class QueryApiController : ApiController
 	{
 		protected readonly Logger Logger = LogManager.GetCurrentClassLogger();
